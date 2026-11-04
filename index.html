@@ -56,6 +56,7 @@
     #chat-stream {
       flex: 1; overflow-y: auto; padding: 14px;
       display: flex; flex-direction: column; gap: 12px;
+      scroll-behavior: smooth;
     }
     .msg-row-bot { display: flex; align-items: flex-start; gap: 8px; max-width: 88%; }
     .msg-row-user { display: flex; justify-content: flex-end; }
@@ -166,7 +167,7 @@
 
   <script>
     (function() {
-      // API Токен
+      // API Токен (замените при необходимости)
       var HF_TOKEN = "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";
       
       // Системная роль для ИИ
@@ -195,11 +196,11 @@
       function formatHTML(str) {
         var text = String(str || "");
         text = text.replace(/&/g, "&amp;");
-        text = text.replace(/\x3C/g, "&lt;");
-        text = text.replace(/\x3E/g, "&gt;");
+        text = text.replace(/</g, "&lt;");
+        text = text.replace(/>/g, "&gt;");
         // Markdown bold to HTML bold
-        text = text.replace(/\*\*(.*?)\*\*/g, "\x3Cb\x3E$1\x3C/b\x3E");
-        text = text.replace(/\n/g, "\x3Cbr\x3E");
+        text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+        text = text.replace(/\n/g, "<br>");
         return text;
       }
 
@@ -210,14 +211,16 @@
           synth.cancel();
           // Очистка текста от тегов и спецсимволов для синтезатора
           var clean = String(text)
-            .replace(/\x3C[^\x3E]*\x3E/g, "")
+            .replace(/<[^>]*>/g, "")
             .replace(/[#*_~`]/g, "")
             .substring(0, 250);
           
           var utter = new SpeechSynthesisUtterance(clean);
+          // Исправлено: добавлена проверка на пустой массив
           var voices = synth.getVoices() || [];
+          
           // Поиск русского голоса
-          for (var i = 0; i !== voices.length; i++) {
+          for (var i = 0; i < voices.length; i++) {
             var v = voices[i];
             if (v.lang && v.lang.toLowerCase().indexOf("ru") !== -1) {
               utter.voice = v;
@@ -262,7 +265,7 @@
 
       // Запрос к ИИ (Hugging Face)
       async function fetchAIResponse(question) {
-        // 1. Проверяем локальные ответы
+        // 1. Проверяем локальные ответы (работают без интернета)
         var localReply = getSmartReply(question);
         if (localReply) {
           // Имитация задержки мышления
@@ -279,7 +282,6 @@
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              model: "Qwen/Qwen2.5-72B-Instruct",
               messages: [
                 { role: "system", content: SYSTEM_PROMPT },
                 { role: "user", content: question }
@@ -289,17 +291,20 @@
             })
           });
 
-          if (!response.ok) throw new Error("API unavailable");
+          if (!response.ok) throw new Error("API Error: " + response.status);
           var data = await response.json();
-          if (data.choices && data.choices[0] && data.choices[0].message) {
+          // Поддержка разных форматов ответа HF
+          if (data && data.choices && data.choices[0] && data.choices[0].message) {
             return data.choices[0].message.content.trim();
+          } else if (Array.isArray(data) && data[0] && data[0].generated_text) {
+             return data[0].generated_text;
           }
         } catch (err) {
           console.warn("Переключение на резервный ответ:", err);
         }
 
-        // 3. Резервный ответ при сбое
-        return "Какой интересный вопрос! 🌸 Я с радостью помогу вам разобраться во всех тонкостях **электроэпиляции** (цены, подготовка, ощущения, зоны) или помогу записаться на сеанс. О чём рассказать подробнее?";
+        // 3. Резервный ответ при сбое (если токен не работает)
+        return "Какой интересный вопрос! 🌸 Я с радостью помогу вам разобраться во всех тонкостях **электроэпиляции** (цены, подготовка, ощущения, зоны). Напишите, что именно вас волнует, или воспользуйтесь кнопками выше!";
       }
 
       // Добавление сообщения в чат
