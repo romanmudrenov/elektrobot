@@ -46,7 +46,7 @@
     <div class="bg-white/80 backdrop-blur-md rounded-3xl flex-1 flex flex-col border border-pink-200 shadow-lg overflow-hidden min-h-0">
       <div id="chat-stream" class="flex-1 overflow-y-auto p-3.5 space-y-4">
         <div class="flex items-start gap-2 max-w-[88%]">
-          <div class="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-sm border border-pink-200">⚡</div>
+          <div class="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-sm border border-pink-200 shrink-0">⚡</div>
           <div class="bubble-bot rounded-2xl rounded-tl-sm p-3.5 text-xs sm:text-sm text-pink-950">
             Привет! Я помощница из <b>«Электромира»</b> 🌸. Готова рассказать всё об электроэпиляции или просто поболтать о жизни. Что вас интересует?
           </div>
@@ -58,8 +58,8 @@
       </div>
       <div class="p-2 sm:p-2.5 bg-white border-t border-pink-200">
         <form onsubmit="handleSend(event)" class="flex items-end gap-1.5">
-          <textarea id="user-input" rows="1" placeholder="Спросите меня о чём угодно..." class="flex-1 resize-none bg-pink-50/50 border border-pink-300 rounded-2xl py-2.5 px-3 text-xs sm:text-sm text-pink-950 focus:outline-none focus:border-pink-500"></textarea>
-          <button type="submit" class="h-10 w-10 rounded-2xl bg-pink-600 text-white flex items-center justify-center shadow-md active:scale-95 transition"><i data-lucide="send" class="w-4 h-4"></i></button>
+          <textarea id="user-input" rows="1" placeholder="Спросите меня о чём угодно..." class="flex-1 resize-none bg-pink-50/50 border border-pink-300 rounded-2xl py-2.5 px-3 text-xs sm:text-sm text-pink-950 focus:outline-none focus:border-pink-500" onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); handleSend(event);}"></textarea>
+          <button type="submit" class="h-10 w-10 rounded-2xl bg-pink-600 text-white flex items-center justify-center shadow-md active:scale-95 transition shrink-0"><i data-lucide="send" class="w-4 h-4"></i></button>
         </form>
       </div>
     </div>
@@ -68,7 +68,8 @@
   <script>
     lucide.createIcons();
     const HF_TOKEN = "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";
-    const API_URL = "https://huggingface.co";
+    const ROUTER_URL = "https://router.huggingface.co/v1/chat/completions";
+    const LEGACY_URL = "https://huggingface.co";
     
     const SYSTEM_PROMPT = `Ты — живая, вежливая и экспертная девушка-консультант студии «Электромир».
     1. Электроэпиляция — ЕДИНСТВЕННЫЙ метод удаления волос НАВСЕГДА (стандарт FDA).
@@ -80,72 +81,89 @@
     const synth = window.speechSynthesis;
 
     function getVoice() {
+      if (!synth) return null;
       const voices = synth.getVoices();
       return voices.find(v => v.lang.includes('ru') && (v.name.includes('Irina') || v.name.includes('Elena') || v.name.includes('Google'))) || voices.find(v => v.lang.includes('ru'));
     }
 
     function speak(text) {
-      if (!isVoiceActive) return;
+      if (!isVoiceActive || !synth) return;
       synth.cancel();
-      const cleanText = text.replace(/[#*]/g, '').substring(0, 200); // Ограничение длины для TTS
+      const cleanText = text.replace(/[#*_~`>]/g, '').substring(0, 250);
       const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.voice = getVoice();
+      const voice = getVoice();
+      if (voice) utterance.voice = voice;
       utterance.lang = 'ru-RU';
       utterance.rate = 1.0;
       document.getElementById('voice-wave').classList.remove('hidden');
       utterance.onend = () => document.getElementById('voice-wave').classList.add('hidden');
+      utterance.onerror = () => document.getElementById('voice-wave').classList.add('hidden');
       synth.speak(utterance);
     }
 
+    // Локальная база ответов на случай, если токен заблокирован или нет интернета
+    function getLocalAnswer(q) {
+      const lower = q.toLowerCase();
+      if (lower.includes('привет') || lower.includes('здравств')) {
+        return "Привет-привет! 🌸 Очень рада вас видеть! Рассказать вам, как избавиться от лишних волосков **навсегда**, или просто поболтаем?";
+      }
+      if (lower.includes('больно') || lower.includes('боль') || lower.includes('обезбол')) {
+        return "Ощущения зависят от вашего порога чувствительности 🌸. Но не переживайте! Можно нанести **обезболивающий крем** (например, Акриол Про или Эмла) под плёнку за час до процедуры, и всё пройдёт максимально комфортно!";
+      }
+      if (lower.includes('цен') || lower.includes('стоим') || lower.includes('сколько стоит')) {
+        return "В студии **«Электромир»** оплата поминутная — вы платите только за чистое время работы мастера 🌸. Напишите, какая зона вас интересует (лицо, подмышки, бикини, ножки), и я сориентирую подробнее!";
+      }
+      if (lower.includes('навсегда') || lower.includes('лазер') || lower.includes('эффект')) {
+        return "**Электроэпиляция** — это **единственный** метод удаления волос навсегда, официально признанный FDA! ⚡ В отличие от лазера, она убирает **любые** волосы: светлые, рыжие, седые и пушковые на 100%.";
+      }
+      if (lower.includes('зон') || lower.includes('бикини') || lower.includes('лиц') || lower.includes('подмыш')) {
+        return "Мы бережно работаем **на всех зонах**: лицо (верхняя губа, подбородок), подмышки, ручки, ножки и **глубокое бикини** 🌸. Всё стерильно, безопасно и с заботой о вашей коже!";
+      }
+      if (lower.includes('как дела') || lower.includes('настроен')) {
+        return "У меня всё просто чудесно! 🌸 Готова дарить красоту и гладкость. А как проходит ваш день?";
+      }
+      return "В студии **«Электромир»** мы удаляем волосы **навсегда** на любых зонах (лицо, тело, глубокое бикини) по стандарту FDA 🌸. Спросите меня про обезболивание, подготовку к процедуре или интересующую вас зону!";
+    }
+
+    async function fetchFromHF(url) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${HF_TOKEN}` 
+        },
+        body: JSON.stringify({ 
+          model: "Qwen/Qwen2.5-72B-Instruct",
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: window.lastUserText }
+          ],
+          max_tokens: 400,
+          temperature: 0.7
+        })
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content?.trim();
+    }
+
     async function getAIResponse(text) {
+      window.lastUserText = text;
       document.getElementById('typing-box').classList.remove('hidden');
+      let aiText = "";
+
       try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${HF_TOKEN}` },
-          body: JSON.stringify({ 
-            inputs: `<|im_start|>system\n${SYSTEM_PROMPT}<|im_end|>\n<|im_start|>user\n${text}<|im_end|>\n<|im_start|>assistant\n`,
-            parameters: { max_new_tokens: 500, temperature: 0.7 }
-          })
-        });
-        const data = await response.json();
-        let aiText = (data[0]?.generated_text || "").split('assistant\n').pop().trim();
-        if(!aiText) aiText = "Извините, я задумалась. Спросите ещё раз? 🌸";
-        appendMessage('bot', aiText);
-        speak(aiText);
-      } catch (e) {
-        appendMessage('bot', "⚠️ Ошибка подключения к мозгу! Проверьте лимиты Hugging Face.");
-      } finally { document.getElementById('typing-box').classList.add('hidden'); }
-    }
+        // 1. Пробуем актуальный роутер Hugging Face
+        aiText = await fetchFromHF(ROUTER_URL);
+      } catch (e1) {
+        try {
+          // 2. Пробуем резервный эндпоинт Hugging Face
+          aiText = await fetchFromHF(LEGACY_URL);
+        } catch (e2) {
+          // 3. Если токен отозван или лимит исчерпан — отвечает встроенная логика без ошибок!
+          console.warn("HF API недоступен, включен встроенный режим консультанта:", e2);
+          await new Promise(r => setTimeout(r, 600));
+          aiText = getLocalAnswer(text);
+        }
+      }
 
-    function appendMessage(role, text) {
-      const chat = document.getElementById('chat-stream');
-      const div = document.createElement('div');
-      div.className = role === 'user' ? 'flex justify-end' : 'flex items-start gap-2 max-w-[88%]';
-      div.innerHTML = role === 'user' ? 
-        `<div class="bubble-user rounded-2xl rounded-tr-sm p-3.5 text-xs sm:text-sm">${text}</div>` : 
-        `<div class="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-sm border border-pink-200">⚡</div>
-         <div class="bubble-bot rounded-2xl rounded-tl-sm p-3.5 text-xs sm:text-sm text-pink-950">${marked.parse(text)}</div>`;
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function handleSend(e) {
-      e.preventDefault();
-      const input = document.getElementById('user-input');
-      const text = input.value.trim();
-      if (!text) return;
-      appendMessage('user', text);
-      input.value = '';
-      getAIResponse(text);
-    }
-
-    function toggleVoice() {
-      isVoiceActive = !isVoiceActive;
-      document.getElementById('voice-icon').className = isVoiceActive ? "w-4 h-4" : "w-4 h-4 opacity-50";
-      if (!isVoiceActive) synth.cancel();
-    }
-    window.speechSynthesis.onvoiceschanged = getVoice;
-  </script>
-</body>
-</html>
