@@ -1,10 +1,9 @@
-html
 <!DOCTYPE html>
-<html lang="ru" class="h-full">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Электромир Bot — Эксперт электроэпиляции</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Электромир Bot — Студия электроэпиляции</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,41 +11,13 @@ html
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- Marked.js for Markdown Rendering -->
+  <!-- Marked.js -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <!-- Google Fonts: Comfortaa & Nunito -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            brand: ['Comfortaa', 'cursive', 'sans-serif'],
-            sans: ['Nunito', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-          },
-          colors: {
-            fuchsiaTheme: {
-              50: '#fdf2f8',
-              100: '#fce7f3',
-              200: '#fbcfe8',
-              300: '#f472b6',
-              400: '#e879f9',
-              500: '#d946ef',
-              600: '#c026d3',
-              700: '#a21caf',
-              800: '#86198f',
-              900: '#701a75',
-              950: '#4a044e'
-            }
-          }
-        }
-      }
-    }
-  </script>
 
   <style>
     * {
@@ -55,162 +26,145 @@ html
     }
 
     body {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #fdf2f8;
       color: #3b0764;
-      height: 100%;
-      height: 100dvh;
     }
 
-    /* Pastel canvas with gentle radial glows */
+    .font-brand {
+      font-family: 'Comfortaa', cursive, sans-serif;
+    }
+
     .bg-pastel-canvas {
       background-color: #fdf2f8;
       background-image: 
-        radial-gradient(circle at 10% 15%, rgba(244, 114, 182, 0.18) 0%, transparent 45%),
-        radial-gradient(circle at 90% 85%, rgba(216, 180, 254, 0.22) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(251, 207, 232, 0.25) 0%, transparent 60%);
+        radial-gradient(circle at 10% 15%, rgba(244, 114, 182, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(192, 132, 252, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(251, 207, 232, 0.3) 0%, transparent 60%);
       background-attachment: fixed;
     }
 
-    /* Ambient floral vector background */
     .floral-ornament-bg {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
       opacity: 0.35;
-      background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 20 C65 35 80 40 90 40 C75 48 70 65 60 75 C50 65 45 48 30 40 C40 40 55 35 60 20 Z' fill='%23f472b6' fill-opacity='0.16'/%3E%3Ccircle cx='60' cy='48' r='5' fill='%23db2777' fill-opacity='0.15'/%3E%3Cpath d='M20 90 C30 92 38 100 40 110 C32 106 20 108 15 115 C16 105 12 96 20 90 Z' fill='%23c084fc' fill-opacity='0.12'/%3E%3Cpath d='M100 85 C108 88 112 96 110 105 C105 100 95 102 90 108 C90 98 94 90 100 85 Z' fill='%23f472b6' fill-opacity='0.14'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 20 C65 35 80 40 90 40 C75 48 70 65 60 75 C50 65 45 48 30 40 C40 40 55 35 60 20 Z' fill='%23f472b6' fill-opacity='0.16'/%3E%3Ccircle cx='60' cy='48' r='5' fill='%23db2777' fill-opacity='0.15'/%3E%3C/svg%3E");
     }
 
-    /* Glass Morphism */
     .glass-card {
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(244, 114, 182, 0.3);
-      box-shadow: 0 10px 30px -8px rgba(190, 24, 93, 0.12);
+      border: 1px solid rgba(244, 114, 182, 0.35);
+      box-shadow: 0 15px 35px -10px rgba(190, 24, 93, 0.15);
     }
 
     .glass-input {
-      background: rgba(255, 255, 255, 0.96);
-      border: 1.5px solid rgba(244, 114, 182, 0.4);
-      box-shadow: inset 0 2px 4px rgba(219, 39, 119, 0.04);
-      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1.5px solid rgba(244, 114, 182, 0.45);
     }
     .glass-input:focus {
       border-color: #db2777;
-      box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.18), inset 0 2px 4px rgba(219, 39, 119, 0.04);
+      box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.2);
     }
 
-    /* Bubbles */
     .bubble-bot {
-      background: #ffffff;
-      border: 1px solid rgba(244, 114, 182, 0.35);
-      box-shadow: 0 2px 10px rgba(219, 39, 119, 0.06);
+      background: linear-gradient(135deg, #ffffff 0%, #fff1f8 100%);
+      border: 1px solid rgba(244, 114, 182, 0.38);
+      box-shadow: 0 4px 15px rgba(219, 39, 119, 0.06);
     }
     .bubble-user {
-      background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+      background: linear-gradient(135deg, #ec4899 0%, #d946ef 50%, #db2777 100%);
       color: #ffffff;
-      box-shadow: 0 4px 14px rgba(219, 39, 119, 0.25);
+      box-shadow: 0 6px 18px rgba(219, 39, 119, 0.25);
     }
 
-    /* Typing animation */
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #f472b6; border-radius: 9999px; }
+
     @keyframes botPulse {
       0%, 80%, 100% { transform: scale(0.6); opacity: 0.35; }
       40% { transform: scale(1.15); opacity: 1; }
     }
-    .bot-dot {
-      animation: botPulse 1.3s infinite ease-in-out both;
-    }
+    .bot-dot { animation: botPulse 1.3s infinite ease-in-out both; }
     .bot-dot:nth-child(1) { animation-delay: -0.3s; }
     .bot-dot:nth-child(2) { animation-delay: -0.15s; }
 
-    /* Custom scrollbars */
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(253, 232, 244, 0.3);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #f472b6;
-      border-radius: 9999px;
-    }
-
-    /* Markdown inside bubbles */
     .prose-bubble p { margin-bottom: 0.5rem; line-height: 1.55; }
     .prose-bubble p:last-child { margin-bottom: 0; }
     .prose-bubble ul { list-style-type: disc; margin-left: 1.2rem; margin-bottom: 0.5rem; }
     .prose-bubble ol { list-style-type: decimal; margin-left: 1.2rem; margin-bottom: 0.5rem; }
-    .prose-bubble li { margin-bottom: 0.25rem; }
     .prose-bubble strong { color: #831843; font-weight: 700; }
-    .prose-bubble code { background: #fdf2f8; color: #be185d; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.88em; }
+
+    /* Audio wave animation */
+    @keyframes waveBar {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .wave-bar {
+      animation: waveBar 0.8s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
   </style>
 </head>
-<body class="bg-pastel-canvas flex flex-col overflow-hidden selection:bg-pink-300 selection:text-pink-950">
+<body class="bg-pastel-canvas h-[100dvh] flex flex-col justify-between overflow-hidden relative select-none">
 
-  <!-- Floral Ornament Overlay -->
+  <!-- Floral Background -->
   <div class="floral-ornament-bg"></div>
 
   <!-- HEADER -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-pink-200/80 shadow-sm flex-shrink-0">
+  <header class="z-40 bg-white/90 backdrop-blur-md border-b border-pink-200 shadow-sm flex-shrink-0">
     <div class="max-w-4xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between">
       
-      <!-- Brand & Status -->
-      <div class="flex items-center gap-2.5 sm:gap-3.5">
-        <!-- Studio Logo -->
+      <!-- Brand -->
+      <div class="flex items-center gap-2.5">
         <div onclick="openStudioModal()" class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-pink-200 via-fuchsia-100 to-pink-50 p-1 flex items-center justify-center border border-pink-300 shadow-sm cursor-pointer hover:scale-105 active:scale-95 transition-transform flex-shrink-0">
-          <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="petalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#f472b6"/>
-                <stop offset="60%" stop-color="#db2777"/>
-                <stop offset="100%" stop-color="#a21caf"/>
-              </linearGradient>
-            </defs>
-            <circle cx="50" cy="50" r="46" fill="#fdf2f8" stroke="#f472b6" stroke-width="2.5" stroke-dasharray="3 3"/>
-            <circle cx="30" cy="30" r="7" fill="url(#petalGrad)"/>
-            <circle cx="70" cy="70" r="7" fill="url(#petalGrad)"/>
-            <path d="M72 24 L52 50 L48 48 L68 22 Z" fill="#ec4899"/>
-            <path d="M48 48 L40 58 L42 60 L50 50 Z" fill="#94a3b8"/>
-            <path d="M40 58 L32 68" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="32" cy="68" r="2.5" fill="#fbbf24"/>
-            <text x="45" y="62" font-family="'Comfortaa', cursive" font-weight="bold" font-size="28" fill="url(#petalGrad)" text-anchor="middle">Э</text>
-          </svg>
+          <span class="text-xl">⚡</span>
         </div>
 
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="font-brand font-bold text-sm sm:text-base text-pink-950 tracking-tight leading-tight">Электромир Bot</h1>
+            <h1 class="font-brand font-bold text-sm sm:text-base text-pink-950 leading-tight">Электромир Bot</h1>
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-100 text-pink-800 border border-pink-200">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> В сети
+              <span class="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse"></span> Онлайн
             </span>
           </div>
           <p class="text-[10px] sm:text-xs text-pink-900/70 font-semibold truncate max-w-[190px] sm:max-w-none">
-            Эксперт перманентного удаления волос
+            Эксперт электроэпиляции и собеседник
           </p>
         </div>
       </div>
 
-      <!-- Action Controls -->
+      <!-- Controls -->
       <div class="flex items-center gap-1.5 sm:gap-2">
-        <button onclick="handleQuickAction('booking')" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold font-brand bg-pink-100 hover:bg-pink-200/80 text-pink-900 border border-pink-300 transition shadow-sm active:scale-95">
-          <i data-lucide="calendar" class="w-3.5 h-3.5 text-pink-600"></i>
-          <span>Запись</span>
+        <!-- Voice Toggle Button -->
+        <button id="toggle-voice-btn" onclick="toggleVoiceOutput()" title="Автоозвучка ответов" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-pink-100 text-pink-900 border border-pink-300 hover:bg-pink-200 transition">
+          <i data-lucide="volume-2" id="voice-icon" class="w-4 h-4 text-pink-600"></i>
+          <span id="voice-status-text" class="hidden sm:inline">Голос вкл</span>
+          <div id="voice-wave" class="hidden flex items-center gap-0.5 ml-1 h-4">
+            <span class="w-0.5 bg-pink-600 rounded-full wave-bar"></span>
+            <span class="w-0.5 bg-pink-600 rounded-full wave-bar"></span>
+            <span class="w-0.5 bg-pink-600 rounded-full wave-bar"></span>
+          </div>
         </button>
-        <!-- Toggle Voice Autoplay -->
-        <button id="toggle-voice-btn" onclick="toggleAutoVoice()" title="Авто-озвучка ответов бота" class="p-2 rounded-xl text-pink-800 hover:text-pink-950 hover:bg-pink-100 transition relative">
-          <i data-lucide="volume-2" id="voice-status-icon" class="w-4 h-4 text-pink-600"></i>
-          <span id="voice-dot" class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-        </button>
-        <button onclick="openApiKeyModal()" title="Настройки API" class="p-2 rounded-xl text-pink-800 hover:text-pink-950 hover:bg-pink-100 transition">
+
+        <!-- API Key Settings -->
+        <button onclick="openApiModal()" title="Настройки API Gemini" class="p-2 rounded-xl text-pink-800 hover:bg-pink-100 transition">
           <i data-lucide="key" class="w-4 h-4"></i>
         </button>
-        <button onclick="openStudioModal()" title="О студии" class="p-2 rounded-xl text-pink-800 hover:text-pink-950 hover:bg-pink-100 transition">
+
+        <!-- Info -->
+        <button onclick="openStudioModal()" title="О студии" class="p-2 rounded-xl text-pink-800 hover:bg-pink-100 transition">
           <i data-lucide="info" class="w-4 h-4"></i>
         </button>
-        <button onclick="confirmClearHistory()" title="Очистить разговор" class="p-2 rounded-xl text-pink-800 hover:text-pink-950 hover:bg-pink-100 transition">
+
+        <!-- Clear -->
+        <button onclick="confirmClearHistory()" title="Очистить чат" class="p-2 rounded-xl text-pink-800 hover:bg-pink-100 transition">
           <i data-lucide="trash-2" class="w-4 h-4"></i>
         </button>
       </div>
@@ -218,56 +172,50 @@ html
     </div>
   </header>
 
-  <!-- MAIN INTERACTIVE WRAPPER -->
-  <main class="flex-1 max-w-4xl w-full mx-auto p-2 sm:p-4 flex flex-col min-h-0 relative z-10">
-    <div class="glass-card rounded-3xl flex flex-col flex-1 min-h-0 overflow-hidden border border-pink-200 shadow-xl">
+  <!-- MAIN CHAT CONTAINER -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-2 sm:px-4 py-2 flex flex-col min-h-0 relative z-10">
+    <div class="glass-card rounded-3xl flex flex-col flex-1 min-h-0 overflow-hidden shadow-xl border border-pink-200">
       
       <!-- Quick Chips Bar -->
-      <div class="bg-pink-50/80 border-b border-pink-200/70 px-3 py-2 overflow-x-auto whitespace-nowrap flex items-center gap-2 text-xs scrollbar-none flex-shrink-0">
+      <div class="bg-pink-50/80 border-b border-pink-200/60 px-3 py-2 overflow-x-auto whitespace-nowrap flex items-center gap-2 text-xs flex-shrink-0">
         <span class="text-pink-900 font-bold font-brand flex items-center gap-1 text-[11px] mr-1 flex-shrink-0">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-pink-500"></i> Вопросы:
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-pink-500"></i> Темы:
         </span>
-        <button onclick="sendQuickMessage('В чем отличие электроэпиляции от лазера? Что удаляет навсегда?')" class="bg-white hover:bg-pink-100/60 text-pink-900 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs font-semibold text-[11px] sm:text-xs">⚡ Электро vs Лазер</button>
-        <button onclick="sendQuickMessage('Больно ли делать процедуру и как обезболивать?')" class="bg-white hover:bg-pink-100/60 text-pink-900 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs font-semibold text-[11px] sm:text-xs">💉 Обезболивание</button>
-        <button onclick="sendQuickMessage('Какие методы есть: Термолиз, Бленд, Flash?')" class="bg-white hover:bg-pink-100/60 text-pink-900 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs font-semibold text-[11px] sm:text-xs">🔬 Методы тока</button>
-        <button onclick="sendQuickMessage('Как подготовиться к процедуре и ухаживать за кожей после?')" class="bg-white hover:bg-pink-100/60 text-pink-900 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs font-semibold text-[11px] sm:text-xs">🧴 Уход и подготовка</button>
-        <button onclick="sendQuickMessage('Сколько стоит сеанс и как рассчитывается цена?')" class="bg-white hover:bg-pink-100/60 text-pink-900 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs font-semibold text-[11px] sm:text-xs">💰 Цены</button>
-        <button onclick="sendQuickMessage('Какие есть противопоказания к процедуре?')" class="bg-white hover:bg-pink-100/60 text-pink-900 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs font-semibold text-[11px] sm:text-xs">🚫 Противопоказания</button>
+        <button onclick="sendQuickMessage('Чем электроэпиляция отличается от лазера?')" class="bg-white hover:bg-pink-100 text-pink-950 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs text-xs font-medium">⚡ Электро vs Лазер</button>
+        <button onclick="sendQuickMessage('Больно ли делать электроэпиляцию и как обезболить?')" class="bg-white hover:bg-pink-100 text-pink-950 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs text-xs font-medium">💉 Обезболивание</button>
+        <button onclick="sendQuickMessage('Какие есть методы: термолиз, флеш, бленд?')" class="bg-white hover:bg-pink-100 text-pink-950 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs text-xs font-medium">🔬 Методы тока</button>
+        <button onclick="sendQuickMessage('Как подготовиться и ухаживать за кожей после?')" class="bg-white hover:bg-pink-100 text-pink-950 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs text-xs font-medium">🧴 Уход и корочки</button>
+        <button onclick="sendQuickMessage('Сколько стоит процедура в среднем?')" class="bg-white hover:bg-pink-100 text-pink-950 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs text-xs font-medium">💰 Цены</button>
+        <button onclick="sendQuickMessage('Привет! Расскажи смешную историю или подними настроение!')" class="bg-white hover:bg-pink-100 text-pink-950 border border-pink-200 px-3 py-1 rounded-full transition shadow-xs text-xs font-medium">☕ Поболтать</button>
       </div>
 
-      <!-- Messages Stream Container -->
+      <!-- Messages Stream -->
       <div id="chat-messages" class="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-4 min-h-0">
-        <!-- Built-in Welcome Bubble -->
+        <!-- Bot Welcome -->
         <div class="flex items-start gap-2.5 sm:gap-3 max-w-[92%] sm:max-w-[85%]">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-pink-300 via-fuchsia-200 to-pink-100 border border-pink-300 flex-shrink-0 flex items-center justify-center shadow-xs p-1">
-            <span class="text-lg">⚡</span>
+          <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-pink-300 to-pink-100 border border-pink-300 flex-shrink-0 flex items-center justify-center shadow-xs">
+            ⚡
           </div>
-          
-          <div class="bubble-bot rounded-3xl rounded-tl-sm p-4 sm:p-5 text-xs sm:text-sm text-slate-800">
-            <div class="flex items-center gap-1.5 mb-2 font-brand font-bold text-pink-950 text-sm sm:text-base">
-              <span>Приветствую Вас в «Электромир»!</span> 🌸⚡
+          <div class="bubble-bot rounded-3xl rounded-tl-sm p-4 text-xs sm:text-sm text-pink-950">
+            <div class="font-brand font-bold text-pink-950 text-sm mb-1.5">
+              Приветствую Вас в «Электромир»! 🌸⚡
             </div>
-            <p class="leading-relaxed mb-2.5">
-              Я ваш персональный эксперт по окончательному удалению волос, физике электроэпиляции и безопасному уходу за кожей.
+            <p class="leading-relaxed mb-2">
+              Я ваш интеллектуальный собеседник и эксперт по перманентному удалению волос навсегда. Готова ответить на любые профессиональные вопросы, посчитать время или просто тепло поболтать!
             </p>
-            <p class="leading-relaxed mb-3 text-slate-600">
-              Вы можете спросить меня об отличиях от лазера, методах тока (Flash, Blend), подготовке, обезболивании или ценах.
-            </p>
-            <div class="p-3 bg-pink-100/70 border border-pink-200 rounded-2xl text-pink-950 font-bold text-xs flex items-center gap-2">
-              <span class="text-base">✨</span>
-              <span>Подскажите, пожалуйста, как к вам обращаться? Как вас зовут?</span>
+            <div class="p-2.5 bg-pink-100/70 border border-pink-200 rounded-2xl font-bold text-xs flex items-center gap-2">
+              <span>✨</span>
+              <span>Подскажите, как я могу к вам обращаться? Как вас зовут?</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Typing Indicator -->
-      <div id="typing-box" class="hidden px-5 py-2 flex items-center gap-2.5 text-xs text-pink-900/80 select-none flex-shrink-0 bg-white/40">
-        <div class="w-6 h-6 rounded-lg bg-pink-200 flex items-center justify-center text-pink-700 font-bold text-[10px]">
-          ⚡
-        </div>
-        <div class="bg-pink-100/90 border border-pink-200 px-3 py-1 rounded-full flex items-center gap-1.5 font-medium">
-          <span>Электромир Bot формирует ответ</span>
+      <div id="typing-box" class="hidden px-4 py-2 flex items-center gap-2 text-xs text-pink-900/80 flex-shrink-0">
+        <div class="w-6 h-6 rounded-xl bg-pink-200 flex items-center justify-center text-[10px]">⚡</div>
+        <div class="bg-pink-50 border border-pink-200 px-3 py-1 rounded-full flex items-center gap-1.5 font-medium">
+          <span>Печатает ответ</span>
           <span class="flex gap-1 items-center">
             <span class="w-1.5 h-1.5 rounded-full bg-pink-500 bot-dot"></span>
             <span class="w-1.5 h-1.5 rounded-full bg-pink-500 bot-dot"></span>
@@ -276,16 +224,15 @@ html
         </div>
       </div>
 
-      <!-- Input Section -->
-      <div class="p-2.5 sm:p-4 bg-white/95 border-t border-pink-200/80 flex-shrink-0">
+      <!-- Input Footer -->
+      <div class="p-2.5 sm:p-3 bg-white/90 backdrop-blur-md border-t border-pink-200/70 flex-shrink-0">
         <form id="chat-input-form" onsubmit="handleSend(event)" class="relative flex items-end gap-2">
-          
           <div class="flex-1 relative">
             <textarea 
               id="message-input" 
               rows="1" 
-              placeholder="Спросите об электроэпиляции или представьтесь..." 
-              class="glass-input w-full resize-none max-h-28 rounded-2xl py-3 pl-3.5 pr-10 text-xs sm:text-sm text-pink-950 placeholder-pink-900/40 focus:outline-none transition leading-relaxed block"
+              placeholder="Спросите о процедуре или представьтесь..." 
+              class="glass-input w-full resize-none max-h-28 rounded-2xl py-3 pl-3.5 pr-11 text-xs sm:text-sm text-pink-950 placeholder-pink-900/40 focus:outline-none transition leading-relaxed"
               onkeydown="handleTextareaKey(event)"
               oninput="resizeTextarea(this)"
             ></textarea>
@@ -295,104 +242,87 @@ html
               type="button" 
               id="mic-action-btn" 
               onclick="toggleSpeechRecognition()" 
-              title="Голосовой ввод"
-              class="absolute right-2.5 bottom-2.5 p-1 text-pink-400 hover:text-pink-600 transition"
+              title="Сказать голосом"
+              class="absolute right-3 bottom-2.5 p-1 text-pink-400 hover:text-pink-600 transition"
             >
               <i data-lucide="mic" class="w-4 h-4"></i>
             </button>
           </div>
 
-          <!-- Send Button -->
+          <!-- Submit Button -->
           <button 
             type="submit" 
             id="send-submit-btn" 
-            class="h-11 w-11 rounded-2xl bg-gradient-to-r from-pink-500 to-fuchsia-600 hover:from-pink-600 hover:to-fuchsia-700 active:scale-95 text-white flex items-center justify-center shadow-md transition disabled:opacity-50 flex-shrink-0 cursor-pointer"
+            class="h-11 w-11 rounded-2xl bg-gradient-to-r from-pink-500 via-fuchsia-500 to-rose-500 hover:opacity-95 active:scale-95 text-white flex items-center justify-center shadow-md shadow-pink-500/20 transition disabled:opacity-50 flex-shrink-0"
           >
-            <i data-lucide="send" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            <i data-lucide="send" class="w-4 h-4"></i>
           </button>
         </form>
 
-        <div class="flex items-center justify-between mt-2 px-1 text-[10px] sm:text-[11px] text-pink-900/60 font-medium">
-          <span class="flex items-center gap-1 font-brand">🌸 «Электромир» • Навсегда и безопасно</span>
-          <span class="hidden sm:inline">Enter для отправки • Shift+Enter для переноса</span>
+        <div class="flex items-center justify-between mt-1.5 px-1 text-[10px] text-pink-900/60 font-medium">
+          <span class="font-brand">🌸 «Электромир» • Волосы уходят навсегда</span>
+          <span class="hidden sm:inline">Enter — отправить • Shift+Enter — перенос</span>
         </div>
       </div>
 
     </div>
   </main>
 
-  <!-- STUDIO INFO MODAL -->
-  <div id="studio-modal" class="fixed inset-0 z-50 bg-pink-950/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 hidden">
-    <div class="glass-card bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-      <button onclick="closeStudioModal()" class="absolute top-4 right-4 p-2 text-pink-800 hover:text-pink-950 rounded-full hover:bg-pink-100">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-
-      <div class="flex items-center gap-3 mb-4">
-        <div class="w-12 h-12 rounded-2xl bg-pink-100 border border-pink-300 p-1 flex items-center justify-center flex-shrink-0">
-          <span class="text-2xl">⚡</span>
-        </div>
-        <div>
-          <h3 class="font-brand font-bold text-pink-950 text-base sm:text-lg">Студия «Электромир»</h3>
-          <p class="text-xs text-pink-900/70 font-semibold">Золотой стандарт перманентного удаления волос</p>
-        </div>
-      </div>
-
-      <div class="space-y-3.5 text-xs text-slate-700 leading-relaxed">
-        <div class="p-3 bg-pink-100/70 rounded-2xl border border-pink-200">
-          <span class="font-brand font-bold text-pink-950 block mb-1">👑 Единственный метод навсегда (FDA):</span>
-          Электроэпиляция коагулирует сосудистый сосочек и стволовую ростковую зону волоса. Работает с любым цветом волос (включая седые, пушковые и рыжие) и на любом фототипе кожи.
-        </div>
-
-        <div class="border-t border-pink-200 pt-3">
-          <h4 class="font-bold text-pink-950 mb-1 font-brand">Наш прайс (ориентировочно):</h4>
-          <ul class="space-y-1.5 pl-1">
-            <li class="flex justify-between py-1 border-b border-pink-100"><span>Тело (руки, ноги, подмышки):</span> <strong class="text-pink-950 font-brand">35 - 45 ₽/мин</strong></li>
-            <li class="flex justify-between py-1 border-b border-pink-100"><span>Лицо, шея, брови:</span> <strong class="text-pink-950 font-brand">40 - 50 ₽/мин</strong></li>
-            <li class="flex justify-between py-1 border-b border-pink-100"><span>Глубокое бикини:</span> <strong class="text-pink-950 font-brand">45 - 55 ₽/мин</strong></li>
-            <li class="flex justify-between py-1 border-b border-pink-100"><span>Стерильный зонд Ballet/Balm:</span> <strong class="text-pink-950 font-brand">250 - 350 ₽</strong></li>
-            <li class="flex justify-between py-1"><span>Анестезия под пленку:</span> <strong class="text-pink-950 font-brand">400 - 600 ₽</strong></li>
-          </ul>
-        </div>
-
-        <div class="pt-2 flex items-center justify-between text-pink-900/70 text-[11px] font-semibold border-t border-pink-200">
-          <span>Студия «Электромир»</span>
-          <span>Часы: 09:00 — 21:00</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- API KEY MODAL -->
-  <div id="apikey-modal" class="fixed inset-0 z-50 bg-pink-950/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 hidden">
-    <div class="glass-card bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative">
-      <button onclick="closeApiKeyModal()" class="absolute top-4 right-4 p-2 text-pink-800 hover:text-pink-950 rounded-full hover:bg-pink-100">
+  <div id="api-modal" class="fixed inset-0 z-50 bg-pink-950/40 backdrop-blur-xs flex items-center justify-center p-3 hidden">
+    <div class="glass-card rounded-3xl max-w-md w-full p-5 shadow-2xl relative">
+      <button onclick="closeApiModal()" class="absolute top-4 right-4 p-2 text-pink-800 hover:text-pink-950">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
-      <div class="flex items-center gap-2 mb-3">
-        <i data-lucide="key" class="w-5 h-5 text-pink-600"></i>
-        <h3 class="font-brand font-bold text-pink-950 text-base">Подключение Gemini API</h3>
-      </div>
-      
-      <p class="text-xs text-slate-600 leading-relaxed mb-3">
-        Бот по умолчанию подключен к **бесплатному Gemini 2.5 Flash API** и мгновенно поддерживает живую беседу. Если у вас есть личный ключ от Google AI Studio, вы можете указать его здесь:
+      <h3 class="font-brand font-bold text-pink-950 text-base mb-2">Настройки подключения Gemini AI</h3>
+      <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+        Для неограниченного живого диалога вставьте бесплатный API-ключ Google AI Studio. Если ключа нет, бот продолжит работать автономно через локальную базу знаний.
       </p>
 
       <input 
         type="password" 
-        id="api-key-input" 
-        placeholder="AIzaSy... (оставьте пустым для встроенного бесплатного API)" 
-        class="glass-input w-full rounded-xl py-2 px-3 text-xs text-pink-950 mb-3 focus:outline-none"
+        id="api-key-field" 
+        placeholder="AIzaSy..." 
+        class="glass-input w-full rounded-xl px-3 py-2 text-xs text-pink-950 mb-3 outline-none"
       />
 
-      <div class="flex justify-end gap-2">
-        <button onclick="clearSavedApiKey()" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 transition">
-          Сбросить
-        </button>
-        <button onclick="saveApiKeyFromModal()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-pink-600 hover:bg-pink-700 text-white transition">
-          Сохранить
-        </button>
+      <div class="flex items-center justify-between">
+        <button onclick="clearSavedKey()" class="text-xs text-rose-600 hover:underline">Удалить ключ</button>
+        <button onclick="saveApiKeyFromModal()" class="bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-sm transition">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDIO INFO MODAL -->
+  <div id="studio-modal" class="fixed inset-0 z-50 bg-pink-950/40 backdrop-blur-xs flex items-center justify-center p-3 hidden">
+    <div class="glass-card rounded-3xl max-w-lg w-full p-5 shadow-2xl relative max-h-[88vh] overflow-y-auto">
+      <button onclick="closeStudioModal()" class="absolute top-4 right-4 p-2 text-pink-800 hover:text-pink-950">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-2xl bg-pink-100 flex items-center justify-center text-xl flex-shrink-0">⚡</div>
+        <div>
+          <h3 class="font-brand font-bold text-pink-950 text-base">Студия «Электромир»</h3>
+          <p class="text-[11px] text-pink-900/70 font-semibold">Единственный метод перманентного удаления волос навсегда</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-700 leading-relaxed">
+        <div class="p-3 bg-pink-100/60 rounded-2xl border border-pink-200">
+          <span class="font-brand font-bold text-pink-950 block mb-0.5">👑 Золотой стандарт FDA:</span>
+          Электроэпиляция коагулирует ростковую зону и волосяной сосочек. Работает с любым цветом волос (седые, светлые, рыжие) и на любом фототипе кожи.
+        </div>
+        <div>
+          <h4 class="font-bold text-pink-950 mb-1 font-brand">Прайс-лист студии:</h4>
+          <ul class="space-y-1">
+            <li class="flex justify-between py-1 border-b border-pink-100"><span>Тело (подмышки, ноги, руки):</span> <strong>35 - 45 ₽/мин</strong></li>
+            <li class="flex justify-between py-1 border-b border-pink-100"><span>Лицо, усики, подбородок:</span> <strong>40 - 50 ₽/мин</strong></li>
+            <li class="flex justify-between py-1 border-b border-pink-100"><span>Глубокое бикини:</span> <strong>45 - 55 ₽/мин</strong></li>
+            <li class="flex justify-between py-1"><span>Стерильный зонд (Ballet/Balm):</span> <strong>250 - 350 ₽</strong></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -400,337 +330,280 @@ html
   <!-- TOAST NOTIFICATION -->
   <div id="toast-notify" class="fixed bottom-4 right-4 z-50 bg-pink-950 text-white text-xs px-4 py-2.5 rounded-2xl shadow-xl transform translate-y-16 opacity-0 transition-all duration-300 flex items-center gap-2 pointer-events-none">
     <i data-lucide="check-circle-2" class="w-4 h-4 text-pink-400"></i>
-    <span id="toast-notify-text">Действие выполнено</span>
+    <span id="toast-notify-text">Готово</span>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- SCRIPT ENGINE -->
   <script>
-    // Initialize icons
     lucide.createIcons();
 
-    // State Variables
-    let userName = localStorage.getItem('electromir_user_name') || "";
-    let userApiKey = localStorage.getItem('electromir_gemini_key') || "";
-    let autoVoiceEnabled = localStorage.getItem('electromir_auto_voice') !== 'false'; // Enabled by default
+    let userName = "";
     const conversationDialog = [];
+    let isVoiceEnabled = true;
+    let preferredFemaleVoice = null;
+    let lastRandomIndex = -1;
 
-    // System prompt persona for conversational electrolysis expert
-    const SYSTEM_PROMPT = `Ты — официальный виртуальный AI-собеседник и эксперт студии электроэпиляции «Электромир».
-ТВОЙ СТИЛЬ:
-- Теплый, дружелюбный, позитивный, тактичный и живой голос.
-- Приветствие: «Приветствую Вас в "Электромир"!»
-- Если пользователь назвал имя, всегда обращайся к нему тепло по имени. Если не назвал, мягко поинтересуйся, как его зовут.
-- Ты не только специалист по электроэпиляции (объясняешь термолиз, флеш, бленд, анаген, обезболивание, уход и противопоказания простым и понятным языком), но и можешь поддержать любой душевный диалог, пошутить, поднять настроение или дать совет по бьюти-уходу.
-- На нецензурную лексику реагируй доброжелательно и с юмором через физику токов и сопротивления.
-- Форматируй ответы красиво и структурировано с абзацами и эмодзи. Не пиши гигантские простыни текста без надобности.`;
+    // Load saved API key
+    let savedApiKey = localStorage.getItem('electromir_gemini_key') || "";
 
-    // Update voice toggle button UI
-    function updateVoiceBtnUI() {
-      const dot = document.getElementById('voice-dot');
-      const icon = document.getElementById('voice-status-icon');
-      if (autoVoiceEnabled) {
-        dot.className = 'absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500';
-        icon.className = 'w-4 h-4 text-pink-600';
-      } else {
-        dot.className = 'absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-rose-400';
-        icon.className = 'w-4 h-4 text-slate-400';
-      }
-    }
-    updateVoiceBtnUI();
+    // ==========================================
+    // SPEECH SYNTHESIS SETUP (Женский мягкий голос)
+    // ==========================================
+    function setupBestFemaleVoice() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return;
 
-    function toggleAutoVoice() {
-      autoVoiceEnabled = !autoVoiceEnabled;
-      localStorage.setItem('electromir_auto_voice', autoVoiceEnabled);
-      if (!autoVoiceEnabled && 'speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      updateVoiceBtnUI();
-      showToastNotification(autoVoiceEnabled ? 'Голосовая озвучка включена 🔊' : 'Голосовая озвучка выключена 🔇');
-    }
-
-    // =========================================================================
-    // ROBUST KNOWLEDGE BASE & AUTONOMOUS BOT BRAIN (FALLBACK)
-    // =========================================================================
-    const KNOWLEDGE_VAULT = [
-      {
-        id: 'laser_diff',
-        tokens: ['лазер', 'лазерн', 'разниц', 'отличи', 'навсегда', 'фотоэпиляц', 'ipl', 'воск', 'шугаринг', 'сравн'],
-        reply: (name) => `
-${name ? `**${name}**, рассказываю` : 'Рассказываю'} ключевое отличие, подтвержденное медициной:
-
-⚡ **Электроэпиляция:**
-* **Статус FDA:** Единственный метод, официально имеющий статус **Permanent Hair Removal** (удаление волос навсегда).
-* **Физика процесса:** В устье фолликула вводится ультратонкий зонд, подается импульс тока, который безвозвратно коагулирует сосудистый сосочек и стволовые клетки.
-* **Универсальность:** Работает с **любым цветом волоса** (седой, рыжий, пушковый, светлый) и на любой коже.
-
-🎯 **Лазерная эпиляция:**
-* **Статус FDA:** Permanent Hair *Reduction* (долговременное сокращение числа волос).
-* **Принцип:** Луч реагирует только на пигмент эумеланин. Лазер не берет светлый, рыжий и пушковый волос, а через 1–3 года фолликулы могут проснуться из-за гормонов.
-
-💡 **Итог:** Если цель — гладкость навсегда без поддерживающих сеансов всю жизнь, то только **электроэпиляция**!
-`
-      },
-      {
-        id: 'pain_anesthesia',
-        tokens: ['бол', 'больно', 'болит', 'терпеть', 'страх', 'анестези', 'обезбол', 'эмла', 'акриол', 'укол', 'инъекц', 'чувствительн'],
-        reply: (name) => `
-${name ? `**${name}**, вопрос` : 'Вопрос'} комфорта у нас на первом месте! Давайте развеем страхи:
-
-✨ **Что вы чувствуете?**
-Ввод зонда в фолликул **не чувствуется вообще**, так как мастер попадает в естественную пору кожи без прокола. В момент импульса ощущается быстрое точечное тепло или микропощипывание.
-
-🛡 **Как мы убираем боль:**
-1. **Крем под окклюзию (пленку):** Профессиональные кремы на основе лидокаина и прилокаина (*Акриол Про* и др.). Наносятся за 60 минут до сеанса. Кожа полностью теряет чувствительность!
-2. **Аппаратные режимы Flash:** Импульс тока длится всего сотые доли секунды — нервное окончание просто не успевает среагировать.
-3. **Рекомендация:** Планируйте сеанс на 4–8 день цикла (после менструации порог боли выше) и пейте больше воды перед визитом.
-`
-      },
-      {
-        id: 'methods',
-        tokens: ['метод', 'термолиз', 'бленд', 'blend', 'flash', 'флеш', 'гальваник', 'микрофлеш', 'ток', 'частот'],
-        reply: (name) => `
-${name ? `**${name}**, в` : 'В'} электроэпиляции используются 4 проверенных метода:
-
-1. ⚡ **Термолиз:** Высокочастотный переменный ток мгновенно нагревает воду вокруг фолликула и коагулирует белок. Очень быстрый метод.
-2. ⚡ **Flash / MicroFlash:** Сверхбыстрый термолиз высокой частоты (доли секунды на волос). Идеален для быстрых работ по телу с минимумом ощущений.
-3. 🧪 **Гальваника (электролиз):** Постоянный ток вступает в реакцию с солями кожи и образует микрощелочь, которая затекает даже в искривленные фолликулы.
-4. 👑 **Blend (Бленд):** Комбинация термолиза и гальваники. Термолиз подогревает щелочь, многократно ускоряя разрушение фолликула. Лучший выбор для плотных волос зоны бикини!
-`
-      },
-      {
-        id: 'sessions_phases',
-        tokens: ['сеанс', 'скольк', 'процедур', 'курс', 'проход', 'фаз', 'анаген', 'катаген', 'телоген', 'почему не сразу', 'длительн'],
-        reply: (name) => `
-${name ? `**${name}**, почему` : 'Почему'} нужен курс, а не один визит:
-
-🧬 **Фазы роста волос:**
-* Электроэпиляция уничтожает фолликул только в фазе активного роста — **Анагене** (когда луковица соединена с питающим капилляром).
-* Одновременно на теле в анагене находится от **20% до 50%** волос. Остальные — «спят» в резерве (телоген).
-
-⏳ **Как проходит курс:**
-* **1-й проход:** Самый долгий, убирается весь видимый волос на зоне.
-* **2–4 проходы (через 1–1.5 месяца):** Удаляются волосы, вышедшие из сна. Время сокращается почти вдвое!
-* **Полный курс:** В среднем **8–14 проходов** (около года регулярных визитов), после чего кожа остается гладкой на всю жизнь.
-`
-      },
-      {
-        id: 'prep_and_care',
-        tokens: ['подготовк', 'уход', 'после', 'корочк', 'краснот', 'пятн', 'хлоргексидин', 'циндол', 'бассейн', 'баня', 'спорт', 'загар', 'солнц'],
-        reply: (name) => `
-${name ? `**${name}**, идеальный` : 'Идеальный'} результат на 50% зависит от правильного домашнего ухода:
-
-🌿 **Перед визитом:**
-* Длина волос: **3–4 мм** (мастер должен ухватить волосок пинцетом).
-* За 2–3 дня увлажняйте кожу и пейте воду.
-* За месяц строго исключите пинцет, воск и шугаринг!
-
-🛡 **После процедуры:**
-* **Первые 24 часа:** Не мочить зону, исключить спорт, сауну и косметику.
-* **Обработка:** 2 раза в день хлоргексидином/мирамистином, затем суспензией *Циндол* или порошком *Банеоцин* (для подсушивания).
-* **Микрокорочки:** Могут появиться на 2–3 день. **Не сдирать!** Они сходят самостоятельно без следов.
-* **Защита от солнца:** SPF 50+ на открытых участках обязателен.
-`
-      },
-      {
-        id: 'contraindications',
-        tokens: ['противопоказан', 'нельзя', 'запрет', 'болезн', 'беременн', 'кормлен', 'гв', 'кардиостимулятор', 'диабет', 'онколог'],
-        reply: (name) => `
-${name ? `**${name}**, здоровье` : 'Здоровье'} — главный приоритет студии «Электромир»:
-
-⛔ **Абсолютные противопоказания:**
-* Кардиостимулятор или дефибриллятор.
-* Онкологические заболевания.
-* Эпилепсия.
-* Тяжелый декомпенсированный сахарный диабет.
-* Склонность к келоидным рубцам.
-* Металлические импланты непосредственно в рабочей зоне.
-
-⚠️ **Временные ограничения:**
-* Беременность (любой срок) и лактация (зона груди).
-* Воспаления, герпес, ссадины в зоне эпиляции.
-* Простуда, температура.
-* Свежий загар (менее 10–14 дней).
-`
-      },
-      {
-        id: 'pricing',
-        tokens: ['цен', 'стоимост', 'прайс', 'рубл', 'скольк стоит', 'минут', 'тариф', 'дорого'],
-        reply: (name) => `
-${name ? `**${name}**, в` : 'В'} электроэпиляции оплачивается только фактическое время работы мастера:
-
-💰 **Ориентировочные тарифы:**
-* **Тело (руки, ноги, подмышки):** 35 – 45 ₽/мин.
-* **Лицо и шея:** 40 – 50 ₽/мин.
-* **Глубокое бикини:** 45 – 55 ₽/мин.
-* **Одноразовый стерильный зонд (Ballet):** 250 – 350 ₽.
-
-⏱ **Пример первого сеанса:**
-* Подмышки: ~60–90 мин на обе (≈ 2 500 – 3 800 ₽).
-* Зона над верхней губой: ~15–25 мин (≈ 700 – 1 200 ₽).
-* *Каждый следующий сеанс время уменьшается на 30–50%!*
-`
-      },
-      {
-        id: 'booking',
-        tokens: ['запис', 'записат', 'адрес', 'номер', 'телефон', 'когда', 'окно', 'прием'],
-        reply: (name) => `
-${name ? `**${name}**, с` : 'С'} радостью подберем для вас комфортное время в «Электромире»! 🌸
-
-✨ **Для записи укажите:**
-1. Интересующую вас зону (бикини, подмышки, лицо, ноги).
-2. Делали ли вы электроэпиляцию ранее?
-3. Предпочтительные дни и время (утро / вечер / выходные).
-
-Напишите свой контактный номер или оставьте сообщение администратору, и мы свяжемся с вами за пару минут!
-`
-      }
-    ];
-
-    // Profanity Handling
-    const PROFANITY_PATTERN = /хуй|пизд|бля|ебат|ёбан|сук[аи]|наху|поху|мудак|говно|залуп|дерьм|чмо|шлюх/i;
-
-    function getProfanityResponse(name) {
-      const jokes = [
-        `${name ? `**${name}**, ого` : 'Ого'}, какой мощный импульс тока! ⚡ Похоже, в цепи пробило изоляцию. Давайте переключим тумблер на мирную частоту! Чем помочь по процедурам?`,
-        `${name ? `**${name}**, фиксирую` : 'Фиксирую'} сопротивление в миллион Ом! Если бы мы направляли столько энергии в фолликулы, удалили бы волосы за секунду. Давайте общаться дружелюбно 😉`,
-        `${name ? `Уважаемый(ая) **${name}**` : 'Уважаемый гость'}, в «Электромире» мы коагулируем волоски, а вежливость бережем! Давайте начнем вопрос с чистого листа?`
+      // Priority list of pleasant Russian voices
+      const femaleNames = [
+        'Google русский',
+        'Milena',
+        'Alisa',
+        'Svetlana',
+        'Irina',
+        'Katya',
+        'Yandex',
+        'Tatiana',
+        'Victoria',
+        'Elena'
       ];
-      return jokes[Math.floor(Math.random() * jokes.length)];
-    }
 
-    // Smart Name Extractor
-    function extractName(text) {
-      const trimmed = text.trim();
-      const match = trimmed.match(/(?:меня зовут|мое имя|моё имя|зовут|я)\s+([А-Яа-яA-Za-z\-]+)/i);
-      if (match && match[1]) {
-        const candidate = match[1];
-        const blacklist = ['привет', 'здравствуйте', 'хочу', 'запись', 'лазер', 'электро', 'нет', 'да'];
-        if (!blacklist.includes(candidate.toLowerCase())) {
-          return candidate.charAt(0).toUpperCase() + candidate.slice(1).toLowerCase();
+      for (const target of femaleNames) {
+        const found = voices.find(v => v.lang.startsWith('ru') && v.name.toLowerCase().includes(target.toLowerCase()));
+        if (found) {
+          preferredFemaleVoice = found;
+          break;
         }
       }
-      // Single word name pattern
-      if (/^[А-Яа-яA-Za-z]{2,15}$/.test(trimmed)) {
-        const blacklist = ['привет', 'ку', 'хай', 'здравствуйте', 'почему', 'лазер', 'запись'];
-        if (!blacklist.includes(trimmed.toLowerCase())) {
-          return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+
+      if (!preferredFemaleVoice) {
+        // Fallback to any Russian voice
+        preferredFemaleVoice = voices.find(v => v.lang.startsWith('ru')) || null;
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = setupBestFemaleVoice;
+      setupBestFemaleVoice();
+    }
+
+    function cleanTextForSpeech(md) {
+      return md
+        .replace(/[*_#`~>\[\]\(\)]/g, '')
+        .replace(/⚡|🌸|💉|🔬|🧴|🚫|☕|✨|👑|💖|😊|😉|😂/g, '')
+        .replace(/\n+/g, ' ')
+        .trim();
+    }
+
+    function speakText(text) {
+      if (!isVoiceEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+
+      const plain = cleanTextForSpeech(text);
+      if (!plain) return;
+
+      const utterance = new SpeechSynthesisUtterance(plain);
+      utterance.lang = 'ru-RU';
+      
+      if (preferredFemaleVoice) {
+        utterance.voice = preferredFemaleVoice;
+      }
+
+      // Parameters for warm, melodic female tone
+      utterance.rate = 0.98;
+      utterance.pitch = 1.15;
+
+      const wave = document.getElementById('voice-wave');
+      utterance.onstart = () => wave.classList.remove('hidden');
+      utterance.onend = () => wave.classList.add('hidden');
+      utterance.onerror = () => wave.classList.add('hidden');
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleVoiceOutput() {
+      isVoiceEnabled = !isVoiceEnabled;
+      const icon = document.getElementById('voice-icon');
+      const text = document.getElementById('voice-status-text');
+      const wave = document.getElementById('voice-wave');
+
+      if (isVoiceEnabled) {
+        icon.className = 'w-4 h-4 text-pink-600';
+        text.innerText = 'Голос вкл';
+        showToast('Озвучка включена');
+      } else {
+        window.speechSynthesis.cancel();
+        icon.className = 'w-4 h-4 text-slate-400';
+        text.innerText = 'Голос выкл';
+        wave.classList.add('hidden');
+        showToast('Озвучка выключена');
+      }
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // EXTENSIVE KNOWLEDGE VAULT
+    // ==========================================
+    const KNOWLEDGE_VAULT = {
+      vs_laser: {
+        keywords: ['лазер', 'лазерн', 'разниц', 'отличие', 'навсегда', 'фотоэпиляц', 'ipl', 'шугаринг', 'воск'],
+        answers: [
+          (n) => `${n ? `**${n}**, давайте` : 'Давайте'} начистоту: лазер — это временное уменьшение волос (*hair reduction*), а **электроэпиляция** — единственный метод, официально признанный FDA как **удаление навсегда** (*permanent removal*). Лазер бьет только по меланину (светлые, седые и рыжие волосы он не видит), а электроэпиляция током разрушает ростковый сосочек абсолютно любого волоса!`,
+          (n) => `Сравнение простое, ${n ? `**${n}**` : 'друг мой'}! Лазер усыпляет фолликулы на пару лет, а электроэпиляция коагулирует сосудистый сосочек навсегда. Току без разницы, седой волос или темный — он уничтожает корень раз и навсегда ⚡`
+        ]
+      },
+      pain_anesthesia: {
+        keywords: ['бол', 'больно', 'терпеть', 'анестези', 'обезбол', 'эмла', 'акриол', 'укол', 'инъекци'],
+        answers: [
+          (n) => `${n ? `**${n}**, не` : 'Не'} переживайте насчет боли! Сам ввод тончайшего зонда в пору вообще не ощущается. Импульс тока чувствуется как быстрое горячее пощипывание. Для чувствительных зон (бикини, подмышки) мы наносим крем с лидокаином (*Акриол Про* или *Эмла*) под пищевую плёнку за час до процедуры — и зона становится практически «немой»!`,
+          (n) => `Бояться не стоит, ${n ? `**${n}**` : 'дорогая'}! Современные аппараты подают ток за сотые доли секунды (Flash-метод), рецепторы просто не успевают передать сигнал боли. А с хорошей аппликационной анестезией многие клиенты у нас на сеансе спокойно читают или даже спят 🌸`
+        ]
+      },
+      methods: {
+        keywords: ['метод', 'термолиз', 'бленд', 'blend', 'flash', 'флеш', 'гальваник', 'ток'],
+        answers: [
+          (n) => `${n ? `**${n}**, в` : 'В'} электроэпиляции 4 проверенных метода:\n1. **Термолиз** — высокочастотный ток моментально нагревает жидкость в фолликуле.\n2. **Flash / MicroFlash** — сверхбыстрый термолиз (импульс 0.01 сек), минимально болезненный.\n3. **Гальваника** — постоянный ток, образующий щелочь.\n4. **Бленд (Blend)** — комбинация термолиза и гальваники, лучший выбор для жестких и искривленных волос бикини!`,
+          (n) => `Мы подбираем метод индивидуально, ${n ? `**${n}**` : ''}: для деликатных зон и тонких волос идеален быстрый **MicroFlash**, а для глубоких и плотных корней — надежный **Бленд**!`
+        ]
+      },
+      care_prep: {
+        keywords: ['подготовк', 'уход', 'корочк', 'краснот', 'пятна', 'хлоргексидин', 'циндол', 'бассейн', 'баня', 'спорт'],
+        answers: [
+          (n) => `${n ? `**${n}**, главное` : 'Главное'} правило ухода: первые 24 часа зону **не мочить** и не наносить косметику! Обрабатывайте 2 раза в день *Хлоргексидином* или *Мирамистином*, а микро-точки подсушивайте *Циндолом*. Если появятся микрокорочки — ни в коем случае их не сдирать, они сами отпадут за несколько дней без следа ✨`,
+          (n) => `Подготовка простая, ${n ? `**${n}**` : ''}: отрастите волоски до 3–4 мм, чтобы мастер мог зацепить их пинцетом. Пейте больше воды за день до сеанса — увлажненная кожа переносит процедуру намного комфортнее!`
+        ]
+      },
+      pricing: {
+        keywords: ['цен', 'стоимост', 'прайс', 'рубл', 'минут', 'тариф', 'сколько стоит'],
+        answers: [
+          (n) => `${n ? `**${n}**, у` : 'У'} нас поминутная оплата, ведь у каждого разная густота волос:\n* Тело: **35–45 ₽/мин**\n* Лицо: **40–50 ₽/мин**\n* Глубокое бикини: **45–55 ₽/мин**\n* Одноразовый стерильный зонд: **250–350 ₽**\nС каждым повторным сеансом волос становится меньше на 30–50%, поэтому и стоимость каждой следующей процедуры снижается!`,
+          (n) => `В среднем за первый сеанс подмышки выходят около 2500–4000 ₽, усики над губой — 800–1500 ₽. И главное — каждый обработанный волосок больше не вырастет никогда!`
+        ]
+      }
+    };
+
+    const WITTY_REACTIONS = [
+      (n) => `${n ? `**${n}**, ого` : 'Ого'}, вот это скачок напряжения! ⚡ Давайте сбавим силу тока, а то сработает автомат защиты. Чем помочь по существу?`,
+      (n) => `Кажется, тут пробило изоляцию! 😂 Давайте вернемся на спокойную волну красоты и гладкости. Что вас интересует по процедурам?`,
+      (n) => `В «Электромире» мы коагулируем только лишние волоски, а хорошие манеры бережем! Перезагрузим цепь и продолжим вежливо? 😉`
+    ];
+
+    const GENERAL_REPLIES = [
+      (n) => `Очень хороший вопрос${n ? `, **${n}**` : ''}! В нашей студии к каждому клиенту индивидуальный подход: всё зависит от зоны и структуры волоса. Уточните детали, и я распишу всё по шагам! 🌸`,
+      (n) => `С удовольствием подскажу${n ? `, **${n}**` : ''}! Расскажите, о какой зоне идет речь (лицо, тело, бикини) или вы пока просто планируете первый визит?`,
+      (n) => `Электроэпиляция полна тонкостей${n ? `, **${n}**` : ''}, но результат всегда один — навсегда чистая кожа. Какой именно момент разобрать подробнее?`
+    ];
+
+    function pickRandom(arr) {
+      if (!arr || arr.length === 0) return '';
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * arr.length);
+      } while (arr.length > 1 && idx === lastRandomIndex);
+      lastRandomIndex = idx;
+      return arr[idx];
+    }
+
+    function extractName(text) {
+      const match = text.match(/(?:меня зовут|мое имя|моё имя|зовут|я)\s+([А-Яа-яA-Za-z\-]+)/i);
+      if (match && match[1]) {
+        const candidate = match[1].trim();
+        const blacklist = ['привет', 'хочу', 'как', 'что', 'электроэпиляция', 'лазер', 'нет', 'да'];
+        if (!blacklist.includes(candidate.toLowerCase())) {
+          return candidate.charAt(0).toUpperCase() + candidate.slice(1).toLowerCase();
         }
       }
       return null;
     }
 
-    // Local Expert Reply Synthesizer
-    function generateAutonomousReply(query) {
-      const lower = query.toLowerCase();
+    // ==========================================
+    // AUTONOMOUS SYNTHESIS (Offline / No Key)
+    // ==========================================
+    function synthesizeLocalReply(query) {
+      const lower = query.toLowerCase().trim();
 
-      // Check name
-      const detected = extractName(query);
-      if (detected) {
-        const wasEmpty = !userName;
-        userName = detected;
-        localStorage.setItem('electromir_user_name', userName);
-        if (wasEmpty) {
-          return `Очень приятно познакомиться, **${userName}**! 🌸 Рада видеть вас в студии «Электромир». Задавайте любые вопросы: о боли, подготовке, методах тока или ценах — я с удовольствием всё расскажу!`;
-        }
+      const foundName = extractName(query);
+      if (foundName) {
+        userName = foundName;
+        return `Очень приятно познакомиться, **${userName}**! 🌸 Рада встрече в «Электромир». Спрашивайте смело: о методах токов, обезболивании, уходе или стоимости сеанса!`;
       }
 
-      // Profanity
-      if (PROFANITY_PATTERN.test(lower)) {
-        return getProfanityResponse(userName);
+      if (/хуй|пизд|бля|ебат|ёбан|сук[аи]|наху|поху|мудак|говно|залуп|хер/i.test(lower)) {
+        return pickRandom(WITTY_REACTIONS)(userName);
       }
 
-      // Greetings
-      if (/^(привет|здравствуй|добрый день|добрый вечер|доброе утро|хай|салют)/i.test(lower)) {
+      if (/^(привет|здравствуй|добрый|хай|салют)/i.test(lower)) {
         return userName 
-          ? `Приветствую Вас снова, **${userName}**! Всегда рада нашему диалогу. О чем хотите узнать подробнее сегодня?`
-          : `Приветствую Вас в «Электромир»! ✨ Я экспертный AI-консультант студии. Подскажите, пожалуйста, как к вам обращаться? 😊`;
+          ? `И снова здравствуйте, **${userName}**! Рада общению. О чем хотите узнать подробнее? ⚡`
+          : `Приветствую Вас в «Электромир»! ✨ Я ваш персональный консультант. Подскажите, пожалуйста, как вас зовут? 😊`;
       }
 
-      // Match Knowledge Base by Token Overlap
-      let bestMatch = null;
-      let maxScore = 0;
-
-      for (const item of KNOWLEDGE_VAULT) {
-        let score = 0;
-        for (const token of item.tokens) {
-          if (lower.includes(token)) {
-            score += token.length;
+      // Check Knowledge Vault
+      for (const key in KNOWLEDGE_VAULT) {
+        const cat = KNOWLEDGE_VAULT[key];
+        for (const kw of cat.keywords) {
+          if (lower.includes(kw)) {
+            return pickRandom(cat.answers)(userName);
           }
         }
-        if (score > maxScore) {
-          maxScore = score;
-          bestMatch = item;
-        }
       }
 
-      if (bestMatch && maxScore >= 3) {
-        let text = bestMatch.reply(userName);
-        if (!userName) {
-          text += `\n\n*Кстати, как вас зовут? Буду рада познакомиться!* 😊`;
-        }
-        return text;
-      }
-
-      // Fallback
-      if (userName) {
-        return `**${userName}**, это отличный вопрос! В студии «Электромир» мы всегда индивидуально подбираем методику (Flash, Blend или Термолиз) и тип зонда (золотые, изолированные). Уточните, пожалуйста, какую зону вы планируете обработать (бикини, подмышки, лицо, ноги), и я подробно распишу протокол! 🌸`;
-      } else {
-        return `Приветствую Вас в «Электромир»! С радостью подробно расскажу вам всё о методиках электроэпиляции, аппаратах и уходе. Подскажите, пожалуйста, как вас зовут? 😊`;
-      }
+      return pickRandom(GENERAL_REPLIES)(userName);
     }
 
-    // Request via Gemini AI with Exponential Backoff
+    // ==========================================
+    // GEMINI 2.5 FLASH API ENGINE
+    // ==========================================
     async function requestBotReply(userMessage) {
-      const apiKey = userApiKey || "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      const keyToUse = savedApiKey.trim();
 
-      const payload = {
-        contents: conversationDialog,
-        systemInstruction: {
-          parts: [{ text: SYSTEM_PROMPT }]
-        }
-      };
-
-      let attempt = 0;
-      const maxRetries = 2;
-      let delay = 1000;
-
-      while (attempt <= maxRetries) {
-        try {
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-          }
-
-          const data = await response.json();
-          const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (!replyText) throw new Error('Empty AI response');
-          return replyText;
-        } catch (err) {
-          attempt++;
-          if (attempt > maxRetries) {
-            console.warn('API unavailable, switching to internal knowledge engine:', err);
-            return generateAutonomousReply(userMessage);
-          }
-          await new Promise(r => setTimeout(r, delay));
-          delay *= 2;
-        }
+      // If no API key is saved, seamlessly use enhanced local engine
+      if (!keyToUse) {
+        await new Promise(r => setTimeout(r, 450));
+        return synthesizeLocalReply(userMessage);
       }
 
-      return generateAutonomousReply(userMessage);
+      const SYSTEM_PROMPT = `
+Ты — официальный AI-консультант студии деликатной электроэпиляции «Электромир».
+ТВОЙ СТИЛЬ:
+- Теплый, дружелюбный, живой, женственный, экспертный и с легким добрым юмором.
+- Имя пользователя: ${userName || "еще не известно (спроси вежливо, если это уместно)"}.
+- Эксперт по электроэпиляции: знаешь всё про термолиз, Flash, бленд, гальванику, фазы анаген/катаген, подготовку и уход циндолом/хлоргексидином.
+- Электроэпиляция — ЕДИНСТВЕННЫЙ метод навсегда (стандарт FDA Permanent Hair Removal). Лазер — временный.
+- Отвечай емко, по делу, структурированно, без канцелярщины.
+`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${keyToUse}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: conversationDialog,
+            generationConfig: {
+              temperature: 0.85,
+              maxOutputTokens: 800
+            },
+            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
+          })
+        });
+
+        if (!res.ok) throw new Error('API Response Error');
+        const data = await res.json();
+        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!reply) throw new Error('Empty text');
+        return reply;
+      } catch (err) {
+        console.warn('API error, falling back to local vault:', err);
+        return synthesizeLocalReply(userMessage);
+      }
     }
 
-    // =========================================================================
-    // UI INTERACTIONS & CONTROLS
-    // =========================================================================
-    function resizeTextarea(textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = Math.min(textarea.scrollHeight, 110) + 'px';
+    // ==========================================
+    // UI DOM HANDLING
+    // ==========================================
+    function resizeTextarea(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 110) + 'px';
     }
 
     function handleTextareaKey(e) {
@@ -746,10 +619,33 @@ ${name ? `**${name}**, с` : 'С'} радостью подберем для ва
       handleSend();
     }
 
-    function handleQuickAction(type) {
-      if (type === 'booking') {
-        sendQuickMessage('Здравствуйте! Я хочу записаться на консультацию и процедуру. Какие есть окошки?');
-      }
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notify');
+      document.getElementById('toast-notify-text').innerText = msg;
+      toast.classList.remove('translate-y-16', 'opacity-0');
+      setTimeout(() => toast.classList.add('translate-y-16', 'opacity-0'), 2500);
+    }
+
+    function openApiModal() {
+      document.getElementById('api-key-field').value = savedApiKey;
+      document.getElementById('api-modal').classList.remove('hidden');
+    }
+    function closeApiModal() {
+      document.getElementById('api-modal').classList.add('hidden');
+    }
+    function saveApiKeyFromModal() {
+      const val = document.getElementById('api-key-field').value.trim();
+      savedApiKey = val;
+      localStorage.setItem('electromir_gemini_key', val);
+      closeApiModal();
+      showToast(val ? 'API-ключ сохранён' : 'Используется автономный режим');
+    }
+    function clearSavedKey() {
+      savedApiKey = "";
+      localStorage.removeItem('electromir_gemini_key');
+      document.getElementById('api-key-field').value = "";
+      closeApiModal();
+      showToast('Ключ удален');
     }
 
     function openStudioModal() {
@@ -759,115 +655,61 @@ ${name ? `**${name}**, с` : 'С'} радостью подберем для ва
       document.getElementById('studio-modal').classList.add('hidden');
     }
 
-    function openApiKeyModal() {
-      document.getElementById('api-key-input').value = userApiKey;
-      document.getElementById('apikey-modal').classList.remove('hidden');
-    }
-    function closeApiKeyModal() {
-      document.getElementById('apikey-modal').classList.add('hidden');
-    }
-    function saveApiKeyFromModal() {
-      const key = document.getElementById('api-key-input').value.trim();
-      userApiKey = key;
-      localStorage.setItem('electromir_gemini_key', key);
-      closeApiKeyModal();
-      showToastNotification(key ? 'API-ключ сохранен' : 'Ключ очищен, бот работает автономно');
-    }
-    function clearSavedApiKey() {
-      userApiKey = "";
-      localStorage.removeItem('electromir_gemini_key');
-      document.getElementById('api-key-input').value = "";
-      closeApiKeyModal();
-      showToastNotification('API-ключ удален. Режим: автономный');
-    }
-
-    function showToastNotification(text) {
-      const toast = document.getElementById('toast-notify');
-      const toastText = document.getElementById('toast-notify-text');
-      toastText.innerText = text;
-      toast.classList.remove('translate-y-16', 'opacity-0');
-      setTimeout(() => {
-        toast.classList.add('translate-y-16', 'opacity-0');
-      }, 3000);
-    }
-
     function confirmClearHistory() {
       userName = "";
-      localStorage.removeItem('electromir_user_name');
       conversationDialog.length = 0;
-      const chatContainer = document.getElementById('chat-messages');
-      chatContainer.innerHTML = `
-        <div class="flex items-start gap-2.5 sm:gap-3 max-w-[92%] sm:max-w-[85%]">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-pink-300 via-fuchsia-200 to-pink-100 border border-pink-300 flex-shrink-0 flex items-center justify-center shadow-xs p-1">
-            <span class="text-lg">⚡</span>
-          </div>
-          <div class="bubble-bot rounded-3xl rounded-tl-sm p-4 text-xs sm:text-sm text-slate-800">
-            <div class="flex items-center gap-1.5 mb-1.5 font-brand font-bold text-pink-950 text-sm">
-              <span>Диалог очищен!</span> 🌸
-            </div>
-            <p class="leading-relaxed mb-2">
-              Я готова ответить на новые вопросы об электроэпиляции. Подскажите, как к вам обращаться?
-            </p>
+      window.speechSynthesis?.cancel();
+      const c = document.getElementById('chat-messages');
+      c.innerHTML = `
+        <div class="flex items-start gap-2.5 max-w-[90%]">
+          <div class="w-9 h-9 rounded-2xl bg-pink-100 flex items-center justify-center text-sm shadow-xs flex-shrink-0">⚡</div>
+          <div class="bubble-bot rounded-3xl rounded-tl-sm p-4 text-xs sm:text-sm text-pink-950">
+            <div class="font-brand font-bold mb-1">Диалог очищен 🌸</div>
+            <p>Я снова готова к общению! Как вас зовут?</p>
           </div>
         </div>
       `;
-      lucide.createIcons();
-      showToastNotification('История чата очищена');
+      showToast('Чат очищен');
     }
 
-    function appendChatBubble(role, content) {
+    function appendBubble(role, text) {
       const container = document.getElementById('chat-messages');
       const isUser = role === 'user';
       const wrapper = document.createElement('div');
-      wrapper.className = `flex items-start gap-2.5 sm:gap-3 ${isUser ? 'justify-end' : 'justify-start'}`;
+      wrapper.className = `flex items-start gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`;
 
       if (isUser) {
         wrapper.innerHTML = `
-          <div class="bubble-user rounded-3xl rounded-tr-sm px-4 py-3 text-xs sm:text-sm font-medium leading-relaxed max-w-[88%] sm:max-w-[80%] whitespace-pre-wrap break-words">
-            ${escapeHtml(content)}
+          <div class="bubble-user rounded-3xl rounded-tr-sm px-4 py-2.5 text-xs sm:text-sm font-medium leading-relaxed max-w-[85%] whitespace-pre-wrap break-words">
+            ${escapeHtml(text)}
           </div>
-          <div class="w-8 h-8 rounded-full bg-pink-200 border border-pink-300 flex-shrink-0 flex items-center justify-center text-pink-900 font-bold text-xs font-brand shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-pink-200 border border-pink-300 flex items-center justify-center text-[11px] font-bold text-pink-900 flex-shrink-0">
             Вы
           </div>
         `;
       } else {
-        const parsed = marked.parse(content);
-        const msgId = 'msg-' + Date.now();
+        const parsed = marked.parse(text);
+        const uid = 'msg-' + Date.now();
         wrapper.innerHTML = `
-          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-pink-300 via-fuchsia-200 to-pink-100 border border-pink-300 flex-shrink-0 flex items-center justify-center shadow-xs p-1">
-            <span class="text-lg">⚡</span>
+          <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-pink-300 to-pink-100 border border-pink-300 flex items-center justify-center text-sm flex-shrink-0 shadow-xs">
+            ⚡
           </div>
-          <div class="bubble-bot rounded-3xl rounded-tl-sm p-4 text-xs sm:text-sm text-slate-800 shadow-sm max-w-[92%] sm:max-w-[85%] leading-relaxed relative">
+          <div class="bubble-bot rounded-3xl rounded-tl-sm p-4 text-xs sm:text-sm text-pink-950 max-w-[88%] leading-relaxed">
             <div class="prose-bubble">${parsed}</div>
-            
-            <div class="mt-2 pt-2 border-t border-pink-100 flex items-center justify-between text-[11px] text-pink-900/60 font-semibold select-none">
-              <span class="flex items-center gap-1 font-brand text-pink-700">
-                <i data-lucide="sparkles" class="w-3 h-3 text-pink-500"></i> Электромир
-              </span>
-              <div class="flex items-center gap-2">
-                <button onclick="copyBubbleText('${msgId}')" title="Скопировать" class="p-1 hover:text-pink-950 transition">
-                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="speakBubbleText('${msgId}')" title="Озвучить" class="p-1 hover:text-pink-600 transition">
-                  <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
-                </button>
-              </div>
+            <div class="mt-2 pt-1.5 border-t border-pink-200/60 flex items-center justify-between text-[10px] text-pink-800/60 font-semibold">
+              <span class="font-brand text-pink-700">Электромир</span>
+              <button onclick="speakText(document.getElementById('${uid}').innerText)" title="Озвучить" class="p-1 hover:text-pink-900">
+                <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+              </button>
             </div>
-            <div id="${msgId}" class="hidden">${escapeHtml(content)}</div>
+            <div id="${uid}" class="hidden">${escapeHtml(text)}</div>
           </div>
         `;
       }
 
       container.appendChild(wrapper);
       lucide.createIcons();
-      scrollToBottom();
-    }
-
-    function scrollToBottom() {
-      const container = document.getElementById('chat-messages');
-      setTimeout(() => {
-        container.scrollTop = container.scrollHeight;
-      }, 50);
+      container.scrollTop = container.scrollHeight;
     }
 
     function escapeHtml(str) {
@@ -876,152 +718,95 @@ ${name ? `**${name}**, с` : 'С'} радостью подберем для ва
       return d.innerHTML;
     }
 
-    function copyBubbleText(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const ta = document.createElement('textarea');
-      ta.value = el.innerText;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      showToastNotification('Текст скопирован');
-    }
-
-    function speakBubbleText(id) {
-      const el = document.getElementById(id);
-      if (!el || !('speechSynthesis' in window)) {
-        showToastNotification('Озвучка не поддерживается вашим браузером');
-        return;
-      }
-      playSpeechText(el.innerText);
-    }
-
-    function playSpeechText(rawText) {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-
-      // Clean markdown tags & symbols for natural voice synthesis
-      const cleanText = rawText
-        .replace(/[*_#`~>]/g, '')
-        .replace(/⚡|🌸|👑|✨|💰|⏱|🛡|🌿|⛔|⚠️|💉|🔬|🧴|🚫/g, '')
-        .replace(/\n+/g, '. ')
-        .trim();
-
-      if (!cleanText) return;
-
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'ru-RU';
-      utterance.rate = 1.05;
-      utterance.pitch = 1.0;
-
-      // Select natural Russian voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const ruVoice = voices.find(v => v.lang.startsWith('ru') && (v.name.includes('Google') || v.name.includes('Yandex') || v.name.includes('Milena') || v.name.includes('Elena')));
-      if (ruVoice) {
-        utterance.voice = ruVoice;
-      }
-
-      window.speechSynthesis.speak(utterance);
-    }
-
-    // Speech Recognition
-    let recognition = null;
+    // Voice Input via Web Speech API
+    let voiceRecognizer = null;
     function toggleSpeechRecognition() {
-      const SpeechApi = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechApi) {
-        showToastNotification('Голосовой ввод не поддерживается');
+      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Speech) {
+        showToast('Голосовой ввод не поддерживается');
         return;
       }
-      const micBtn = document.getElementById('mic-action-btn');
+      const mic = document.getElementById('mic-action-btn');
 
-      if (recognition) {
-        recognition.stop();
-        recognition = null;
-        micBtn.classList.remove('text-pink-600', 'animate-pulse');
+      if (voiceRecognizer) {
+        voiceRecognizer.stop();
+        voiceRecognizer = null;
+        mic.classList.remove('text-pink-600', 'animate-pulse');
         return;
       }
 
       try {
-        recognition = new SpeechApi();
-        recognition.lang = 'ru-RU';
-        recognition.interimResults = false;
+        voiceRecognizer = new Speech();
+        voiceRecognizer.lang = 'ru-RU';
+        voiceRecognizer.interimResults = false;
 
-        micBtn.classList.add('text-pink-600', 'animate-pulse');
-        showToastNotification('Говорите...');
+        mic.classList.add('text-pink-600', 'animate-pulse');
+        showToast('Слушаю вас...');
 
-        recognition.onresult = (evt) => {
-          const text = evt.results[0][0].transcript;
+        voiceRecognizer.onresult = (e) => {
+          const res = e.results[0][0].transcript;
           const input = document.getElementById('message-input');
-          input.value = (input.value ? input.value + ' ' : '') + text;
+          input.value = (input.value ? input.value + ' ' : '') + res;
           resizeTextarea(input);
         };
-        recognition.onend = () => {
-          micBtn.classList.remove('text-pink-600', 'animate-pulse');
-          recognition = null;
+
+        voiceRecognizer.onerror = () => {
+          mic.classList.remove('text-pink-600', 'animate-pulse');
+          voiceRecognizer = null;
         };
-        recognition.onerror = () => {
-          micBtn.classList.remove('text-pink-600', 'animate-pulse');
-          recognition = null;
+        voiceRecognizer.onend = () => {
+          mic.classList.remove('text-pink-600', 'animate-pulse');
+          voiceRecognizer = null;
         };
-        recognition.start();
+
+        voiceRecognizer.start();
       } catch (e) {
-        micBtn.classList.remove('text-pink-600', 'animate-pulse');
-        recognition = null;
+        mic.classList.remove('text-pink-600', 'animate-pulse');
+        voiceRecognizer = null;
       }
     }
 
-    // Main Send Pipeline
+    // Main Send Handler
     async function handleSend(e) {
       if (e) e.preventDefault();
       const input = document.getElementById('message-input');
       const sendBtn = document.getElementById('send-submit-btn');
-      const typingIndicator = document.getElementById('typing-box');
+      const typing = document.getElementById('typing-box');
+      const container = document.getElementById('chat-messages');
 
       const text = input.value.trim();
       if (!text) return;
 
-      appendChatBubble('user', text);
-      conversationDialog.push({
-        role: 'user',
-        parts: [{ text: text }]
-      });
+      const detected = extractName(text);
+      if (detected && !userName) {
+        userName = detected;
+      }
 
-      // Clear & Lock Input
+      appendBubble('user', text);
+      conversationDialog.push({ role: 'user', parts: [{ text }] });
+
       input.value = '';
       input.style.height = 'auto';
       input.disabled = true;
       sendBtn.disabled = true;
-      typingIndicator.classList.remove('hidden');
-      scrollToBottom();
+      typing.classList.remove('hidden');
+      container.scrollTop = container.scrollHeight;
 
       try {
-        const responseText = await requestBotReply(text);
-        
-        conversationDialog.push({
-          role: 'model',
-          parts: [{ text: responseText }]
-        });
-
-        appendChatBubble('assistant', responseText);
-
-        // Auto Voice Speak if enabled
-        if (autoVoiceEnabled) {
-          playSpeechText(responseText);
-        }
+        const reply = await requestBotReply(text);
+        conversationDialog.push({ role: 'model', parts: [{ text: reply }] });
+        appendBubble('assistant', reply);
+        speakText(reply);
       } catch (err) {
-        console.error('Send error:', err);
-        const fallback = generateAutonomousReply(text);
-        appendChatBubble('assistant', fallback);
-        if (autoVoiceEnabled) {
-          playSpeechText(fallback);
-        }
+        const fallback = synthesizeLocalReply(text);
+        appendBubble('assistant', fallback);
+        speakText(fallback);
       } finally {
-        typingIndicator.classList.add('hidden');
+        typing.classList.add('hidden');
         input.disabled = false;
         sendBtn.disabled = false;
         input.focus();
-        scrollToBottom();
+        container.scrollTop = container.scrollHeight;
       }
     }
   </script>
