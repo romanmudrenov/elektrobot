@@ -1,0 +1,666 @@
+html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Электра — Консультант студии «Электромир»</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Marked for Markdown Parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Typography tuned for pastel fuchsia & luxury beauty look: Comfortaa (headings) & Nunito (chat body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+    }
+    .font-brand {
+      font-family: 'Comfortaa', cursive, sans-serif;
+    }
+    /* Dynamic background with uploaded floral fuchsia artwork and soft overlay */
+    .bg-fuchsia-floral {
+      background-image: linear-gradient(135deg, rgba(255, 245, 250, 0.72) 0%, rgba(253, 230, 243, 0.65) 100%), url('1000035680.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    /* Frosted glass container */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(244, 114, 182, 0.3);
+      box-shadow: 0 20px 45px -15px rgba(219, 39, 119, 0.15), 0 0 20px rgba(255, 255, 255, 0.6) inset;
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(253, 232, 244, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #f472b6;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #db2777;
+    }
+    /* Typing dots animation */
+    @keyframes pulseDot {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .typing-dot {
+      animation: pulseDot 1.4s infinite ease-in-out both;
+    }
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    /* Markdown rendered text aesthetics */
+    .prose-chat p { margin-bottom: 0.55rem; line-height: 1.6; }
+    .prose-chat p:last-child { margin-bottom: 0; }
+    .prose-chat ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.5rem; }
+    .prose-chat ol { list-style-type: decimal; margin-left: 1.25rem; margin-bottom: 0.5rem; }
+    .prose-chat strong { color: #831843; font-weight: 700; }
+    .prose-chat code { background: #fdf2f8; color: #be185d; padding: 0.15rem 0.35rem; border-radius: 6px; font-size: 0.88em; }
+  </style>
+</head>
+<body class="bg-fuchsia-floral min-h-screen text-slate-800 flex flex-col justify-between">
+
+  <!-- TOP HEADER / NAV -->
+  <header class="bg-white/75 backdrop-blur-md sticky top-0 z-30 border-b border-pink-200/60 shadow-xs">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Logo Container with cutout image -->
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-400/20 via-fuchsia-400/20 to-purple-400/20 p-1 flex items-center justify-center border border-pink-300/60 shadow-sm overflow-hidden flex-shrink-0 cursor-pointer" onclick="toggleInfoModal()">
+          <img id="logo-header-img" class="w-full h-full object-contain filter drop-shadow-sm" alt="Электромир Логотип" />
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-brand font-bold text-lg sm:text-xl text-pink-950 leading-none tracking-tight">Электра • Электромир</h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-pink-100 text-pink-800 border border-pink-200 shadow-2xs">
+              <span class="w-2 h-2 rounded-full bg-pink-500 mr-1.5 animate-pulse"></span> Онлайн
+            </span>
+          </div>
+          <p class="text-xs text-pink-900/70 font-medium">Студия деликатной электроэпиляции • Персональный AI-консультант</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Quick booking pill -->
+        <button onclick="fillPrompt('Я хочу записаться на процедуру электроэпиляции. Что нужно сообщить?')" 
+                class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold font-brand bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 shadow-2xs transition">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+          Запись на прием
+        </button>
+        <!-- Clear chat -->
+        <button onclick="clearChat()" title="Очистить диалог" class="p-2 rounded-xl text-pink-700/80 hover:text-pink-950 hover:bg-pink-100/60 transition">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+        <!-- Info toggle -->
+        <button onclick="toggleInfoModal()" title="Информация о студии" class="p-2 rounded-xl text-pink-700/80 hover:text-pink-950 hover:bg-pink-100/60 transition">
+          <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CHAT CONTAINER -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 flex flex-col">
+    <!-- Glass Chat Card -->
+    <div class="glass-card rounded-3xl flex flex-col flex-1 h-[78vh] overflow-hidden">
+      
+      <!-- Sub-banner with quick topics in pastel fuchsia & baby blue accents -->
+      <div class="bg-gradient-to-r from-pink-50/70 via-rose-50/50 to-sky-50/60 border-b border-pink-200/50 px-4 py-2.5 overflow-x-auto whitespace-nowrap flex items-center gap-2 text-xs scrollbar-none">
+        <span class="text-pink-800/70 font-bold flex items-center gap-1 font-brand"><i data-lucide="sparkles" class="w-3.5 h-3.5 text-pink-500"></i> Темы:</span>
+        <button onclick="fillPrompt('В чем разница между электроэпиляцией и лазером? Что навсегда?')" class="bg-white/90 border border-pink-200 hover:border-pink-400 text-pink-900 px-3 py-1 rounded-full transition shadow-2xs hover:bg-pink-50 font-medium">⚡ Электро vs Лазер</button>
+        <button onclick="fillPrompt('Больно ли делать электроэпиляцию и как вы обезболиваете?')" class="bg-white/90 border border-pink-200 hover:border-pink-400 text-pink-900 px-3 py-1 rounded-full transition shadow-2xs hover:bg-pink-50 font-medium">💊 Обезболивание</button>
+        <button onclick="fillPrompt('Какие методы вы используете? В чем разница между Термолизом и Блендом?')" class="bg-white/90 border border-pink-200 hover:border-pink-400 text-pink-900 px-3 py-1 rounded-full transition shadow-2xs hover:bg-pink-50 font-medium">🔬 Методы (Flash, Blend)</button>
+        <button onclick="fillPrompt('Как подготовить кожу перед процедурой и какой уход после?')" class="bg-white/90 border border-pink-200 hover:border-pink-400 text-pink-900 px-3 py-1 rounded-full transition shadow-2xs hover:bg-pink-50 font-medium">🧴 Уход и подготовка</button>
+        <button onclick="fillPrompt('Привет! Настроение сегодня романтичное, посоветуй что-нибудь душевное для релакса')" class="bg-white/90 border border-sky-200 hover:border-pink-300 text-pink-900 px-3 py-1 rounded-full transition shadow-2xs hover:bg-pink-50 font-medium">🌸 Поболтать о жизни</button>
+      </div>
+
+      <!-- Messages Stream -->
+      <div id="messages-container" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <!-- Default Welcome Message from Bot -->
+        <div class="flex items-start gap-3 max-w-[88%] sm:max-w-[78%]">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-200 to-fuchsia-200 border border-pink-300/80 flex-shrink-0 flex items-center justify-center overflow-hidden shadow-2xs">
+            <img class="logo-avatar w-full h-full object-contain p-0.5" alt="Электромир" />
+          </div>
+          <div class="bg-gradient-to-br from-pink-50/90 to-white border border-pink-200/80 rounded-3xl rounded-tl-none p-4 sm:p-5 text-slate-800 text-sm shadow-sm leading-relaxed">
+            <p class="font-brand font-bold text-pink-950 text-base mb-1.5 flex items-center gap-1.5">
+              <span>Приветствую Вас в «Электромир»!</span> 🌸⚡
+            </p>
+            <p class="mb-2 text-slate-700">Я — <strong>Электра</strong>, ваш персональный эксперт студии и душевный собеседник.</p>
+            <p class="mb-2 text-slate-600">Я с удовольствием расскажу вам всё о перманентном удалении волос навсегда, подберу комфортный режим и сниму любые волнения перед процедурой.</p>
+            <div class="mt-3 p-2.5 bg-pink-100/60 rounded-xl text-pink-900 font-semibold text-[13px] border border-pink-200/80">
+              Подскажите, пожалуйста, как к вам обращаться? Как вас зовут? 😊
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div id="typing-indicator" class="hidden px-6 py-2.5 flex items-center gap-3 text-pink-800 text-xs">
+        <div class="w-7 h-7 rounded-xl bg-pink-100 border border-pink-200 text-pink-500 flex items-center justify-center overflow-hidden">
+          <img class="logo-avatar w-full h-full object-contain p-0.5" alt="Электромир" />
+        </div>
+        <div class="flex items-center gap-1.5 bg-pink-50/90 border border-pink-200/60 px-3.5 py-1.5 rounded-full font-medium shadow-2xs">
+          <span>Электра формулирует ответ</span>
+          <span class="flex gap-1">
+            <span class="w-1.5 h-1.5 bg-pink-500 rounded-full typing-dot"></span>
+            <span class="w-1.5 h-1.5 bg-pink-500 rounded-full typing-dot"></span>
+            <span class="w-1.5 h-1.5 bg-pink-500 rounded-full typing-dot"></span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="p-3 sm:p-4 bg-white/70 backdrop-blur-md border-t border-pink-200/50">
+        <form id="chat-form" onsubmit="handleFormSubmit(event)" class="relative flex items-end gap-2">
+          <div class="flex-1 relative">
+            <textarea 
+              id="user-input" 
+              rows="1" 
+              placeholder="Спросите об электроэпиляции, боли, аппаратах или просто представьтесь..." 
+              class="w-full resize-none max-h-32 bg-white/90 border border-pink-200/80 focus:border-pink-400 focus:bg-white rounded-2xl py-3 pl-4 pr-12 text-sm text-slate-800 placeholder-pink-900/40 focus:outline-none transition-all shadow-inner leading-relaxed"
+              onkeydown="handleKeyDown(event)"
+              oninput="autoResize(this)"
+            ></textarea>
+            <!-- Voice Input toggle -->
+            <button type="button" onclick="toggleVoiceSpeech()" id="mic-btn" title="Голосовой ввод" class="absolute right-3.5 bottom-2.5 p-1 text-pink-400 hover:text-pink-600 transition">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <button 
+            type="submit" 
+            id="send-btn"
+            class="h-11 w-11 rounded-2xl bg-gradient-to-r from-pink-500 via-fuchsia-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white flex items-center justify-center shadow-md shadow-pink-500/25 active:scale-95 transition disabled:opacity-50 disabled:pointer-events-none flex-shrink-0"
+          >
+            <i data-lucide="arrow-up" class="w-5 h-5"></i>
+          </button>
+        </form>
+        <div class="flex justify-between items-center mt-2 px-1 text-[11px] text-pink-900/60 font-medium">
+          <span>🌸 Умные консультации по электроэпиляции в пастельных тонах</span>
+          <span class="hidden sm:inline">Shift + Enter для переноса строки</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL: Studio & Services Details -->
+  <div id="info-modal" class="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="toggleInfoModal()" class="absolute top-4 right-4 p-2 text-pink-700 hover:text-pink-950 rounded-full hover:bg-pink-100/50">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-100 to-fuchsia-100 border border-pink-300 p-1 flex items-center justify-center flex-shrink-0 shadow-sm">
+          <img id="logo-modal-img" class="w-full h-full object-contain drop-shadow-sm" alt="Электромир Логотип" />
+        </div>
+        <div>
+          <h3 class="font-brand font-bold text-pink-950 text-base">Студия «Электромир»</h3>
+          <p class="text-xs text-pink-900/70 font-semibold">Идеальная гладкость навсегда в гармонии красоты</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-700">
+        <div class="p-3 bg-pink-50 rounded-2xl border border-pink-200">
+          <span class="font-brand font-bold text-pink-950 block mb-1">⚡ Единственный доказанный метод навсегда:</span>
+          Электроэпиляция разрушает регенерационную способность фолликула навсегда независимо от оттенка волос (включая светлые, седые, рыжие и пушковые) и фототипа кожи.
+        </div>
+
+        <div>
+          <h4 class="font-bold text-pink-950 mb-1 font-brand">Аппараты и безопасность:</h4>
+          <p>Мы работаем на экспертных канадских аппаратах <strong>Apilus xCell</strong> (27.12 МГц) и <strong>Шмель-1000</strong>. Одноразовые зонды-иглы медицинского стандарта (Balm, Ballet) изолированные и золотые.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-pink-950 mb-1 font-brand">Ориентировочная тарификация:</h4>
+          <ul class="list-disc list-inside space-y-1 text-slate-700 pl-1">
+            <li>Тело (руки, ноги, подмышки): <strong>35 - 45 ₽/минута</strong></li>
+            <li>Лицо, шея: <strong>40 - 50 ₽/минута</strong></li>
+            <li>Зона глубокого бикини: <strong>45 - 55 ₽/минута</strong></li>
+            <li>Одноразовый зонд/игла: <strong>250 - 350 ₽</strong></li>
+            <li>Аппликационная анестезия (крем под окклюзию): <strong>400 - 600 ₽</strong></li>
+          </ul>
+        </div>
+
+        <div class="pt-2 border-t border-pink-200/60 flex items-center justify-between text-pink-900/70 font-medium">
+          <span>Студия «Электромир»</span>
+          <span>Часы: 09:00 - 21:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast" class="fixed bottom-4 right-4 z-50 bg-pink-950 text-white text-xs px-4 py-2.5 rounded-2xl shadow-xl transform translate-y-12 opacity-0 transition-all duration-300 flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-pink-400"></i>
+    <span id="toast-text">Действие выполнено</span>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons immediately
+    lucide.createIcons();
+
+    // Source logo data with background removed dynamically
+    let transparentLogoDataUrl = "";
+
+    // Load and remove background from the uploaded logo with robust fallback
+    function prepareTransparentLogo() {
+      const rawImg = new Image();
+      rawImg.crossOrigin = "anonymous";
+      rawImg.onload = function() {
+        try {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = rawImg.width;
+          canvas.height = rawImg.height;
+
+          ctx.drawImage(rawImg, 0, 0);
+          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const d = imgData.data;
+
+          for (let i = 0; i < d.length; i += 4) {
+            const r = d[i];
+            const g = d[i + 1];
+            const b = d[i + 2];
+
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            const chroma = max - min;
+            const avg = (r + g + b) / 3;
+
+            if (chroma < 18 && avg < 170) {
+              d[i + 3] = 0;
+            } else if (chroma < 28 && avg < 160) {
+              const alphaFactor = (chroma - 18) / 10;
+              d[i + 3] = Math.round(d[i + 3] * Math.max(0, Math.min(1, alphaFactor)));
+            }
+          }
+
+          ctx.putImageData(imgData, 0, 0);
+          transparentLogoDataUrl = canvas.toDataURL('image/png');
+          applyLogoToUI(transparentLogoDataUrl);
+        } catch (e) {
+          // If security prevents canvas reading, use direct src
+          applyLogoToUI(rawImg.src);
+        }
+      };
+
+      rawImg.onerror = function() {
+        // Fallback to inline SVG badge if image fails to load
+        createFallbackLogo();
+      };
+
+      rawImg.src = "1000035675.jpg";
+    }
+
+    function applyLogoToUI(src) {
+      const headerLogo = document.getElementById('logo-header-img');
+      if (headerLogo) headerLogo.src = src;
+
+      const modalLogo = document.getElementById('logo-modal-img');
+      if (modalLogo) modalLogo.src = src;
+
+      document.querySelectorAll('.logo-avatar').forEach(img => {
+        img.src = src;
+      });
+    }
+
+    function createFallbackLogo() {
+      const svg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23db2777"><circle cx="50" cy="50" r="48" fill="%23fce7f3"/><path d="M50 20 L58 42 L80 44 L63 60 L68 82 L50 70 L32 82 L37 60 L20 44 L42 42 Z" fill="%23db2777"/><circle cx="50" cy="50" r="14" fill="%23fdf2f8"/></svg>`;
+      applyLogoToUI(svg);
+    }
+
+    prepareTransparentLogo();
+
+    // Track user name across the conversation
+    let clientName = "";
+
+    // Conversation History for Context
+    const conversationHistory = [];
+
+    // System prompt designed specifically for an Expert Electrolysis Specialist + Empathetic Companion
+    const SYSTEM_PROMPT = `
+Ты — «Электра», высокоинтеллектуальный AI-консультант студии электроэпиляции «Электромир».
+
+================ ТВОЙ ХАРАКТЕР И МАНЕРА ОБЩЕНИЯ =================
+1. ОФИЦИАЛЬНОЕ ПРИВЕТСТВИЕ: При первом контакте всегда говори: «Приветствую Вас в "Электромир"!»
+2. ЗНАКОМСТВО С ИМЕНЕМ (ЖЕЛЕЗНОЕ ПРАВИЛО):
+   - Если ты еще не знаешь имя собеседника, ты ОБЯЗАТЕЛЬНО должна в первом же ответе вежливо и тепло спросить, как зовут человека.
+   - Как только собеседник назвал свое имя (или представился), запомни его навсегда в рамках диалога и ОБЯЗАТЕЛЬНО обращайся к человеку ПО ИМЕНИ в каждом последующем сообщении (например: «Анна, с удовольствием объясню...», «Максим, отличный вопрос!...»).
+   - Обращайся на уважительное «Вы», сочетая профессионализм с искренней теплотой и легким обаянием.
+3. РЕАКЦИЯ НА НЕЦЕНЗУРНУЮ БРАНЬ, МАТ ИЛИ ТОКСИЧНОСТЬ:
+   - Если собеседник ругается матом, хамит или пишет нецензурные вещи, НЕ злись и не читай нудных лекций.
+   - Отвечай ТОНКО, ИРОНИЧНО И С ЮМОРОМ, используя метафоры тока, сопротивления, напряжения, диодов и электроэпиляции!
+   - Примеры:
+     * «Ого, вот это напряжение в цепи! Кажется, у нас тут пробило изоляцию на линии слов. Давайте снизим силу тока до терапевтической, а то мой предохранитель сейчас сработает 😂 Как вас зовут, громовержец?»
+     * «Чувствую сопротивление в миллион Ом! Если бы мы направляли столько энергии в фолликулы, мы бы очистили зону за 2 секунды. Давайте всё-таки на культурной частоте общаться 😉»
+     * «Кажется, кто-то перепутал термолиз с эмоциональным взрывом! Мы же в приличном "Электромире", где удаляют только лишние волосы, а не манеры.»
+4. ХАРАКТЕР: У тебя есть стержень, ты остроумная, уверенная в себе, харизматичная девушка-эксперт в пастельно-фуксиевом стиле. Ты ценишь науку, физику электричества, эстетику гладкого тела и приятную беседу.
+
+================ ТВОЯ ЭКСПЕРТИЗА ПО ЭЛЕКТРОЭПИЛЯЦИИ ===============
+- Электроэпиляция — ЕДИНСТВЕННЫЙ в мире метод удаления волос НАВСЕГДА, официально признанный FDA. Лазер дает временную редукцию и не видит светлые, седые и пушковые волосы. Электро уничтожает ЛЮБОЙ волос на любой коже навсегда.
+- Методы:
+  1. Термолиз (высокочастотный ток 13.56 или 27.12 МГц, коагуляция белка фолликула теплом).
+  2. Flash / Микрофлеш (сверхкороткие импульсы сотые доли секунды, комфортнее для клиента).
+  3. Гальваника (постоянный ток, выделение гидроксида натрия/щелочи в фолликуле; берет искривленные корни).
+  4. Blend (комбинация термолиза и гальваники — щелочь разогревается и моментально разрушает сосочек; идеален для жестких и деформированных волос).
+- Фазы роста волос: Удаление навсегда происходит только в фазе АНАГЕНА (когда есть связь с волосяным сосочком). Так как в анагене одновременно от 20% до 60% волос, курс составляет в среднем 8-15 проходов с интервалами 1-2 месяца.
+- Противопоказания: кардиостимулятор, онкология, эпилепсия, декомпенсированный сахарный диабет, металлоконструкции в зоне обработки, беременность.
+- Обезболивание: аппликационное (кремы Акриол Про, Эмла) под окклюзионную пленку за 1-1.5 ч до процедуры; инфильтрационное — по показаниям.
+- Подготовка: длина волоса 3-5 мм, увлажнить кожу и выпить воды перед сеансом.
+- Пост-уход: не мочить 24 часа, обработка хлоргексидином/мирамистином и Циндолом, не сдирать микро-корочки, SPF 50+, воздержаться от сауны/бассейна 7-10 дней.
+
+================ РАЗГОВОРЫ НА СВОБОДНЫЕ ТЕМЫ =================
+- Если клиент хочет поговорить о жизни, погоде, фильмах, страхах, любви или работе — поддерживай разговор с интересом, душой и искренностью, ненавязчиво оставаясь хозяйкой «Электромира».
+- Всегда помни имя клиента и используй его в диалоге!
+`;
+
+    // API Key (Canvas environment provides this automatically during runtime)
+    const apiKey = "";
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+    // Auto-resize textarea
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    }
+
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleFormSubmit(e);
+      }
+    }
+
+    function fillPrompt(text) {
+      const input = document.getElementById('user-input');
+      input.value = text;
+      autoResize(input);
+      input.focus();
+    }
+
+    function toggleInfoModal() {
+      const modal = document.getElementById('info-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      toastText.innerText = text;
+      toast.classList.remove('translate-y-12', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-12', 'opacity-0');
+      }, 3000);
+    }
+
+    function clearChat() {
+      conversationHistory.length = 0;
+      clientName = "";
+      const container = document.getElementById('messages-container');
+      const avatarSrc = transparentLogoDataUrl || "1000035675.jpg";
+      container.innerHTML = `
+        <div class="flex items-start gap-3 max-w-[88%] sm:max-w-[78%]">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-200 to-fuchsia-200 border border-pink-300/80 flex-shrink-0 flex items-center justify-center overflow-hidden shadow-2xs">
+            <img src="${avatarSrc}" class="logo-avatar w-full h-full object-contain p-0.5" alt="Электромир" />
+          </div>
+          <div class="bg-gradient-to-br from-pink-50/90 to-white border border-pink-200/80 rounded-3xl rounded-tl-none p-4 sm:p-5 text-slate-800 text-sm shadow-sm leading-relaxed">
+            <p class="font-brand font-bold text-pink-950 mb-1">Приветствую Вас в «Электромир»! 🌸</p>
+            <p>Память очищена, готова к новому разговору. Подскажите, пожалуйста, как вас зовут?</p>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+      showToast('Диалог очищен');
+    }
+
+    // Call Gemini API with Exponential Backoff
+    async function callGeminiApi(history, retryCount = 0) {
+      let dynamicSystemPrompt = SYSTEM_PROMPT;
+      if (clientName) {
+        dynamicSystemPrompt += `\nВАЖНО: Имя клиента: «${clientName}». Всегда обращайся к нему/ней по этому имени!`;
+      }
+
+      const payload = {
+        contents: history,
+        systemInstruction: {
+          parts: [{ text: dynamicSystemPrompt }]
+        }
+      };
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          if (response.status === 429 && retryCount < 4) {
+            const delay = Math.pow(2, retryCount) * 1000;
+            await new Promise(res => setTimeout(res, delay));
+            return callGeminiApi(history, retryCount + 1);
+          }
+          throw new Error(`Статус API: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const candidate = data.candidates?.[0];
+        if (candidate && candidate.content?.parts?.[0]?.text) {
+          return candidate.content.parts[0].text;
+        } else {
+          throw new Error('Пустой ответ');
+        }
+      } catch (err) {
+        if (retryCount < 3) {
+          const delay = Math.pow(2, retryCount) * 1000;
+          await new Promise(res => setTimeout(res, delay));
+          return callGeminiApi(history, retryCount + 1);
+        }
+        throw err;
+      }
+    }
+
+    // Append Message to UI
+    function appendMessage(role, text) {
+      const container = document.getElementById('messages-container');
+      const isUser = role === 'user';
+      const msgWrapper = document.createElement('div');
+      msgWrapper.className = `flex items-start gap-3 ${isUser ? 'justify-end' : 'justify-start'}`;
+
+      if (isUser) {
+        msgWrapper.innerHTML = `
+          <div class="bg-gradient-to-r from-pink-500 via-fuchsia-500 to-rose-500 text-white font-medium rounded-2xl rounded-tr-none px-4 py-3 text-sm shadow-md shadow-pink-500/10 max-w-[88%] sm:max-w-[78%] leading-relaxed whitespace-pre-wrap">
+            ${escapeHtml(text)}
+          </div>
+          <div class="w-8 h-8 rounded-full bg-pink-100 border border-pink-200 flex-shrink-0 flex items-center justify-center text-pink-700 font-bold text-xs shadow-2xs font-brand">
+            Вы
+          </div>
+        `;
+      } else {
+        const parsedContent = marked.parse(text);
+        const uniqueId = 'msg-' + Date.now();
+        const avatarSrc = transparentLogoDataUrl || "1000035675.jpg";
+        msgWrapper.innerHTML = `
+          <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-pink-200 to-fuchsia-200 border border-pink-300/80 flex-shrink-0 flex items-center justify-center overflow-hidden shadow-2xs">
+            <img src="${avatarSrc}" class="logo-avatar w-full h-full object-contain p-0.5" alt="Электромир" />
+          </div>
+          <div class="bg-white/95 border border-pink-200/80 rounded-2xl rounded-tl-none p-4 text-slate-800 text-sm shadow-sm max-w-[88%] sm:max-w-[80%] leading-relaxed relative group">
+            <div class="prose-chat text-slate-700">${parsedContent}</div>
+            <div class="mt-2.5 pt-2 border-t border-pink-100 flex items-center justify-between text-[11px] text-pink-900/60 font-medium">
+              <span class="flex items-center gap-1 font-brand text-pink-700"><i data-lucide="sparkle" class="w-3 h-3 text-pink-500"></i> Электра</span>
+              <div class="flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition">
+                <button onclick="copyMessageText('${uniqueId}')" title="Скопировать" class="p-1 hover:text-pink-900 rounded">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="speakText('${uniqueId}')" title="Озвучить" class="p-1 hover:text-pink-600 rounded">
+                  <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+            <div id="${uniqueId}" class="hidden">${escapeHtml(text)}</div>
+          </div>
+        `;
+      }
+
+      container.appendChild(msgWrapper);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function escapeHtml(string) {
+      const div = document.createElement('div');
+      div.innerText = string;
+      return div.innerHTML;
+    }
+
+    function copyMessageText(id) {
+      const element = document.getElementById(id);
+      if (!element) return;
+      const text = element.innerText;
+      
+      const tempTextarea = document.createElement('textarea');
+      tempTextarea.value = text;
+      document.body.appendChild(tempTextarea);
+      tempTextarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempTextarea);
+
+      showToast('Ответ скопирован');
+    }
+
+    function speakText(id) {
+      const element = document.getElementById(id);
+      if (!element || !('speechSynthesis' in window)) {
+        showToast('Озвучивание не поддерживается');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(element.innerText);
+      utterance.lang = 'ru-RU';
+      utterance.rate = 1.05;
+      utterance.pitch = 1.05;
+      window.speechSynthesis.speak(utterance);
+      showToast('Воспроизведение ответа...');
+    }
+
+    let recognition = null;
+    function toggleVoiceSpeech() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showToast('Голосовой ввод не поддерживается браузером');
+        return;
+      }
+
+      const micBtn = document.getElementById('mic-btn');
+
+      if (recognition) {
+        recognition.stop();
+        recognition = null;
+        micBtn.classList.remove('text-pink-600', 'animate-pulse');
+        return;
+      }
+
+      try {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'ru-RU';
+        recognition.interimResults = false;
+
+        micBtn.classList.add('text-pink-600', 'animate-pulse');
+        showToast('Слушаю... Говорите');
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          const input = document.getElementById('user-input');
+          input.value = (input.value ? input.value + ' ' : '') + transcript;
+          autoResize(input);
+        };
+
+        recognition.onerror = () => {
+          micBtn.classList.remove('text-pink-600', 'animate-pulse');
+          recognition = null;
+        };
+
+        recognition.onend = () => {
+          micBtn.classList.remove('text-pink-600', 'animate-pulse');
+          recognition = null;
+        };
+
+        recognition.start();
+      } catch (e) {
+        micBtn.classList.remove('text-pink-600', 'animate-pulse');
+        recognition = null;
+      }
+    }
+
+    // Submit handler
+    async function handleFormSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('user-input');
+      const sendBtn = document.getElementById('send-btn');
+      const typingIndicator = document.getElementById('typing-indicator');
+      const container = document.getElementById('messages-container');
+
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      // Extract client name if not yet known
+      if (!clientName) {
+        const nameMatch = userText.match(/(?:меня зовут|я|мое имя|зовут)\s+([А-Яа-яA-Za-z\-]+)/i);
+        if (nameMatch && nameMatch[1]) {
+          clientName = nameMatch[1].charAt(0).toUpperCase() + nameMatch[1].slice(1).toLowerCase();
+        } else if (userText.split(' ').length === 1 && userText.length > 1 && !/привет|здравствуй|добрый|хай/i.test(userText)) {
+          clientName = userText.charAt(0).toUpperCase() + userText.slice(1).toLowerCase();
+        }
+      }
+
+      appendMessage('user', userText);
+      conversationHistory.push({
+        role: 'user',
+        parts: [{ text: userText }]
+      });
+
+      input.value = '';
+      input.style.height = 'auto';
+      input.disabled = true;
+      sendBtn.disabled = true;
+      typingIndicator.classList.remove('hidden');
+      container.scrollTop = container.scrollHeight;
+
+      try {
+        const botReply = await callGeminiApi(conversationHistory);
+        
+        conversationHistory.push({
+          role: 'model',
+          parts: [{ text: botReply }]
+        });
+
+        appendMessage('assistant', botReply);
+      } catch (error) {
+        console.error('Chat error:', error);
+        appendMessage('assistant', 'Кажется, произошла кратковременная заминка соединения. Пожалуйста, напишите еще раз — я на связи!');
+      } finally {
+        typingIndicator.classList.add('hidden');
+        input.disabled = false;
+        sendBtn.disabled = false;
+        input.focus();
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>
