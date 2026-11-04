@@ -4,120 +4,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Электромир Bot</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <script src="https://tailwindcss.com"></script>
+  <script src="https://unpkg.com"></script>
+  <script src="https://jsdelivr.net"></script>
+  <link href="https://googleapis.com" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Nunito', sans-serif; background-color: #fdf2f8; color: #3b0764; }
     .font-brand { font-family: 'Comfortaa', cursive, sans-serif; }
-    .bg-canvas {
-      background: radial-gradient(circle at 10% 15%, rgba(244, 114, 182, 0.25) 0%, transparent 40%),
-                  radial-gradient(circle at 90% 85%, rgba(192, 132, 252, 0.25) 0%, transparent 50%),
-                  #fdf2f8;
-    }
-    .bubble-bot {
-      background: #ffffff;
-      border: 1px solid rgba(244, 114, 182, 0.35);
-      box-shadow: 0 4px 15px rgba(219, 39, 119, 0.05);
-    }
-    .bubble-user {
-      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(219, 39, 119, 0.25);
-    }
+    .bg-canvas { background: radial-gradient(circle at 10% 15%, rgba(244, 114, 182, 0.25) 0%, transparent 40%), radial-gradient(circle at 90% 85%, rgba(192, 132, 252, 0.25) 0%, transparent 50%), #fdf2f8; }
+    .bubble-bot { background: #ffffff; border: 1px solid rgba(244, 114, 182, 0.35); box-shadow: 0 4px 15px rgba(219, 39, 119, 0.05); }
+    .bubble-user { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); color: #ffffff; box-shadow: 0 4px 14px rgba(219, 39, 119, 0.25); }
+    .wave-bar { animation: wavePulse 0.8s ease-in-out infinite; }
+    @keyframes wavePulse { 0%, 100% { height: 4px; } 50% { height: 14px; } }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: #f472b6; border-radius: 9999px; }
-    
-    @keyframes wavePulse {
-      0%, 100% { height: 4px; }
-      50% { height: 14px; }
-    }
-    .wave-bar {
-      animation: wavePulse 0.8s ease-in-out infinite;
-    }
-    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
-    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
   </style>
 </head>
 <body class="bg-canvas h-[100dvh] flex flex-col justify-between overflow-hidden">
-
-  <!-- ШАПКА -->
-  <header class="bg-white/90 backdrop-blur-md border-b border-pink-200 px-3 py-2 flex items-center justify-between flex-shrink-0 z-20">
+  <header class="bg-white/90 backdrop-blur-md border-b border-pink-200 px-3 py-2 flex items-center justify-between z-20">
     <div class="flex items-center gap-2">
       <div class="w-9 h-9 rounded-2xl bg-pink-100 flex items-center justify-center text-lg border border-pink-300">⚡</div>
       <div>
-        <div class="flex items-center gap-1.5">
-          <h1 class="font-brand font-bold text-sm text-pink-950">Электромир Bot</h1>
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        </div>
-        <p class="text-[10px] text-pink-800/60 font-semibold">Живой AI с нейроголосом</p>
+        <h1 class="font-brand font-bold text-sm text-pink-950">Электромир Bot</h1>
+        <p class="text-[10px] text-pink-800/60 font-semibold">AI Консультант + Голос Ирины</p>
       </div>
     </div>
-
     <div class="flex items-center gap-1.5">
-      <button id="voice-btn" onclick="toggleVoice()" class="px-2.5 py-1.5 rounded-xl bg-pink-100 text-pink-900 border border-pink-300 text-xs flex items-center gap-1.5 transition active:scale-95">
+      <button onclick="toggleVoice()" id="voice-btn" class="px-2.5 py-1.5 rounded-xl bg-pink-100 text-pink-900 border border-pink-300 text-xs flex items-center gap-1.5 active:scale-95 transition">
         <i data-lucide="volume-2" id="voice-icon" class="w-4 h-4 text-pink-600"></i>
         <div id="voice-wave" class="hidden flex items-center gap-0.5 h-3.5">
           <span class="w-0.5 bg-pink-600 rounded-full wave-bar"></span>
-          <span class="w-0.5 bg-pink-600 rounded-full wave-bar"></span>
-          <span class="w-0.5 bg-pink-600 rounded-full wave-bar"></span>
+          <span class="w-0.5 bg-pink-600 rounded-full wave-bar" style="animation-delay:0.2s"></span>
+          <span class="w-0.5 bg-pink-600 rounded-full wave-bar" style="animation-delay:0.4s"></span>
         </div>
       </button>
-
-      <button onclick="clearChat()" title="Очистить" class="p-2 rounded-xl text-pink-800 hover:bg-pink-100 transition">
-        <i data-lucide="trash-2" class="w-4 h-4"></i>
-      </button>
+      <button onclick="location.reload()" class="p-2 rounded-xl text-pink-800 hover:bg-pink-100 transition"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
     </div>
   </header>
 
-  <!-- ОКНО ЧАТА -->
   <main class="flex-1 max-w-2xl w-full mx-auto p-2 flex flex-col min-h-0 z-10">
-    <div class="bg-white/80 backdrop-blur-md rounded-3xl flex-1 flex flex-col min-h-0 border border-pink-200 shadow-lg overflow-hidden">
-      
-      <!-- Быстрые кнопки -->
-      <div class="bg-pink-50/70 border-b border-pink-200/50 px-3 py-1.5 overflow-x-auto whitespace-nowrap flex gap-1.5 text-xs flex-shrink-0">
-        <button onclick="sendQuick('Какие зоны электроэпиляции бывают?')" class="bg-white border border-pink-200 px-2.5 py-1 rounded-full text-pink-900 text-[11px] shadow-xs active:scale-95 transition">📍 Зоны обработки</button>
-        <button onclick="sendQuick('Чем электро отличается от лазера?')" class="bg-white border border-pink-200 px-2.5 py-1 rounded-full text-pink-900 text-[11px] shadow-xs active:scale-95 transition">⚡ Лазер или Электро?</button>
-        <button onclick="sendQuick('Это больно? Как вы обезболиваете?')" class="bg-white border border-pink-200 px-2.5 py-1 rounded-full text-pink-900 text-[11px] shadow-xs active:scale-95 transition">💉 Про боль</button>
-        <button onclick="sendQuick('Расскажи шутку или подними настроение')" class="bg-white border border-pink-200 px-2.5 py-1 rounded-full text-pink-900 text-[11px] shadow-xs active:scale-95 transition">☕ Поболтать</button>
-      </div>
-
-      <!-- Лента сообщений -->
-      <div id="chat-stream" class="flex-1 overflow-y-auto p-3.5 space-y-4 min-h-0">
-        <!-- Приветствие -->
+    <div class="bg-white/80 backdrop-blur-md rounded-3xl flex-1 flex flex-col border border-pink-200 shadow-lg overflow-hidden min-h-0">
+      <div id="chat-stream" class="flex-1 overflow-y-auto p-3.5 space-y-4">
         <div class="flex items-start gap-2 max-w-[88%]">
-          <div class="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-sm flex-shrink-0 border border-pink-200">⚡</div>
+          <div class="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-sm border border-pink-200">⚡</div>
           <div class="bubble-bot rounded-2xl rounded-tl-sm p-3.5 text-xs sm:text-sm text-pink-950">
-            <span class="font-brand font-bold block mb-1">Приветствую в «Электромир»! 🌸</span>
-            Я ваш виртуальный эксперт студии. Готова подробно ответить на любые вопросы о процедурах, обезболивании, зонах или просто поболтать по душам.
+            Привет! Я помощница из <b>«Электромира»</b> 🌸. Готова рассказать всё об электроэпиляции или просто поболтать о жизни. Что вас интересует?
           </div>
         </div>
       </div>
-
       <div id="typing-box" class="hidden px-4 py-1.5 flex items-center gap-1.5 text-xs text-pink-700/70">
         <span class="w-1.5 h-1.5 rounded-full bg-pink-500 animate-ping"></span>
-        <span>Печатает ответ...</span>
+        <span>Печатаю ответ...</span>
       </div>
-
-      <!-- Поле ввода -->
-      <div class="p-2 sm:p-2.5 bg-white border-t border-pink-200 flex-shrink-0">
-        <form id="chat-form" onsubmit="handleSend(event)" class="flex items-end gap-1.5">
-          <textarea 
-            id="user-input" 
-            rows="1" 
-            placeholder="Спросите о чём угодно..." 
-            class="flex-1 resize-none max-h-24 bg-pink-50/50 border border-pink-300 rounded-2xl py-2.5 px-3 text-xs sm:text-sm text-pink-950 focus:outline-none focus:border-pink-500"
-          ></textarea>
-          <button type="submit" id="send-btn" class="h-10 w-10 rounded-2xl bg-pink-600 hover:bg-pink-700 active:scale-95 text-white flex items-center justify-center shadow-md transition flex-shrink-0">
-            <i data-lucide="send" class="w-4 h-4"></i>
-          </button>
+      <div class="p-2 sm:p-2.5 bg-white border-t border-pink-200">
+        <form onsubmit="handleSend(event)" class="flex items-end gap-1.5">
+          <textarea id="user-input" rows="1" placeholder="Спросите меня о чём угодно..." class="flex-1 resize-none bg-pink-50/50 border border-pink-300 rounded-2xl py-2.5 px-3 text-xs sm:text-sm text-pink-950 focus:outline-none focus:border-pink-500"></textarea>
+          <button type="submit" class="h-10 w-10 rounded-2xl bg-pink-600 text-white flex items-center justify-center shadow-md active:scale-95 transition"><i data-lucide="send" class="w-4 h-4"></i></button>
         </form>
       </div>
     </div>
@@ -125,116 +67,85 @@
 
   <script>
     lucide.createIcons();
+    const HF_TOKEN = "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";
+    const API_URL = "https://huggingface.co";
+    
+    const SYSTEM_PROMPT = `Ты — живая, вежливая и экспертная девушка-консультант студии «Электромир».
+    1. Электроэпиляция — ЕДИНСТВЕННЫЙ метод удаления волос НАВСЕГДА (стандарт FDA).
+    2. Мы работаем на ВСЕХ зонах (лицо, тело, глубокое бикини).
+    3. Отвечай кратко, используй эмодзи 🌸, выделяй важное жирным шрифтом.
+    4. Если спрашивают не про волосы — поддерживай диалог как милая подруга.`;
 
     let isVoiceActive = true;
-    let synth = window.speechSynthesis;
-    const streamContainer = document.getElementById('chat-stream');
-    const inputField = document.getElementById('user-input');
-    const typingBox = document.getElementById('typing-box');
+    const synth = window.speechSynthesis;
 
-    const SYSTEM_PROMPT = `Ты — живая, вежливая и остроумная девушка-консультант студии «Электромир». 
-ТВОИ ПРАВИЛА:
-1. Отвечай живым языком. Про зоны: электроэпиляция работает НА ВСЕХ ЗОНАХ (лицо, тело, бикини).
-2. Это единственный способ удаления волос НАВСЕГДА. 
-3. Если спрашивают не про эпиляцию — поддерживай любую тему, будь милой собеседницей.
-4. Выделяй важные мысли жирным шрифтом. Пиши кратко.`;
+    function getVoice() {
+      const voices = synth.getVoices();
+      return voices.find(v => v.lang.includes('ru') && (v.name.includes('Irina') || v.name.includes('Elena') || v.name.includes('Google'))) || voices.find(v => v.lang.includes('ru'));
+    }
 
-    let chatHistory = [{ role: "system", content: SYSTEM_PROMPT }];
-
-    // Функция озвучки
     function speak(text) {
       if (!isVoiceActive) return;
       synth.cancel();
-      const cleanText = text.replace(/[#*]/g, '');
+      const cleanText = text.replace(/[#*]/g, '').substring(0, 200); // Ограничение длины для TTS
       const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.voice = getVoice();
       utterance.lang = 'ru-RU';
-      utterance.pitch = 1.1;
       utterance.rate = 1.0;
-      
       document.getElementById('voice-wave').classList.remove('hidden');
       utterance.onend = () => document.getElementById('voice-wave').classList.add('hidden');
       synth.speak(utterance);
     }
 
-    function toggleVoice() {
-      isVoiceActive = !isVoiceActive;
-      const icon = document.getElementById('voice-icon');
-      icon.setAttribute('data-lucide', isVoiceActive ? 'volume-2' : 'volume-x');
-      if(!isVoiceActive) synth.cancel();
-      lucide.createIcons();
+    async function getAIResponse(text) {
+      document.getElementById('typing-box').classList.remove('hidden');
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${HF_TOKEN}` },
+          body: JSON.stringify({ 
+            inputs: `<|im_start|>system\n${SYSTEM_PROMPT}<|im_end|>\n<|im_start|>user\n${text}<|im_end|>\n<|im_start|>assistant\n`,
+            parameters: { max_new_tokens: 500, temperature: 0.7 }
+          })
+        });
+        const data = await response.json();
+        let aiText = (data[0]?.generated_text || "").split('assistant\n').pop().trim();
+        if(!aiText) aiText = "Извините, я задумалась. Спросите ещё раз? 🌸";
+        appendMessage('bot', aiText);
+        speak(aiText);
+      } catch (e) {
+        appendMessage('bot', "⚠️ Ошибка подключения к мозгу! Проверьте лимиты Hugging Face.");
+      } finally { document.getElementById('typing-box').classList.add('hidden'); }
     }
 
     function appendMessage(role, text) {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = role === 'user' ? 'flex justify-end' : 'flex items-start gap-2 max-w-[88%]';
-      
-      const content = role === 'user' 
-        ? `<div class="bubble-user rounded-2xl rounded-tr-sm p-3.5 text-xs sm:text-sm">${text}</div>`
-        : `<div class="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-sm flex-shrink-0 border border-pink-200">⚡</div>
-           <div class="bubble-bot rounded-2xl rounded-tl-sm p-3.5 text-xs sm:text-sm text-pink-950">
-             ${marked.parse(text)}
-           </div>`;
-      
-      msgDiv.innerHTML = content;
-      streamContainer.appendChild(msgDiv);
-      streamContainer.scrollTop = streamContainer.scrollHeight;
-    }
-
-    // Подключение к бесплатному AI API (через CORS шлюз для примера)
-    async function getAIResponse(text) {
-      typingBox.classList.remove('hidden');
-      chatHistory.push({ role: "user", content: text });
-
-      try {
-        // Мы используем публичный API Hugging Face (без ключа может быть лимит, но для тестов идеально)
-        const response = await fetch("https://huggingface.co", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            inputs: `<|system|>\n${SYSTEM_PROMPT}</s>\n<|user|>\n${text}</s>\n<|assistant|>`,
-            parameters: { max_new_tokens: 250, temperature: 0.7 }
-          })
-        });
-
-        const data = await response.json();
-        let aiText = data[0]?.generated_text?.split('<|assistant|>').pop().trim() || "Ой, что-то в моих проводах замкнуло... Повторите вопрос?";
-        
-        appendMessage('bot', aiText);
-        speak(aiText);
-        chatHistory.push({ role: "assistant", content: aiText });
-      } catch (e) {
-        appendMessage('bot', "**Ошибка связи.** Кажется, я перегрелась. Попробуйте еще раз!");
-      } finally {
-        typingBox.classList.add('hidden');
-      }
+      const chat = document.getElementById('chat-stream');
+      const div = document.createElement('div');
+      div.className = role === 'user' ? 'flex justify-end' : 'flex items-start gap-2 max-w-[88%]';
+      div.innerHTML = role === 'user' ? 
+        `<div class="bubble-user rounded-2xl rounded-tr-sm p-3.5 text-xs sm:text-sm">${text}</div>` : 
+        `<div class="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-sm border border-pink-200">⚡</div>
+         <div class="bubble-bot rounded-2xl rounded-tl-sm p-3.5 text-xs sm:text-sm text-pink-950">${marked.parse(text)}</div>`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
     }
 
     function handleSend(e) {
       e.preventDefault();
-      const text = inputField.value.trim();
+      const input = document.getElementById('user-input');
+      const text = input.value.trim();
       if (!text) return;
-
       appendMessage('user', text);
-      inputField.value = '';
+      input.value = '';
       getAIResponse(text);
     }
 
-    function sendQuick(text) {
-      inputField.value = text;
-      document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+    function toggleVoice() {
+      isVoiceActive = !isVoiceActive;
+      document.getElementById('voice-icon').className = isVoiceActive ? "w-4 h-4" : "w-4 h-4 opacity-50";
+      if (!isVoiceActive) synth.cancel();
     }
-
-    function clearChat() {
-      streamContainer.innerHTML = '';
-      chatHistory = [{ role: "system", content: SYSTEM_PROMPT }];
-      appendMessage('bot', "Чат очищен. Спрашивайте о чем угодно!");
-    }
-
-    // Авто-высота textarea
-    inputField.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
-    });
+    window.speechSynthesis.onvoiceschanged = getVoice;
   </script>
 </body>
 </html>
