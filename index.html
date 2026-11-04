@@ -216,4 +216,53 @@
         if (s.indexOf("зон") !== -1 || s.indexOf("бикини") !== -1 || s.indexOf("лиц") !== -1 || s.indexOf("подмыш") !== -1 || s.indexOf("ног") !== -1 || s.indexOf("губ") !== -1) {
           return "Мы бережно работаем **на всех зонах**: лицо (верхняя губа, подбородок, брови), подмышки, ручки, ножки и **глубокое бикини** 🌸. Всё проходит со 100% стерильностью и одноразовыми иголочками!";
         }
-        if (s.indexOf("подготов") !== -1 || s.indexOf("длин") !== -1) {
+        if (s.indexOf("подготов") !== -1 || s.indexOf("длин") !== -1) {var bubble = document.createElement("div");
+bubble.className = "bubble-bot";
+bubble.innerHTML = formatHTML(text);
+row.appendChild(avatar);
+row.appendChild(bubble);
+}
+chatStream.appendChild(row);
+chatStream.scrollTop = chatStream.scrollHeight;
+}
+async function handleSend(text) {
+var query = String(text || "").trim();
+if (!query) return;
+userInput.value = "";
+appendMessage(query, true);
+typingBox.style.display = "flex";
+chatStream.scrollTop = chatStream.scrollHeight;
+var reply = await fetchAIResponse(query);
+typingBox.style.display = "none";
+appendMessage(reply, false);
+speak(reply);
+}
+chatForm.addEventListener("submit", function(e) {
+e.preventDefault();
+handleSend(userInput.value);
+});
+quickBar.addEventListener("click", function(e) {
+var chip = e.target.closest(".chip");
+if (chip) {
+var q = chip.getAttribute("data-q");
+if (q) handleSend(q);
+}
+});
+voiceBtn.addEventListener("click", function() {
+isVoiceActive = !isVoiceActive;
+if (isVoiceActive) {
+voiceIcon.textContent = "🔊";
+voiceStatus.textContent = "Звук вкл";
+} else {
+voiceIcon.textContent = "🔇";
+voiceStatus.textContent = "Звук выкл";
+if (synth) synth.cancel();
+}
+});
+reloadBtn.addEventListener("click", function() {
+if (synth) synth.cancel();
+chatStream.innerHTML = "";
+var welcome = "Привет! Я помощница из «Электромира» 🌸. Готова рассказать всё об электроэпиляции или просто поболтать о жизни. Что вас интересует?";
+appendMessage(welcome, false);
+});
+})();
