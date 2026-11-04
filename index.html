@@ -5,26 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Электромир Bot</title>
   <style>
+    /* --- СТИЛИ (Дизайн) --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: radial-gradient(circle at 10% 15%, rgba(244, 114, 182, 0.25) 0%, transparent 40%),
                   radial-gradient(circle at 90% 85%, rgba(192, 132, 252, 0.25) 0%, transparent 50%),
                   #fdf2f8;
       color: #4a044e;
       height: 100vh;
       height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      display: flex; flex-direction: column; overflow: hidden;
     }
     header {
-      background: #ffffff;
-      border-bottom: 1px solid #fbcfe8;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #ffffff; border-bottom: 1px solid #fbcfe8;
+      padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
     }
     .brand-box { display: flex; align-items: center; gap: 10px; }
     .logo-icon {
@@ -84,19 +79,18 @@
     }
     .quick-bar {
       padding: 8px 12px; display: flex; gap: 6px; overflow-x: auto;
-      background: #fdf2f8; border-top: 1px solid #fce7f3;
+      background: #fdf2f8; border-top: 1px solid #fce7f3; flex-shrink: 0;
     }
     .quick-bar::-webkit-scrollbar { height: 4px; }
     .quick-bar::-webkit-scrollbar-thumb { background: #f9a8d4; border-radius: 4px; }
     .chip {
       flex-shrink: 0; padding: 6px 12px; border-radius: 999px;
       background: #ffffff; border: 1px solid #f9a8d4;
-      font-size: 12px; color: #831843; cursor: pointer;
-      transition: all 0.2s;
+      font-size: 12px; color: #831843; cursor: pointer; transition: all 0.2s;
     }
     .chip:hover { background: #fce7f3; }
     .input-area {
-      padding: 10px; background: #ffffff; border-top: 1px solid #fbcfe8;
+      padding: 10px; background: #ffffff; border-top: 1px solid #fbcfe8; flex-shrink: 0;
     }
     .input-form { display: flex; align-items: center; gap: 8px; }
     #user-input {
@@ -110,8 +104,7 @@
       width: 44px; height: 42px; border-radius: 14px;
       background: #db2777; color: #ffffff; border: none;
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer; flex-shrink: 0; font-size: 16px;
-      transition: background 0.2s;
+      cursor: pointer; flex-shrink: 0; font-size: 16px; transition: background 0.2s;
     }
     .send-btn:hover { background: #be185d; }
   </style>
@@ -123,15 +116,14 @@
       <div class="logo-icon">⚡</div>
       <div>
         <div class="title">Электромир Bot</div>
-        <div class="subtitle">AI Консультант + Голос Ирины</div>
+        <div class="subtitle">AI Консультант 2.0</div>
       </div>
     </div>
     <div class="header-btns">
       <button type="button" class="icon-btn" id="voice-btn">
         <span id="voice-icon">🔊</span>
-        <span id="voice-status">Звук вкл</span>
       </button>
-      <button type="button" class="icon-btn" id="reload-btn" title="Очистить чат">🔄</button>
+      <button type="button" class="icon-btn" id="reload-btn" title="Сбросить диалог">🔄</button>
     </div>
   </header>
 
@@ -141,7 +133,7 @@
         <div class="msg-row-bot">
           <div class="bot-avatar">⚡</div>
           <div class="bubble-bot">
-            Привет! Я помощница из <b>«Электромира»</b> 🌸. Готова рассказать всё об электроэпиляции или просто поболтать о жизни. Что вас интересует?
+            Привет! Я консультант <b>«Электромира»</b> 🌸. Расскажу про удаление волос навсегда без боли. Что вас интересует?
           </div>
         </div>
       </div>
@@ -149,16 +141,15 @@
       <div id="typing-box">⏳ Печатаю ответ...</div>
 
       <div class="quick-bar" id="quick-bar">
-        <button type="button" class="chip" data-q="Это больно?">🌸 Это больно?</button>
+        <button type="button" class="chip" data-q="Это больно?">🌸 Ощущения</button>
         <button type="button" class="chip" data-q="Сколько стоит?">💳 Цены</button>
-        <button type="button" class="chip" data-q="Удаляет навсегда?">⚡ Навсегда?</button>
-        <button type="button" class="chip" data-q="Какие зоны делаете?">✨ Зоны</button>
-        <button type="button" class="chip" data-q="Как подготовиться к процедуре?">📋 Подготовка</button>
+        <button type="button" class="chip" data-q="Точно навсегда?">⚡ Гарантия</button>
+        <button type="button" class="chip" data-q="Зоны и бикини">✨ Зоны</button>
       </div>
 
       <div class="input-area">
         <form id="chat-form" class="input-form">
-          <input type="text" id="user-input" placeholder="Спросите меня о чём угодно..." autocomplete="off">
+          <input type="text" id="user-input" placeholder="Напишите вопрос..." autocomplete="off">
           <button type="submit" class="send-btn">➤</button>
         </form>
       </div>
@@ -167,113 +158,109 @@
 
   <script>
     (function() {
-      // API Токен (замените при необходимости)
-      var HF_TOKEN = "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";
+      // --- НАСТРОЙКИ ---
+      var HF_TOKEN = "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"; 
+      var SYSTEM_PROMPT = "Ты — девушка-администратор студии «Электромир». Твоя цель — записать клиента. 1. Электроэпиляция — удаление волос НАВСЕГДА (FDA). 2. Мы делаем ВСЕ зоны (бикини, лицо, тело). 3. Отвечай кратко (до 2 предложений), живо, меняй формулировки, используй разные эмодзи (🌸, ✨, ⚡).";
       
-      // Системная роль для ИИ
-      var SYSTEM_PROMPT = "Ты — живая, вежливая и экспертная девушка-консультант студии «Электромир». 1. Электроэпиляция — ЕДИНСТВЕННЫЙ метод удаления волос НАВСЕГДА (стандарт FDA). 2. Мы работаем на ВСЕХ зонах (лицо, тело, глубокое бикини). 3. Отвечай кратко, на русском языке, используй эмодзи 🌸, выделяй важное жирным шрифтом. 4. Если спрашивают не про волосы — поддерживай диалог как милая подруга.";
+      // Инициализация памяти диалога
+      var chatHistory = []; 
 
       var isVoiceActive = true;
       var synth = window.speechSynthesis || null;
 
-      // Элементы DOM
+      // Элементы
       var chatStream = document.getElementById("chat-stream");
       var typingBox = document.getElementById("typing-box");
       var chatForm = document.getElementById("chat-form");
       var userInput = document.getElementById("user-input");
       var voiceBtn = document.getElementById("voice-btn");
       var voiceIcon = document.getElementById("voice-icon");
-      var voiceStatus = document.getElementById("voice-status");
       var reloadBtn = document.getElementById("reload-btn");
       var quickBar = document.getElementById("quick-bar");
 
-      // Инициализация голосов
+      // Принудительная подгрузка голосов
       if (synth && synth.onvoiceschanged !== undefined) {
         synth.onvoiceschanged = function() { synth.getVoices(); };
       }
 
-      // Функция форматирования текста (безопасная)
-      function formatHTML(str) {
-        var text = String(str || "");
-        text = text.replace(/&/g, "&amp;");
-        text = text.replace(/</g, "&lt;");
-        text = text.replace(/>/g, "&gt;");
-        // Markdown bold to HTML bold
-        text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-        text = text.replace(/\n/g, "<br>");
-        return text;
+      function pickRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
       }
 
-      // Функция озвучки
+      function formatHTML(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+          .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+          .replace(/\n/g, "<br>");
+      }
+
+      // --- УЛУЧШЕННАЯ ОЗВУЧКА ---
       function speak(text) {
         if (!isVoiceActive || !synth) return;
         try {
           synth.cancel();
-          // Очистка текста от тегов и спецсимволов для синтезатора
-          var clean = String(text)
-            .replace(/<[^>]*>/g, "")
-            .replace(/[#*_~`]/g, "")
-            .substring(0, 250);
-          
+          var clean = String(text).replace(/<[^>]*>/g, "").replace(/[#*_~`]/g, "").substring(0, 300);
           var utter = new SpeechSynthesisUtterance(clean);
-          // Исправлено: добавлена проверка на пустой массив
           var voices = synth.getVoices() || [];
           
-          // Поиск русского голоса
-          for (var i = 0; i < voices.length; i++) {
-            var v = voices[i];
-            if (v.lang && v.lang.toLowerCase().indexOf("ru") !== -1) {
-              utter.voice = v;
-              if (v.name.indexOf("Irina") !== -1 || v.name.indexOf("Google") !== -1) break;
-            }
-          }
+          // Поиск лучшего русского голоса
+          var bestVoice = voices.find(function(v) { return v.name.includes("Google") && v.lang.includes("ru"); }) 
+                       || voices.find(function(v) { return v.lang.includes("ru"); });
+          
+          if (bestVoice) utter.voice = bestVoice;
+          
           utter.lang = "ru-RU";
-          utter.rate = 1.05;
+          utter.rate = 0.95; // Чуть медленнее = естественнее
+          utter.pitch = 1.1; // Немного повыше (женственнее)
+          
           synth.speak(utter);
         } catch (e) {
-          console.error("Ошибка синтеза речи:", e);
+          console.error(e);
         }
       }
 
-      // Локальная база знаний (мгновенные ответы)
-      function getSmartReply(q) {
-        var s = String(q).toLowerCase();
+      // --- ВАРИАТИВНЫЕ ОТВЕТЫ ---
+      function getVariedReply(trigger) {
+        var t = trigger.toLowerCase();
         
-        if (s.indexOf("привет") !== -1 || s.indexOf("здравств") !== -1 || s.indexOf("добр") !== -1) {
-          return "Привет-привет! 🌸 Очень рада вас видеть! Рассказать про **электроэпиляцию** или хотите записаться на пробный сеанс?";
-        }
-        if (s.indexOf("больно") !== -1 || s.indexOf("боль") !== -1 || s.indexOf("чувств") !== -1 || s.indexOf("анестез") !== -1) {
-          return "Ощущения очень индивидуальны 🌸. Современные аппараты делают процедуру максимально комфортной! А для чувствительных зон (например, бикини) мы используем **аппликационную анестезию** (крем или спрей), чтобы вы могли расслабиться и даже вздремнуть.";
-        }
-        if (s.indexOf("цен") !== -1 || s.indexOf("стои") !== -1 || s.indexOf("прайс") !== -1 || s.indexOf("скольк") !== -1) {
-          return "Оплата у нас поминутная — вы платите только за чистую работу мастера! 💳\n\n• **Тело и лицо:** от 35 ₽/мин\n• **Бикини:** от 40 ₽/мин\n• **Одноразовый зонд (иголочка):** 150 ₽\n\nДля новых клиентов действует **приятная скидка** на первый визит! 🌸";
-        }
-        if (s.indexOf("навсегда") !== -1 || s.indexOf("точно") !== -1 || s.indexOf("лазер") !== -1 || s.indexOf("эффект") !== -1) {
-          return "Да, **абсолютно навсегда**! ⚡ Электроэпиляция — это **единственный в мире метод**, официально признанный организацией FDA как перманентное удаление волос. В отличие от лазера, она убирает **любой волос**: светлый, рыжий, седой и пушковый 🌸.";
-        }
-        if (s.indexOf("зон") !== -1 || s.indexOf("где") !== -1 || s.indexOf("бикини") !== -1 || s.indexOf("лиц") !== -1) {
-          return "Мы бережно работаем абсолютно со **всеми зонами** ✨:\n• Ножки, ручки и подмышки\n• **Глубокое бикини**\n• Лицо (верхняя губа, подбородок, межбровье)\n\nЕдинственное строгое исключение — внутренняя часть носа и ушных раковин.";
-        }
-        if (s.indexOf("подготов") !== -1 || s.indexOf("длин") !== -1 || s.indexOf("перед") !== -1) {
-          return "Подготовиться очень просто! 📋\n1. Отрастите длину волосков до **3–5 мм** (чтобы мастер мог легко захватить волосок пинцетом).\n2. За сутки сделайте легкий скраб или пилинг.\n3. Пейте больше воды и увлажняйте кожу кремом — на напитанной коже ток работает эффективнее! 🌸";
-        }
-        if (s.indexOf("запис") !== -1 || s.indexOf("контакт") !== -1 || s.indexOf("адрес") !== -1) {
-          return "Записаться очень легко! 🌸 Напишите нам желаемый день, время и зону, и мы подберем для вас идеальное окошко. Ждем вас в студии **«Электромир»**!";
-        }
-        return null;
+        var painReplies = [
+          "Всё терпимо! 🌸 Мы используем отличную анестезию, многие девочки даже дремлют.",
+          "Ощущения есть, но это не больно. С нашим обезболивающим кремом вы почувствуете только легкое тепло ✨.",
+          "Совсем не бойтесь! Для чувствительных зон (бикини) у нас есть аппликационная анестезия. ⚡"
+        ];
+        
+        var priceReplies = [
+          "У нас честная поминутная оплата: <b>35-40 ₽/мин</b>. Вы платите только за чистое время работы мастера! 💳",
+          "Прайс простой: тело <b>35 ₽/мин</b>, бикини <b>40 ₽/мин</b>. Плюс 150 ₽ за индивидуальную иголочку. Записать вас? 🌸",
+          "Минута стоит от 35 рублей. На первой процедуре волос больше, но с каждым разом сеанс будет короче и дешевле! ✨"
+        ];
+
+        var foreverReplies = [
+          "Да! Это единственный метод в мире с пожизненной гарантией (стандарт FDA). ⚡",
+          "Абсолютно. В отличие от лазера, электроэпиляция убирает волос раз и навсегда. Даже пушковый! 🌸",
+          "Конечно! Пройдя курс, вы забудете о бритве на всю жизнь. Это научный факт. ✨"
+        ];
+
+        if (t.includes("бол") || t.includes("ощущ")) return pickRandom(painReplies);
+        if (t.includes("цен") || t.includes("стои") || t.includes("прайс")) return pickRandom(priceReplies);
+        if (t.includes("навсегда") || t.includes("гарант")) return pickRandom(foreverReplies);
+        
+        return null; 
       }
 
-      // Запрос к ИИ (Hugging Face)
-      async function fetchAIResponse(question) {
-        // 1. Проверяем локальные ответы (работают без интернета)
-        var localReply = getSmartReply(question);
-        if (localReply) {
-          // Имитация задержки мышления
+      async function fetchAIResponse(userText) {
+        // 1. Проверяем локальную базу
+        var localReply = getVariedReply(userText);
+        // С вероятностью 30% пропускаем локальный ответ, чтобы ИИ мог придумать что-то новое
+        if (localReply && Math.random() > 0.3) {
           await new Promise(function(r) { setTimeout(r, 600); });
           return localReply;
         }
 
-        // 2. Если нет в базе, идем в API
+        // 2. Добавляем в историю
+        chatHistory.push({ role: "user", content: userText });
+        var contextMessages = [{ role: "system", content: SYSTEM_PROMPT }].concat(chatHistory.slice(-6));
+
         try {
           var response = await fetch("https://huggingface.co", {
             method: "POST",
@@ -282,59 +269,53 @@
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                { role: "user", content: question }
-              ],
-              max_tokens: 250,
-              temperature: 0.7
+              messages: contextMessages,
+              max_tokens: 150,
+              temperature: 0.8 
             })
           });
 
-          if (!response.ok) throw new Error("API Error: " + response.status);
+          if (!response.ok) throw new Error("API Error");
           var data = await response.json();
-          // Поддержка разных форматов ответа HF
-          if (data && data.choices && data.choices[0] && data.choices[0].message) {
-            return data.choices[0].message.content.trim();
-          } else if (Array.isArray(data) && data[0] && data[0].generated_text) {
-             return data[0].generated_text;
-          }
-        } catch (err) {
-          console.warn("Переключение на резервный ответ:", err);
-        }
+          var aiText = "";
 
-        // 3. Резервный ответ при сбое (если токен не работает)
-        return "Какой интересный вопрос! 🌸 Я с радостью помогу вам разобраться во всех тонкостях **электроэпиляции** (цены, подготовка, ощущения, зоны). Напишите, что именно вас волнует, или воспользуйтесь кнопками выше!";
+          // Обработка разных форматов API
+          if (data.choices && data.choices[0]) {
+             aiText = data.choices[0].message.content.trim();
+          } else if (data.generated_text) {
+             aiText = data.generated_text;
+          } else if (Array.isArray(data) && data[0] && data[0].generated_text) {
+             aiText = data[0].generated_text;
+          }
+
+          if (!aiText) aiText = "Я вас услышала, но связь прерывается. Повторите, пожалуйста! 🌸";
+
+          chatHistory.push({ role: "assistant", content: aiText });
+          return aiText;
+
+        } catch (err) {
+          console.warn(err);
+          return localReply || "Что-то связь барахлит 🌸. Но я точно знаю: электроэпиляция — это лучшее решение! Записать вас?";
+        }
       }
 
-      // Добавление сообщения в чат
       function appendMessage(text, isUser) {
         var row = document.createElement("div");
         row.className = isUser ? "msg-row-user" : "msg-row-bot";
-
-        if (isUser) {
-          var bubble = document.createElement("div");
-          bubble.className = "bubble-user";
-          bubble.innerHTML = formatHTML(text);
-          row.appendChild(bubble);
-        } else {
+        var bubble = document.createElement("div");
+        bubble.className = isUser ? "bubble-user" : "bubble-bot";
+        bubble.innerHTML = formatHTML(text);
+        if (!isUser) {
           var avatar = document.createElement("div");
           avatar.className = "bot-avatar";
           avatar.textContent = "⚡";
-
-          var bubble = document.createElement("div");
-          bubble.className = "bubble-bot";
-          bubble.innerHTML = formatHTML(text);
-
           row.appendChild(avatar);
-          row.appendChild(bubble);
         }
-
+        row.appendChild(bubble);
         chatStream.appendChild(row);
         chatStream.scrollTop = chatStream.scrollHeight;
       }
 
-      // Основная логика отправки
       async function handleSend(text) {
         var query = String(text || "").trim();
         if (!query) return;
@@ -342,50 +323,33 @@
         userInput.value = "";
         appendMessage(query, true);
 
-        // Показать индикатор печати
         typingBox.style.display = "flex";
         chatStream.scrollTop = chatStream.scrollHeight;
 
-        // Получить ответ
         var reply = await fetchAIResponse(query);
 
-        // Скрыть индикатор
         typingBox.style.display = "none";
         appendMessage(reply, false);
         speak(reply);
       }
 
-      // Слушатели событий
-      chatForm.addEventListener("submit", function(e) {
-        e.preventDefault();
-        handleSend(userInput.value);
-      });
-
+      chatForm.addEventListener("submit", function(e) { e.preventDefault(); handleSend(userInput.value); });
+      
       quickBar.addEventListener("click", function(e) {
-        var chip = e.target.closest(".chip");
-        if (chip) {
-          var q = chip.getAttribute("data-q");
-          if (q) handleSend(q);
-        }
+        if (e.target.classList.contains("chip")) handleSend(e.target.getAttribute("data-q"));
       });
 
       voiceBtn.addEventListener("click", function() {
         isVoiceActive = !isVoiceActive;
-        if (isVoiceActive) {
-          voiceIcon.textContent = "🔊";
-          voiceStatus.textContent = "Звук вкл";
-        } else {
-          voiceIcon.textContent = "🔇";
-          voiceStatus.textContent = "Звук выкл";
-          if (synth) synth.cancel();
-        }
+        voiceIcon.textContent = isVoiceActive ? "🔊" : "🔇";
+        if (!isVoiceActive && synth) synth.cancel();
       });
 
       reloadBtn.addEventListener("click", function() {
         if (synth) synth.cancel();
         chatStream.innerHTML = "";
-        var welcome = "Привет! Я помощница из **«Электромира»** 🌸. Готова рассказать всё об электроэпиляции или просто поболтать о жизни. Что вас интересует?";
-        appendMessage(welcome, false);
+        chatHistory = [];
+        appendMessage("Привет! Я консультант <b>«Электромира»</b> 🌸. Расскажу про удаление волос навсегда без боли. Что вас интересует?", false);
       });
 
     })();
