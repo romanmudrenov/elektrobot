@@ -4,476 +4,563 @@ html
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Сезонный ASMR Процедурный Синтезатор</title>
+  <title>ASMR Премиум Звуковой Движок | Пастельный Синий</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
-    /* Плавные переходы цветов сезонов */
+    /* Пастельная синяя база */
+    :root {
+      --bg-deep: #0b121e;
+      --bg-card: #141f33;
+      --bg-card-soft: #1a273f;
+      --btn-base: #1f2f4c;
+      --btn-hover: #253757;
+      --btn-active: #17243b;
+      --pastel-blue: #93b7e3;
+      --pastel-ice: #c2ddff;
+      --pastel-muted: #647b9d;
+      --light-edge: rgba(255, 255, 255, 0.08);
+      --dark-shadow: rgba(4, 7, 13, 0.65);
+    }
+
     body {
-      transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background-color: var(--bg-deep);
+      color: #e2eaf5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
     }
-    .season-spring {
-      --accent: 74, 222, 128;
-      --bg-from: #041f14;
-      --bg-to: #0f172a;
+
+    /* 3D Объемные кнопки (Neumorphic / Claymorphic depth) */
+    .btn-3d {
+      background: linear-gradient(145deg, #243555, #19263e);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      border-right: 1px solid rgba(0, 0, 0, 0.35);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+      box-shadow: 
+        0 6px 14px -2px var(--dark-shadow),
+        0 2px 4px 0 rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: all 0.12s cubic-bezier(0.2, 0, 0.1, 1);
+      position: relative;
     }
-    .season-summer {
-      --accent: 251, 191, 36;
-      --bg-from: #261603;
-      --bg-to: #0f172a;
+
+    .btn-3d:hover {
+      background: linear-gradient(145deg, #293d62, #1d2c47);
+      transform: translateY(-1px);
+      box-shadow: 
+        0 8px 18px -3px var(--dark-shadow),
+        0 3px 6px 0 rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
-    .season-autumn {
-      --accent: 249, 115, 22;
-      --bg-from: #240c03;
-      --bg-to: #110e1b;
+
+    .btn-3d:active, .btn-3d.btn-pressed {
+      transform: translateY(2px);
+      background: linear-gradient(145deg, #141e32, #1b2842);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(0, 0, 0, 0.4);
+      box-shadow: 
+        inset 0 4px 8px rgba(0, 0, 0, 0.6),
+        inset 0 1px 3px rgba(0, 0, 0, 0.4),
+        0 1px 2px rgba(0, 0, 0, 0.2);
     }
-    .season-winter {
-      --accent: 56, 189, 248;
-      --bg-from: #081d33;
-      --bg-to: #0a0f1d;
+
+    /* Активное выбранное состояние кнопки */
+    .btn-3d.active-season {
+      background: linear-gradient(145deg, #2c446e, #1c2e4f);
+      border: 1px solid rgba(147, 183, 227, 0.45);
+      box-shadow: 
+        0 0 16px rgba(119, 158, 203, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.3);
     }
-    .tap-effect {
-      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease;
+
+    /* Объемная кнопка-акцент */
+    .btn-3d-accent {
+      background: linear-gradient(145deg, #3d669c, #26436b);
+      border-top: 1px solid rgba(255, 255, 255, 0.3);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      border-bottom: 2px solid rgba(10, 20, 36, 0.7);
+      box-shadow: 
+        0 6px 14px -1px rgba(10, 20, 35, 0.6),
+        inset 0 1px 1px rgba(255, 255, 255, 0.35);
+      color: #f0f6ff;
     }
-    .tap-effect:active {
-      transform: scale(0.95);
+    .btn-3d-accent:hover {
+      background: linear-gradient(145deg, #4674b0, #2c4d7b);
     }
+    .btn-3d-accent:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Пастельные карточки */
+    .pastel-card {
+      background: linear-gradient(165deg, rgba(26, 39, 63, 0.85) 0%, rgba(17, 26, 43, 0.85) 100%);
+      border: 1px solid rgba(147, 183, 227, 0.12);
+      box-shadow: 
+        0 12px 30px -5px rgba(3, 7, 15, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+    }
+
+    /* Кастомный пастельный скроллбар */
     ::-webkit-scrollbar {
-      width: 5px;
+      width: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(11, 18, 30, 0.6);
+      border-radius: 8px;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 9999px;
+      background: #253757;
+      border-radius: 8px;
+      border: 1px solid rgba(147, 183, 227, 0.15);
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.4);
+      background: #374f79;
     }
   </style>
 </head>
-<body class="season-spring text-slate-100 min-h-screen font-sans selection:bg-emerald-500/30 relative overflow-x-hidden">
+<body class="min-h-screen relative flex flex-col justify-between antialiased selection:bg-blue-500/20">
 
-  <!-- Фоновый холст для атмосферных частиц (лепестки, светлячки, листья, снег) -->
-  <canvas id="ambient-canvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full opacity-60"></canvas>
+  <!-- Фоновые мягкие атмосферные частицы (капли/снег/туман) -->
+  <canvas id="ambient-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
 
-  <div class="relative z-10 flex flex-col min-h-screen">
-    <!-- Шапка управления -->
-    <header class="border-b border-white/10 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <div id="season-badge-icon" class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-lg shadow-lg transition-all duration-700">
-            <i class="fa-solid fa-seedling"></i>
-          </div>
-          <div>
-            <h1 class="font-bold text-base md:text-lg tracking-tight text-white flex items-center gap-2">
-              Сезонный ASMR Синтезатор
-              <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-white/10 text-slate-300 border border-white/10">100% Procedural</span>
-            </h1>
-            <p id="season-subtitle" class="text-xs text-slate-400">Весна: пение лесных птиц, журчание ручья и роса</p>
-          </div>
+  <div class="relative z-10 w-full max-w-6xl mx-auto px-4 py-6 md:py-8 flex flex-col flex-1 space-y-7">
+
+    <!-- Верхняя шапка с регуляторами и статусом -->
+    <header class="pastel-card p-5 md:p-6 rounded-3xl flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div id="status-sphere" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl text-blue-200 btn-3d">
+          <i id="season-icon-main" class="fa-solid fa-cloud-showers-heavy text-[#93b7e3]"></i>
         </div>
-
-        <!-- Мастер контролы -->
-        <div class="flex items-center gap-2 sm:gap-3 bg-white/5 border border-white/10 p-1.5 rounded-2xl backdrop-blur-md">
-          <button id="toggle-ambience-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 bg-emerald-500 text-slate-950 tap-effect transition-all shadow-md">
-            <i id="ambience-icon" class="fa-solid fa-play"></i>
-            <span id="ambience-text">Фон вкл</span>
-          </button>
-
-          <button id="toggle-mute-btn" class="w-9 h-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/15 text-slate-200 tap-effect" title="Заглушить все звуки">
-            <i id="mute-icon" class="fa-solid fa-volume-high text-xs"></i>
-          </button>
-
-          <div class="flex items-center gap-2 px-2 border-l border-white/10">
-            <i class="fa-solid fa-volume-low text-[10px] text-slate-400"></i>
-            <input type="range" id="master-vol" min="0" max="1" step="0.05" value="0.7" class="w-16 sm:w-24 accent-emerald-400 cursor-pointer">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-lg md:text-xl font-bold tracking-tight text-white">ASMR Acoustic Studio</h1>
+            <span class="text-[10px] font-mono tracking-wide px-2 py-0.5 rounded-full bg-[#203250] text-[#a8c9f0] border border-[#3b5379]">PASTEL BLUE</span>
           </div>
+          <p id="season-subtitle" class="text-xs text-[#8ca5c7] mt-0.5 font-medium">Осень: натуральный шум дождя и шелест прохладного ветра</p>
+        </div>
+      </div>
+
+      <!-- Главные органы управления -->
+      <div class="flex items-center gap-3">
+        <!-- Кнопка Вкл/Выкл окружения -->
+        <button id="toggle-ambience-btn" class="btn-3d btn-3d-accent px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2.5">
+          <i id="ambience-play-icon" class="fa-solid fa-play text-xs text-[#c2ddff]"></i>
+          <span id="ambience-btn-label">Включить фон</span>
+        </button>
+
+        <!-- Кнопка Mute -->
+        <button id="toggle-mute-btn" class="btn-3d w-10 h-10 rounded-2xl flex items-center justify-center text-[#93b7e3]" title="Заглушить все звуки">
+          <i id="mute-icon" class="fa-solid fa-volume-high text-xs"></i>
+        </button>
+
+        <!-- Регулятор громкости -->
+        <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-[#243555]">
+          <i class="fa-solid fa-volume-low text-xs text-[#647b9d]"></i>
+          <input type="range" id="master-vol-slider" min="0" max="1" step="0.05" value="0.75" class="w-20 md:w-28 accent-[#93b7e3] cursor-pointer">
         </div>
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
-
-      <!-- Селектор Времён Года -->
-      <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <!-- Весна -->
-        <button class="season-btn active p-4 rounded-3xl border border-emerald-500/40 bg-emerald-950/40 hover:bg-emerald-900/40 backdrop-blur-md text-left tap-effect transition-all group" data-season="spring">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-seedling"></i>
-            </span>
-            <span class="text-[10px] font-mono text-emerald-400/80 uppercase">Spring</span>
-          </div>
-          <div class="font-bold text-sm text-white">Весна</div>
-          <div class="text-[11px] text-slate-400 leading-snug mt-0.5">Певчие птицы, звонкий ручей, капли талой воды</div>
-        </button>
-
-        <!-- Лето -->
-        <button class="season-btn p-4 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-md text-left tap-effect transition-all group" data-season="summer">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-sun"></i>
-            </span>
-            <span class="text-[10px] font-mono text-amber-400/80 uppercase">Summer</span>
-          </div>
-          <div class="font-bold text-sm text-white">Лето</div>
-          <div class="text-[11px] text-slate-400 leading-snug mt-0.5">Стрекот цикад, теплый бриз, шелест крон</div>
-        </button>
-
-        <!-- Осень -->
-        <button class="season-btn p-4 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-md text-left tap-effect transition-all group" data-season="autumn">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-cloud-showers-heavy"></i>
-            </span>
-            <span class="text-[10px] font-mono text-orange-400/80 uppercase">Autumn</span>
-          </div>
-          <div class="font-bold text-sm text-white">Осень</div>
-          <div class="text-[11px] text-slate-400 leading-snug mt-0.5">Шорох капель дождя, завывание ветра, хруст листвы</div>
-        </button>
-
-        <!-- Зима -->
-        <button class="season-btn p-4 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-md text-left tap-effect transition-all group" data-season="winter">
-          <div class="flex items-center justify-between mb-2">
-            <span class="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-snowflake"></i>
-            </span>
-            <span class="text-[10px] font-mono text-sky-400/80 uppercase">Winter</span>
-          </div>
-          <div class="font-bold text-sm text-white">Зима</div>
-          <div class="text-[11px] text-slate-400 leading-snug mt-0.5">Метель, ледяные перезвоны, скрип свежего снега</div>
-        </button>
-      </section>
-
-      <!-- Интерактивная зона тестирования тапов и скролла -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Левая колонка: Интерактивные ASMR кнопки и иконки под сезон -->
-        <div class="lg:col-span-2 space-y-5">
-          <div class="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6 backdrop-blur-md">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-xs uppercase font-mono tracking-wider text-slate-300 flex items-center gap-2">
-                <i class="fa-solid fa-hand-pointer text-emerald-400"></i>
-                Сезонные тактильные тапы по элементам
-              </h2>
-              <span id="tap-mode-label" class="text-[11px] text-emerald-400 font-mono">Режим: Капли росы</span>
-            </div>
-
-            <p class="text-xs text-slate-300 mb-5 leading-relaxed">
-              Нажимайте на любые иконки и карточки ниже — синтезатор мгновенно генерирует тактильный отклик под выбранное время года: <b class="text-white">весной</b> — мягкие водяные капли, <b class="text-white">летом</b> — теплые деревянные щелчки веток, <b class="text-white">осенью</b> — хруст сухого листа и шлепок дождя, <b class="text-white">зимой</b> — плотный скрип наста и звон льдинок.
-            </p>
-
-            <!-- Сетка иконок категорий в стиле магазина электрики -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <button class="asmr-interactive p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 tap-effect flex flex-col items-center gap-2 text-center group" data-sound-variant="primary">
-                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-lg group-hover:scale-110 transition-transform text-white">
-                  <i class="fa-solid fa-bolt"></i>
-                </div>
-                <span class="text-xs font-semibold text-slate-200">Автоматы & УЗО</span>
-                <span class="text-[10px] text-slate-400">Тап 1</span>
-              </button>
-
-              <button class="asmr-interactive p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 tap-effect flex flex-col items-center gap-2 text-center group" data-sound-variant="secondary">
-                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-lg group-hover:scale-110 transition-transform text-white">
-                  <i class="fa-solid fa-lightbulb"></i>
-                </div>
-                <span class="text-xs font-semibold text-slate-200">Освещение</span>
-                <span class="text-[10px] text-slate-400">Тап 2</span>
-              </button>
-
-              <button class="asmr-interactive p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 tap-effect flex flex-col items-center gap-2 text-center group" data-sound-variant="accent">
-                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-lg group-hover:scale-110 transition-transform text-white">
-                  <i class="fa-solid fa-plug-circle-bolt"></i>
-                </div>
-                <span class="text-xs font-semibold text-slate-200">Кабель и провод</span>
-                <span class="text-[10px] text-slate-400">Тап 3</span>
-              </button>
-
-              <button class="asmr-interactive p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 tap-effect flex flex-col items-center gap-2 text-center group" data-sound-variant="bell">
-                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-lg group-hover:scale-110 transition-transform text-white">
-                  <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <span class="text-xs font-semibold text-slate-200">Щитовое оборуд.</span>
-                <span class="text-[10px] text-slate-400">Колокол</span>
-              </button>
-            </div>
-
-            <!-- Имитация панели навигации -->
-            <div class="mt-5 p-2 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-around">
-              <button class="asmr-interactive px-4 py-2 rounded-xl text-xs font-medium text-white tap-effect flex items-center gap-2 hover:bg-white/10" data-sound-variant="primary">
-                <i class="fa-solid fa-store text-emerald-400"></i> Каталог
-              </button>
-              <button class="asmr-interactive px-4 py-2 rounded-xl text-xs font-medium text-slate-300 tap-effect flex items-center gap-2 hover:bg-white/10" data-sound-variant="secondary">
-                <i class="fa-solid fa-percent text-amber-400"></i> Акции
-              </button>
-              <button class="asmr-interactive px-4 py-2 rounded-xl text-xs font-medium text-slate-300 tap-effect flex items-center gap-2 hover:bg-white/10" data-sound-variant="accent">
-                <i class="fa-solid fa-truck-fast text-sky-400"></i> Доставка
-              </button>
-              <button class="asmr-interactive px-4 py-2 rounded-xl text-xs font-medium text-slate-300 tap-effect flex items-center gap-2 hover:bg-white/10" data-sound-variant="bell">
-                <i class="fa-solid fa-phone text-orange-400"></i> Контакты
-              </button>
-            </div>
-          </div>
-
-          <!-- Настройки отдельных генераторов фона -->
-          <div class="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6 backdrop-blur-md space-y-4">
-            <h2 class="text-xs uppercase font-mono tracking-wider text-slate-300 flex items-center justify-between">
-              <span class="flex items-center gap-2">
-                <i class="fa-solid fa-sliders text-emerald-400"></i>
-                Тонкая настройка эмбиент-слоёв
-              </span>
-              <span class="text-[10px] text-slate-400 font-normal">Realtime Синтез</span>
-            </h2>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-              <div class="bg-black/30 p-3 rounded-2xl border border-white/5 space-y-1.5">
-                <div class="flex justify-between text-slate-300">
-                  <span id="slider-label-1">Ветер / Шелест</span>
-                  <span id="wind-val-text" class="text-emerald-400 font-mono">60%</span>
-                </div>
-                <input type="range" id="layer-wind-vol" min="0" max="1" step="0.05" value="0.6" class="w-full accent-emerald-400 cursor-pointer">
-              </div>
-
-              <div class="bg-black/30 p-3 rounded-2xl border border-white/5 space-y-1.5">
-                <div class="flex justify-between text-slate-300">
-                  <span id="slider-label-2">Птицы / Насекомые</span>
-                  <span id="fauna-val-text" class="text-emerald-400 font-mono">75%</span>
-                </div>
-                <input type="range" id="layer-fauna-vol" min="0" max="1" step="0.05" value="0.75" class="w-full accent-emerald-400 cursor-pointer">
-              </div>
-
-              <div class="bg-black/30 p-3 rounded-2xl border border-white/5 space-y-1.5">
-                <div class="flex justify-between text-slate-300">
-                  <span id="slider-label-3">Ручей / Осадки</span>
-                  <span id="water-val-text" class="text-emerald-400 font-mono">65%</span>
-                </div>
-                <input type="range" id="layer-water-vol" min="0" max="1" step="0.05" value="0.65" class="w-full accent-emerald-400 cursor-pointer">
-              </div>
-            </div>
-          </div>
+    <!-- СЕКЦИЯ 1: Переключение времён года (4 объемные 3D-кнопки) -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+      <!-- Весна -->
+      <button class="season-selector-btn btn-3d p-4 rounded-3xl text-left flex flex-col justify-between h-28 group" data-season="spring">
+        <div class="flex items-center justify-between">
+          <span class="w-9 h-9 rounded-xl flex items-center justify-center text-sm bg-[#182740] text-[#a2d2ff] border border-[#2b3f63]">
+            <i class="fa-solid fa-seedling"></i>
+          </span>
+          <span class="text-[10px] font-mono text-[#6c86a8] uppercase font-semibold">SPRING</span>
         </div>
+        <div>
+          <div class="text-sm font-semibold text-white group-hover:text-[#c2ddff] transition-colors">Весна</div>
+          <div class="text-[11px] text-[#8ca5c7] leading-tight">Журчание талой воды и капель</div>
+        </div>
+      </button>
 
-        <!-- Правая колонка: Скролл-полигон (динамический шорох и микро-тики) -->
-        <div class="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6 backdrop-blur-md flex flex-col h-full">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="text-xs uppercase font-mono tracking-wider text-slate-300 flex items-center gap-2">
-              <i class="fa-solid fa-arrows-up-down text-emerald-400"></i>
-              Скролл-текстура
+      <!-- Лето -->
+      <button class="season-selector-btn btn-3d p-4 rounded-3xl text-left flex flex-col justify-between h-28 group" data-season="summer">
+        <div class="flex items-center justify-between">
+          <span class="w-9 h-9 rounded-xl flex items-center justify-center text-sm bg-[#182740] text-[#93b7e3] border border-[#2b3f63]">
+            <i class="fa-solid fa-sun"></i>
+          </span>
+          <span class="text-[10px] font-mono text-[#6c86a8] uppercase font-semibold">SUMMER</span>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-white group-hover:text-[#c2ddff] transition-colors">Лето</div>
+          <div class="text-[11px] text-[#8ca5c7] leading-tight">Живые цикады и теплый бриз</div>
+        </div>
+      </button>
+
+      <!-- Осень (Активна по умолчанию) -->
+      <button class="season-selector-btn btn-3d active-season p-4 rounded-3xl text-left flex flex-col justify-between h-28 group" data-season="autumn">
+        <div class="flex items-center justify-between">
+          <span class="w-9 h-9 rounded-xl flex items-center justify-center text-sm bg-[#182740] text-[#93b7e3] border border-[#2b3f63]">
+            <i class="fa-solid fa-cloud-showers-heavy"></i>
+          </span>
+          <span class="text-[10px] font-mono text-[#93b7e3] uppercase font-semibold">AUTUMN</span>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-white group-hover:text-[#c2ddff] transition-colors">Осень</div>
+          <div class="text-[11px] text-[#8ca5c7] leading-tight">Натуральный дождь и ветер</div>
+        </div>
+      </button>
+
+      <!-- Зима -->
+      <button class="season-selector-btn btn-3d p-4 rounded-3xl text-left flex flex-col justify-between h-28 group" data-season="winter">
+        <div class="flex items-center justify-between">
+          <span class="w-9 h-9 rounded-xl flex items-center justify-center text-sm bg-[#182740] text-[#c2ddff] border border-[#2b3f63]">
+            <i class="fa-solid fa-snowflake"></i>
+          </span>
+          <span class="text-[10px] font-mono text-[#6c86a8] uppercase font-semibold">WINTER</span>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-white group-hover:text-[#c2ddff] transition-colors">Зима</div>
+          <div class="text-[11px] text-[#8ca5c7] leading-tight">Свист метели и кристальный звон</div>
+        </div>
+      </button>
+    </section>
+
+    <!-- СЕКЦИЯ 2: Интерактивный полигон тапов и скролла -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- Левый блок: 3D-кнопки тактильных ASMR-кликов -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="pastel-card p-5 md:p-6 rounded-3xl space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs uppercase font-mono tracking-wider text-[#93b7e3] flex items-center gap-2">
+              <i class="fa-solid fa-fingerprint"></i>
+              Тактильные микро-щелчки (Тапы и клики)
             </h2>
-            <span id="scroll-state-badge" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-mono text-emerald-300">
-              Покой
-            </span>
+            <span class="text-[11px] text-[#647b9d]">Чистый чип-синтез</span>
           </div>
 
-          <p class="text-xs text-slate-400 mb-3">
-            Крутите колесо или свайпайте пальцем. При прокрутке синтезатор воссоздает кинетическое трение воздуха, перестук капель или хруст шагов.
+          <p class="text-xs text-[#8ca5c7] leading-relaxed">
+            Нажимайте на объемные кнопки ниже. Звуки не имеют резких паразитных частот, создают расслабляющий приятный отклик при касаниях каталога и меню.
           </p>
 
-          <!-- Список карточек для прокрутки -->
-          <div id="scroll-demo-box" class="flex-1 max-h-[380px] overflow-y-auto space-y-2 pr-1 rounded-2xl bg-black/40 border border-white/10 p-2.5">
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">ABB S201 B16 Автомат 1P</div>
-                <div class="text-[10px] text-slate-400">Характеристика B, 6кА</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">480 ₽</span>
-            </div>
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">Schneider Easy9 УЗО 2P 25A 30mA</div>
-                <div class="text-[10px] text-slate-400">Тип AC, артикул EZ9R34225</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">2 350 ₽</span>
-            </div>
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">Кабель ВВГ-Пнг(А)-LS 3х2.5 ГОСТ</div>
-                <div class="text-[10px] text-slate-400">Медь, негорючий, малодымный</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">94 ₽/м</span>
-            </div>
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">Клеммы монтажные WAGO 221-413</div>
-                <div class="text-[10px] text-slate-400">3 проводника, рычажковые</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">46 ₽</span>
-            </div>
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">Реле напряжения Welrok D2-63 red</div>
-                <div class="text-[10px] text-slate-400">TrueRMS защита бытовой техники</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">3 890 ₽</span>
-            </div>
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">Бокс Tekfor встраиваемый на 36 мод.</div>
-                <div class="text-[10px] text-slate-400">С белой дверцей, IP41</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">2 980 ₽</span>
-            </div>
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">Legrand Valena Розетка 2К+З</div>
-                <div class="text-[10px] text-slate-400">Цвет Слоновая Кость</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">340 ₽</span>
-            </div>
-            <div class="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 text-xs flex justify-between items-center transition-colors">
-              <div>
-                <div class="font-medium text-white">Светодиодный профиль накладной 2м</div>
-                <div class="text-[10px] text-slate-400">Анодированный алюминий с матовым рассеивателем</div>
-              </div>
-              <span class="font-mono text-emerald-400 text-[11px]">590 ₽</span>
+          <!-- Сетка 5 объемных кнопок для тестирования -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+            <!-- Дерево (Marimba) -->
+            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="wood">
+              <span class="w-10 h-10 rounded-xl bg-[#142036] flex items-center justify-center text-base text-[#93b7e3] border border-[#233554]">
+                <i class="fa-solid fa-cubes"></i>
+              </span>
+              <span class="text-xs font-semibold text-white">Теплое дерево</span>
+              <span class="text-[10px] text-[#647b9d] font-mono">Wood Click</span>
+            </button>
+
+            <!-- Капля (Water droplet) -->
+            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="drop">
+              <span class="w-10 h-10 rounded-xl bg-[#142036] flex items-center justify-center text-base text-[#a2d2ff] border border-[#233554]">
+                <i class="fa-solid fa-droplet"></i>
+              </span>
+              <span class="text-xs font-semibold text-white">Капля росы</span>
+              <span class="text-[10px] text-[#647b9d] font-mono">Dew Drop</span>
+            </button>
+
+            <!-- Стекло / Кристалл -->
+            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="crystal">
+              <span class="w-10 h-10 rounded-xl bg-[#142036] flex items-center justify-center text-base text-[#c2ddff] border border-[#233554]">
+                <i class="fa-regular fa-gem"></i>
+              </span>
+              <span class="text-xs font-semibold text-white">Кристалл / Стекло</span>
+              <span class="text-[10px] text-[#647b9d] font-mono">Glass Tap</span>
+            </button>
+
+            <!-- Пузырек Pop -->
+            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="bubble">
+              <span class="w-10 h-10 rounded-xl bg-[#142036] flex items-center justify-center text-base text-[#779ecb] border border-[#233554]">
+                <i class="fa-solid fa-circle-notch"></i>
+              </span>
+              <span class="text-xs font-semibold text-white">Мягкий поп</span>
+              <span class="text-[10px] text-[#647b9d] font-mono">Bubble Pop</span>
+            </button>
+
+            <!-- Шелест / Бумага -->
+            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="paper">
+              <span class="w-10 h-10 rounded-xl bg-[#142036] flex items-center justify-center text-base text-[#8ca5c7] border border-[#233554]">
+                <i class="fa-solid fa-scroll"></i>
+              </span>
+              <span class="text-xs font-semibold text-white">Шелест бумаги</span>
+              <span class="text-[10px] text-[#647b9d] font-mono">Soft Flutter</span>
+            </button>
+
+            <!-- Колокольчик резонансный -->
+            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="bell">
+              <span class="w-10 h-10 rounded-xl bg-[#142036] flex items-center justify-center text-base text-[#bde0fe] border border-[#233554]">
+                <i class="fa-regular fa-bell"></i>
+              </span>
+              <span class="text-xs font-semibold text-white">Нежный тон</span>
+              <span class="text-[10px] text-[#647b9d] font-mono">Harmonic</span>
+            </button>
+          </div>
+
+          <!-- Макет меню интернет-магазина elektromir с объемными кнопками -->
+          <div class="pt-3">
+            <div class="text-[11px] font-medium text-[#647b9d] mb-2 uppercase font-mono tracking-wider">Имитация панели сайта Elektromir</div>
+            <div class="p-2 rounded-2xl bg-[#0f1827] border border-[#1f2f4c] flex flex-wrap gap-2 items-center justify-around">
+              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="wood">
+                <i class="fa-solid fa-bolt text-[#93b7e3]"></i> Автоматы
+              </button>
+              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="drop">
+                <i class="fa-solid fa-lightbulb text-[#a2d2ff]"></i> Освещение
+              </button>
+              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="crystal">
+                <i class="fa-solid fa-shield-halved text-[#c2ddff]"></i> Щиты УЗО
+              </button>
+              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="bubble">
+                <i class="fa-solid fa-basket-shopping text-[#779ecb]"></i> Корзина
+              </button>
             </div>
           </div>
         </div>
 
+        <!-- Тонкая настройка эмбиент-слоев текущего сезона -->
+        <div class="pastel-card p-5 md:p-6 rounded-3xl space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs uppercase font-mono tracking-wider text-[#93b7e3] flex items-center gap-2">
+              <i class="fa-solid fa-sliders"></i>
+              Баланс сезонных компонентов
+            </h2>
+            <span class="text-[11px] text-[#647b9d]">Регулировка в реальном времени</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Слой ветра -->
+            <div class="p-3.5 rounded-2xl bg-[#0f1827] border border-[#1f2f4c] space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-white font-medium flex items-center gap-2">
+                  <i class="fa-solid fa-wind text-[#93b7e3]"></i> Воздушный бриз / Ветер
+                </span>
+                <span id="wind-level-text" class="font-mono text-[#93b7e3]">65%</span>
+              </div>
+              <input type="range" id="wind-slider" min="0" max="1" step="0.05" value="0.65" class="w-full accent-[#93b7e3] cursor-pointer">
+            </div>
+
+            <!-- Слой сезонного элемента (Дождь / Цикады / Ручей / Метель) -->
+            <div class="p-3.5 rounded-2xl bg-[#0f1827] border border-[#1f2f4c] space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span id="seasonal-layer-name" class="text-white font-medium flex items-center gap-2">
+                  <i id="seasonal-layer-icon" class="fa-solid fa-cloud-showers-heavy text-[#93b7e3]"></i> Натуральный дождь
+                </span>
+                <span id="seasonal-level-text" class="font-mono text-[#93b7e3]">70%</span>
+              </div>
+              <input type="range" id="seasonal-slider" min="0" max="1" step="0.05" value="0.70" class="w-full accent-[#93b7e3] cursor-pointer">
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Блок встраивания готового кода на сайт elektromir -->
-      <section class="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6 backdrop-blur-md">
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
-          <div>
-            <h2 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-code text-emerald-400"></i>
-              Подключение в 1 строчку на ваш сайт elektromir
+      <!-- Правый блок: Полигон прокрутки (Scroll Kinetic Feedback) -->
+      <div class="pastel-card p-5 md:p-6 rounded-3xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xs uppercase font-mono tracking-wider text-[#93b7e3] flex items-center gap-2">
+              <i class="fa-solid fa-arrows-up-down"></i>
+              АСМР-Скролл
             </h2>
-            <p class="text-xs text-slate-400 mt-1">
-              Автономный модуль, весит 0 килобайт сторонних ассетов, автоматически активируется по первому тапу пользователя.
-            </p>
+            <span id="scroll-state-indicator" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1b2b46] text-[#93b7e3] border border-[#2b4169]">
+              Готов
+            </span>
           </div>
-          <button id="copy-script-btn" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold rounded-xl text-xs tap-effect flex items-center gap-2 shadow-lg shadow-emerald-500/20">
-            <i class="fa-regular fa-copy"></i>
-            <span id="copy-btn-label">Скопировать скрипт</span>
-          </button>
+
+          <p class="text-xs text-[#8ca5c7] mb-3 leading-relaxed">
+            Прокручивайте список товаров или страницу целиком: движок генерирует бархатный тактильный микро-перестук.
+          </p>
+
+          <!-- Скролл-контейнер товаров -->
+          <div id="scroll-test-container" class="max-h-[360px] overflow-y-auto space-y-2 pr-1.5">
+            <div class="p-3 rounded-2xl bg-[#0f1827] border border-[#1e2f4c] flex items-center justify-between hover:border-[#385482] transition-colors">
+              <div>
+                <div class="text-xs font-semibold text-white">Выключатель двухклавишный</div>
+                <div class="text-[10px] text-[#647b9d]">Legrand Valena Allure</div>
+              </div>
+              <span class="font-mono text-xs text-[#93b7e3]">720 ₽</span>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-[#0f1827] border border-[#1e2f4c] flex items-center justify-between hover:border-[#385482] transition-colors">
+              <div>
+                <div class="text-xs font-semibold text-white">Автоматический выключатель 16A</div>
+                <div class="text-[10px] text-[#647b9d]">ABB S201 B16 1-полюсный</div>
+              </div>
+              <span class="font-mono text-xs text-[#93b7e3]">480 ₽</span>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-[#0f1827] border border-[#1e2f4c] flex items-center justify-between hover:border-[#385482] transition-colors">
+              <div>
+                <div class="text-xs font-semibold text-white">УЗО Easy9 2P 25A 30мА</div>
+                <div class="text-[10px] text-[#647b9d]">Schneider Electric тип AC</div>
+              </div>
+              <span class="font-mono text-xs text-[#93b7e3]">2 350 ₽</span>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-[#0f1827] border border-[#1e2f4c] flex items-center justify-between hover:border-[#385482] transition-colors">
+              <div>
+                <div class="text-xs font-semibold text-white">Кабель ВВГнг-LS 3x2.5 ГОСТ</div>
+                <div class="text-[10px] text-[#647b9d]">Бухта 100 м, медь монолит</div>
+              </div>
+              <span class="font-mono text-xs text-[#93b7e3]">9 400 ₽</span>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-[#0f1827] border border-[#1e2f4c] flex items-center justify-between hover:border-[#385482] transition-colors">
+              <div>
+                <div class="text-xs font-semibold text-white">Реле напряжения Welrok D2-63</div>
+                <div class="text-[10px] text-[#647b9d]">С цифровым LED индикатором</div>
+              </div>
+              <span class="font-mono text-xs text-[#93b7e3]">3 890 ₽</span>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-[#0f1827] border border-[#1e2f4c] flex items-center justify-between hover:border-[#385482] transition-colors">
+              <div>
+                <div class="text-xs font-semibold text-white">Клеммы соединительные Wago</div>
+                <div class="text-[10px] text-[#647b9d]">Серия 221-413 (3 контакта)</div>
+              </div>
+              <span class="font-mono text-xs text-[#93b7e3]">46 ₽</span>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-[#0f1827] border border-[#1e2f4c] flex items-center justify-between hover:border-[#385482] transition-colors">
+              <div>
+                <div class="text-xs font-semibold text-white">Бокс распределительный 36 мод.</div>
+                <div class="text-[10px] text-[#647b9d]">Встраиваемый с дымчатой дверцей</div>
+              </div>
+              <span class="font-mono text-xs text-[#93b7e3]">3 150 ₽</span>
+            </div>
+          </div>
         </div>
 
-        <pre class="bg-black/60 p-4 rounded-2xl text-[11px] font-mono text-emerald-300/90 overflow-x-auto leading-relaxed border border-white/5 max-h-64"><code id="code-snippet">&lt;!-- Добавьте перед закрывающим тегом &lt;/body&gt; в index.html --&gt;
+        <div class="mt-4 pt-3 border-t border-[#1e2f4c] text-[11px] text-[#647b9d] flex justify-between items-center">
+          <span>Сглаживание пиков: активный лимитер</span>
+          <i class="fa-solid fa-waveform-lines text-[#93b7e3]"></i>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- СЕКЦИЯ 3: Готовый чистый код для вставки на сайт Romanmudrenov / Elektromir -->
+    <section class="pastel-card p-5 md:p-6 rounded-3xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-code text-[#93b7e3]"></i>
+            Готовый код для вашего сайта (https://romanmudrenov.github.io/elektromir/)
+          </h2>
+          <p class="text-xs text-[#8ca5c7] mt-0.5">
+            Вставьте данный скрипт перед тегом &lt;/body&gt;. Он не нагружает процессор и звучит реалистично.
+          </p>
+        </div>
+        <button id="copy-code-btn" class="btn-3d btn-3d-accent px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2">
+          <i class="fa-regular fa-copy"></i>
+          <span id="copy-btn-text">Скопировать код скрипта</span>
+        </button>
+      </div>
+
+      <pre class="bg-[#090e18] p-4 rounded-2xl text-[11px] font-mono text-[#a2d2ff]/90 overflow-x-auto border border-[#1b2b46] leading-relaxed max-h-56"><code id="code-snippet">&lt;!-- ASMR Engine for Elektromir (Soft Pastel Blue Edition) --&gt;
 &lt;script&gt;
-/**
- * Ultra-realistic Procedural Seasonal ASMR Engine
- * GitHub Pages: https://romanmudrenov.github.io/elektromir/
- */
-class SeasonalASMR {
-  static init(config = { season: 'autumn', scroll: true, tap: true, volume: 0.5 }) {
-    if (window._seasonalAsmrInstance) return window._seasonalAsmrInstance;
-    const instance = new SeasonalASMR(config);
-    window._seasonalAsmrInstance = instance;
-    return instance;
+class ElektromirASMR {
+  static start(options = {}) {
+    if (window._elektromirASMR) return window._elektromirASMR;
+    window._elektromirASMR = new ElektromirASMR(options);
+    return window._elektromirASMR;
   }
 
-  constructor(cfg) {
-    this.cfg = Object.assign({ season: 'autumn', scroll: true, tap: true, volume: 0.5 }, cfg);
+  constructor(opts) {
+    this.opt = Object.assign({ season: 'autumn', volume: 0.45, clicks: true, scroll: true }, opts);
     this.ctx = null;
     this.master = null;
-    this.setupTriggers();
+    this.bindEvents();
   }
 
-  ensureContext() {
+  initAudio() {
     if (!this.ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AC();
       this.master = this.ctx.createGain();
-      this.master.gain.setValueAtTime(this.cfg.volume, this.ctx.currentTime);
+      this.master.gain.setValueAtTime(this.opt.volume, this.ctx.currentTime);
       this.master.connect(this.ctx.destination);
     }
     if (this.ctx.state === 'suspended') this.ctx.resume();
   }
 
-  playTap(variant = 'primary') {
-    this.ensureContext();
+  // Приятные бархатные щелчки при касаниях
+  playClick(type = 'wood') {
+    this.initAudio();
     const t = this.ctx.currentTime;
-    const s = this.cfg.season;
-    
-    // Процедурный синтез под сезон
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    const filter = this.ctx.createBiquadFilter();
 
-    if (s === 'spring') {
-      // Весенняя роса / капля (синус с восходящим глиссандо)
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(380, t);
-      osc.frequency.exponentialRampToValueAtTime(1100, t + 0.04);
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(800, t);
-      filter.Q.setValueAtTime(4, t);
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.linearRampToValueAtTime(0.3, t + 0.004);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
-      osc.connect(filter).connect(gain).connect(this.master);
-      osc.start(t); osc.stop(t + 0.05);
-    } else if (s === 'summer') {
-      // Летняя веточка (короткий щелчок с резонансом дерева)
+    if (type === 'wood') {
+      // Теплый клик дерева (Marimba)
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(540, t);
-      osc.frequency.exponentialRampToValueAtTime(120, t + 0.035);
+      osc.frequency.setValueAtTime(520, t);
+      osc.frequency.exponentialRampToValueAtTime(110, t + 0.035);
       gain.gain.setValueAtTime(0.0001, t);
       gain.gain.linearRampToValueAtTime(0.28, t + 0.002);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
       osc.connect(gain).connect(this.master);
-      osc.start(t); osc.stop(t + 0.04);
-    } else if (s === 'autumn') {
-      // Осенний шорох / капля дождя
+      osc.start(t); osc.stop(t + 0.045);
+    } else if (type === 'drop') {
+      // Чистая капля росы
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(900, t);
-      osc.frequency.exponentialRampToValueAtTime(280, t + 0.03);
-      filter.type = 'bandpass'; filter.frequency.setValueAtTime(1600, t); filter.Q.setValueAtTime(2.5, t);
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.linearRampToValueAtTime(0.25, t + 0.002);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.032);
-      osc.connect(filter).connect(gain).connect(this.master);
-      osc.start(t); osc.stop(t + 0.035);
-    } else {
-      // Зимний хруст наста / кристалл
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(1800, t);
+      osc.frequency.setValueAtTime(360, t);
       osc.frequency.exponentialRampToValueAtTime(950, t + 0.04);
       gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.linearRampToValueAtTime(0.2, t + 0.001);
+      gain.gain.linearRampToValueAtTime(0.22, t + 0.003);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
       osc.connect(gain).connect(this.master);
       osc.start(t); osc.stop(t + 0.05);
+    } else {
+      // Мягкий пузырек
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(260, t);
+      osc.frequency.exponentialRampToValueAtTime(620, t + 0.03);
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.linearRampToValueAtTime(0.2, t + 0.002);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+      osc.connect(gain).connect(this.master);
+      osc.start(t); osc.stop(t + 0.04);
     }
   }
 
-  playScrollTick() {
-    this.ensureContext();
+  // Деликатный перестук скролла
+  playScroll() {
+    this.initAudio();
     const t = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1200, t);
-    osc.frequency.exponentialRampToValueAtTime(140, t + 0.015);
+    osc.frequency.setValueAtTime(980, t);
+    osc.frequency.exponentialRampToValueAtTime(160, t + 0.016);
     gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.linearRampToValueAtTime(0.05, t + 0.002);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.016);
+    gain.gain.linearRampToValueAtTime(0.04, t + 0.001);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.018);
     osc.connect(gain).connect(this.master);
-    osc.start(t); osc.stop(t + 0.018);
+    osc.start(t); osc.stop(t + 0.02);
   }
 
-  setupTriggers() {
-    if (this.cfg.tap) {
+  bindEvents() {
+    if (this.opt.clicks) {
       document.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('button, a, input, select, [role="button"], i, .card, .btn')) {
-          this.playTap();
+        if (e.target.closest('button, a, input, select, [role="button"], .card, i')) {
+          this.playClick('wood');
         }
       }, { passive: true });
     }
-    if (this.cfg.scroll) {
+    if (this.opt.scroll) {
       let lastY = window.scrollY, lastT = Date.now();
       window.addEventListener('scroll', () => {
         const y = window.scrollY;
-        const d = Math.abs(y - lastY);
+        const diff = Math.abs(y - lastY);
         const now = Date.now();
-        if (d > 40 && (now - lastT) > 45) {
-          this.playScrollTick();
+        if (diff > 45 && (now - lastT) > 40) {
+          this.playScroll();
           lastY = y; lastT = now;
         }
       }, { passive: true });
@@ -481,43 +568,57 @@ class SeasonalASMR {
   }
 }
 
-// Запуск: выберите season ('spring' | 'summer' | 'autumn' | 'winter')
-SeasonalASMR.init({ season: 'autumn', scroll: true, tap: true, volume: 0.4 });
+// Запуск по умолчанию
+ElektromirASMR.start({ season: 'autumn', volume: 0.45, clicks: true, scroll: true });
 &lt;/script&gt;</code></pre>
-      </section>
+    </section>
 
-    </main>
   </div>
 
-  <!-- Главный скрипт аудио-ядра и интерактивных визуалов -->
+  <!-- Аудио-архитектура ASMR движка -->
   <script>
     /**
-     * Полноценный процедурный звуковой движок четырёх сезонов
+     * Премиальный ASMR-движок:
+     * 1. Реальные звуковые сэмплы цикад (Wikimedia Commons loop)
+     * 2. Реалистичный шелковистый дождь без белого шума (стерео фильтрация розового шума + авто-LFO)
+     * 3. Мягкий свистящий ветер метели и весенний ручей
+     * 4. Отполированные тактильные ASMR-клики для тапов и скролла
      */
-    class ProceduralAudioEngine {
+    class RealisticASMRStudio {
       constructor() {
         this.ctx = null;
-        this.master = null;
-        this.ambienceMaster = null;
-        this.sfxMaster = null;
+        this.masterGain = null;
+        this.ambienceGain = null;
+        this.sfxGain = null;
 
-        this.season = 'spring';
-        this.isPlayingAmbience = false;
+        this.season = 'autumn';
+        this.isAmbiencePlaying = false;
         this.isMuted = false;
-        this.masterVol = 0.7;
+        this.masterVolume = 0.75;
 
-        // Уровни отдельных слоев
-        this.windVol = 0.6;
-        this.faunaVol = 0.75;
-        this.waterVol = 0.65;
+        // Громкость слоев
+        this.windVolume = 0.65;
+        this.seasonalVolume = 0.70;
 
-        // Ноды генераторов
-        this.noiseBuffers = {};
+        // Буферы шумов для синтеза
+        this.pinkBuffer = null;
+        this.brownBuffer = null;
+
+        // Активные ноды
         this.activeNodes = [];
-        this.birdTimer = null;
-        this.cicadaTimer = null;
+        this.rainDropletTimer = null;
+        this.iceChimeTimer = null;
+
+        // Реальный аудио-сэмпл насекомых (сверчки Gryllus campestris, лицензия Creative Commons)
+        this.cricketAudio = new Audio();
+        this.cricketAudio.crossOrigin = "anonymous";
+        this.cricketAudio.loop = true;
+        this.cricketAudio.src = "https://upload.wikimedia.org/wikipedia/commons/9/9c/Gryllus_campestris_-_sound.ogg";
+        this.cricketAudioNode = null;
+        this.cricketGainNode = null;
+
         this.windGainNode = null;
-        this.waterGainNode = null;
+        this.seasonalGainNode = null;
       }
 
       init() {
@@ -525,19 +626,30 @@ SeasonalASMR.init({ season: 'autumn', scroll: true, tap: true, volume: 0.4 });
           const AC = window.AudioContext || window.webkitAudioContext;
           this.ctx = new AC();
 
-          this.master = this.ctx.createGain();
-          this.master.gain.setValueAtTime(this.masterVol, this.ctx.currentTime);
-          this.master.connect(this.ctx.destination);
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.setValueAtTime(this.masterVolume, this.ctx.currentTime);
+          this.masterGain.connect(this.ctx.destination);
 
-          this.ambienceMaster = this.ctx.createGain();
-          this.ambienceMaster.gain.setValueAtTime(1.0, this.ctx.currentTime);
-          this.ambienceMaster.connect(this.master);
+          this.ambienceGain = this.ctx.createGain();
+          this.ambienceGain.gain.setValueAtTime(1.0, this.ctx.currentTime);
+          this.ambienceGain.connect(this.masterGain);
 
-          this.sfxMaster = this.ctx.createGain();
-          this.sfxMaster.gain.setValueAtTime(0.9, this.ctx.currentTime);
-          this.sfxMaster.connect(this.master);
+          this.sfxGain = this.ctx.createGain();
+          this.sfxGain.gain.setValueAtTime(0.85, this.ctx.currentTime);
+          this.sfxGain.connect(this.masterGain);
 
-          this.generateNoiseBuffers();
+          this.createNoiseGenerators();
+
+          // Подключаем реальный аудиофайл сверчков через Web Audio
+          try {
+            this.cricketAudioNode = this.ctx.createMediaElementSource(this.cricketAudio);
+            this.cricketGainNode = this.ctx.createGain();
+            this.cricketGainNode.gain.setValueAtTime(0, this.ctx.currentTime);
+            this.cricketAudioNode.connect(this.cricketGainNode);
+            this.cricketGainNode.connect(this.ambienceGain);
+          } catch (e) {
+            console.log("AudioElement already routed or waiting gesture");
+          }
         }
 
         if (this.ctx.state === 'suspended') {
@@ -545,96 +657,90 @@ SeasonalASMR.init({ season: 'autumn', scroll: true, tap: true, volume: 0.4 });
         }
       }
 
-      generateNoiseBuffers() {
-        const bufferSize = this.ctx.sampleRate * 4; // 4 секунды цикличного шума
+      createNoiseGenerators() {
+        const sr = this.ctx.sampleRate;
+        const length = sr * 4; // 4 секунды сглаженного шума
 
-        // Белый шум
-        const whiteBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-        const whiteData = whiteBuffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          whiteData[i] = Math.random() * 2 - 1;
+        // Розовый шум (Voss-McCartney алгоритм для мягкого дождя и ветра)
+        this.pinkBuffer = this.ctx.createBuffer(2, length, sr);
+        for (let ch = 0; ch < 2; ch++) {
+          const data = this.pinkBuffer.getChannelData(ch);
+          let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+          for (let i = 0; i < length; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99886 * b0 + white * 0.0555179;
+            b1 = 0.99332 * b1 + white * 0.0750759;
+            b2 = 0.96900 * b2 + white * 0.1538520;
+            b3 = 0.86650 * b3 + white * 0.3104856;
+            b4 = 0.55000 * b4 + white * 0.5329522;
+            b5 = -0.7616 * b5 - white * 0.0168980;
+            data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.09;
+            b6 = white * 0.115926;
+          }
         }
-        this.noiseBuffers.white = whiteBuffer;
 
-        // Розовый шум (Pink Noise - алгоритм Voss-McCartney)
-        const pinkBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-        const pinkData = pinkBuffer.getChannelData(0);
-        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          b0 = 0.99886 * b0 + white * 0.0555179;
-          b1 = 0.99332 * b1 + white * 0.0750759;
-          b2 = 0.96900 * b2 + white * 0.1538520;
-          b3 = 0.86650 * b3 + white * 0.3104856;
-          b4 = 0.55000 * b4 + white * 0.5329522;
-          b5 = -0.7616 * b5 - white * 0.0168980;
-          pinkData[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
-          b6 = white * 0.115926;
+        // Коричневый шум (глубокий мягкий поток воды и ручья)
+        this.brownBuffer = this.ctx.createBuffer(2, length, sr);
+        for (let ch = 0; ch < 2; ch++) {
+          const data = this.brownBuffer.getChannelData(ch);
+          let last = 0.0;
+          for (let i = 0; i < length; i++) {
+            const white = Math.random() * 2 - 1;
+            last = (last + (0.02 * white)) / 1.02;
+            data[i] = last * 3.2;
+          }
         }
-        this.noiseBuffers.pink = pinkBuffer;
-
-        // Коричневый шум (Brown/Red Noise для глубокого ветра и ручья)
-        const brownBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-        const brownData = brownBuffer.getChannelData(0);
-        let lastOut = 0.0;
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          lastOut = (lastOut + (0.02 * white)) / 1.02;
-          brownData[i] = lastOut * 3.5;
-        }
-        this.noiseBuffers.brown = brownBuffer;
       }
 
       setMasterVolume(val) {
-        this.masterVol = parseFloat(val);
-        if (this.master && !this.isMuted) {
-          this.master.gain.setTargetAtTime(this.masterVol, this.ctx.currentTime, 0.03);
+        this.masterVolume = parseFloat(val);
+        if (this.masterGain && !this.isMuted) {
+          this.masterGain.gain.setTargetAtTime(this.masterVolume, this.ctx.currentTime, 0.03);
         }
       }
 
       toggleMute() {
         this.isMuted = !this.isMuted;
-        if (this.master) {
-          const target = this.isMuted ? 0 : this.masterVol;
-          this.master.gain.setTargetAtTime(target, this.ctx.currentTime, 0.03);
+        if (this.masterGain) {
+          const target = this.isMuted ? 0 : this.masterVolume;
+          this.masterGain.gain.setTargetAtTime(target, this.ctx.currentTime, 0.03);
         }
         return this.isMuted;
       }
 
-      setSeason(seasonName) {
-        this.season = seasonName;
-        if (this.isPlayingAmbience) {
+      setSeason(newSeason) {
+        this.season = newSeason;
+        if (this.isAmbiencePlaying) {
           this.stopAmbience();
           this.startAmbience();
         }
       }
 
-      // Запуск эмбиента
+      // Запуск фона выбранного сезона
       startAmbience() {
         this.init();
         this.stopAmbience();
-        this.isPlayingAmbience = true;
+        this.isAmbiencePlaying = true;
 
-        switch (this.season) {
-          case 'spring':
-            this.startSpringLandscape();
-            break;
-          case 'summer':
-            this.startSummerLandscape();
-            break;
-          case 'autumn':
-            this.startAutumnLandscape();
-            break;
-          case 'winter':
-            this.startWinterLandscape();
-            break;
+        if (this.season === 'autumn') {
+          this.renderAutumnAmbience();
+        } else if (this.season === 'summer') {
+          this.renderSummerAmbience();
+        } else if (this.season === 'spring') {
+          this.renderSpringAmbience();
+        } else if (this.season === 'winter') {
+          this.renderWinterAmbience();
         }
       }
 
       stopAmbience() {
-        this.isPlayingAmbience = false;
-        if (this.birdTimer) clearTimeout(this.birdTimer);
-        if (this.cicadaTimer) clearTimeout(this.cicadaTimer);
+        this.isAmbiencePlaying = false;
+        if (this.rainDropletTimer) clearTimeout(this.rainDropletTimer);
+        if (this.iceChimeTimer) clearTimeout(this.iceChimeTimer);
+
+        if (this.cricketAudio) {
+          this.cricketAudio.pause();
+        }
 
         this.activeNodes.forEach(node => {
           try {
@@ -645,423 +751,265 @@ SeasonalASMR.init({ season: 'autumn', scroll: true, tap: true, volume: 0.4 });
         this.activeNodes = [];
       }
 
-      // ==========================================
-      // СЕЗОН 1: ВЕСНА (Птицы FM-синтез + ручей)
-      // ==========================================
-      startSpringLandscape() {
+      // ОСЕНЬ: Натуральный дождь (глубокий сглаженный розовый шум) + ветер
+      renderAutumnAmbience() {
         const now = this.ctx.currentTime;
 
-        // 1. Журчащий ручей (Brown Noise + полосовые резонансные фильтры)
-        const streamSource = this.ctx.createBufferSource();
-        streamSource.buffer = this.noiseBuffers.brown;
-        streamSource.loop = true;
-
-        const streamFilter = this.ctx.createBiquadFilter();
-        streamFilter.type = 'bandpass';
-        streamFilter.frequency.setValueAtTime(620, now);
-        streamFilter.Q.setValueAtTime(3.8, now);
-
-        // LFO для колебания бурления воды
-        const streamLfo = this.ctx.createOscillator();
-        streamLfo.type = 'sine';
-        streamLfo.frequency.setValueAtTime(1.8, now);
-        const streamLfoGain = this.ctx.createGain();
-        streamLfoGain.gain.setValueAtTime(140, now);
-        streamLfo.connect(streamLfoGain);
-        streamLfoGain.connect(streamFilter.frequency);
-
-        this.waterGainNode = this.ctx.createGain();
-        this.waterGainNode.gain.setValueAtTime(0.18 * this.waterVol, now);
-
-        streamSource.connect(streamFilter);
-        streamFilter.connect(this.waterGainNode);
-        this.waterGainNode.connect(this.ambienceMaster);
-
-        streamSource.start(now);
-        streamLfo.start(now);
-        this.activeNodes.push(streamSource, streamLfo, this.waterGainNode);
-
-        // 2. Легкий весенний ветерок (розовый шум)
-        this.buildWindChannel(380, 2.2, 0.12 * this.windVol, 0.2);
-
-        // 3. FM-синтез птичьих трелей (динамический генератор)
-        this.scheduleBirdChirp();
-      }
-
-      scheduleBirdChirp() {
-        if (!this.isPlayingAmbience || this.season !== 'spring') return;
-
-        const delay = 800 + Math.random() * 2400; // каждые 0.8 - 3.2 сек
-        this.birdTimer = setTimeout(() => {
-          this.triggerFMBirdSong();
-          this.scheduleBirdChirp();
-        }, delay);
-      }
-
-      triggerFMBirdSong() {
-        if (!this.ctx || this.isMuted) return;
-        const now = this.ctx.currentTime;
-        const chirpCount = 2 + Math.floor(Math.random() * 4); // серия трелей
-        let t = now;
-
-        for (let i = 0; i < chirpCount; i++) {
-          const carrier = this.ctx.createOscillator();
-          const modulator = this.ctx.createOscillator();
-          const modGain = this.ctx.createGain();
-          const noteGain = this.ctx.createGain();
-
-          // Частоты птичьего пения (2.4 - 4.5 кГц)
-          const baseFreq = 2600 + Math.random() * 1200;
-          const duration = 0.06 + Math.random() * 0.05;
-
-          modulator.frequency.setValueAtTime(80 + Math.random() * 120, t);
-          modGain.gain.setValueAtTime(400, t);
-
-          modulator.connect(modGain);
-          modGain.connect(carrier.frequency);
-
-          carrier.type = 'sine';
-          carrier.frequency.setValueAtTime(baseFreq, t);
-          carrier.frequency.exponentialRampToValueAtTime(baseFreq * (Math.random() > 0.5 ? 1.4 : 0.7), t + duration);
-
-          noteGain.gain.setValueAtTime(0.0001, t);
-          noteGain.gain.exponentialRampToValueAtTime(0.12 * this.faunaVol, t + 0.008);
-          noteGain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
-
-          carrier.connect(noteGain);
-          noteGain.connect(this.ambienceMaster);
-
-          modulator.start(t);
-          carrier.start(t);
-          modulator.stop(t + duration);
-          carrier.stop(t + duration);
-
-          t += duration + (0.04 + Math.random() * 0.05);
-        }
-      }
-
-      // ==========================================
-      // СЕЗОН 2: ЛЕТО (Цикады, шелест крон, теплый ветер)
-      // ==========================================
-      startSummerLandscape() {
-        const now = this.ctx.currentTime;
-
-        // 1. Теплый шелест листвы (розовый шум с плавающей фильтрацией)
-        this.buildWindChannel(750, 1.8, 0.16 * this.windVol, 0.35);
-
-        // 2. Цикады / сверчки (модулированный высокочастотный шум с ритмическими импульсами)
-        this.scheduleCicadas();
-      }
-
-      scheduleCicadas() {
-        if (!this.isPlayingAmbience || this.season !== 'summer') return;
-
-        const burstDuration = 1.8 + Math.random() * 2.5;
-        this.triggerCicadaBurst(burstDuration);
-
-        const nextDelay = (burstDuration * 1000) + 400 + Math.random() * 1500;
-        this.cicadaTimer = setTimeout(() => {
-          this.scheduleCicadas();
-        }, nextDelay);
-      }
-
-      triggerCicadaBurst(duration) {
-        if (!this.ctx || this.isMuted) return;
-        const now = this.ctx.currentTime;
-
-        const noise = this.ctx.createBufferSource();
-        noise.buffer = this.noiseBuffers.white;
-        noise.loop = true;
-
-        const bpf = this.ctx.createBiquadFilter();
-        bpf.type = 'bandpass';
-        bpf.frequency.setValueAtTime(4800, now);
-        bpf.Q.setValueAtTime(9.0, now);
-
-        // AM тремоло цикады (быстрая пульсация 28 Гц)
-        const tremoloOsc = this.ctx.createOscillator();
-        tremoloOsc.type = 'triangle';
-        tremoloOsc.frequency.setValueAtTime(28, now);
-
-        const tremoloGain = this.ctx.createGain();
-        tremoloGain.gain.setValueAtTime(0.5, now);
-        tremoloOsc.connect(tremoloGain);
-
-        const envelopeGain = this.ctx.createGain();
-        envelopeGain.gain.setValueAtTime(0.0001, now);
-        envelopeGain.gain.linearRampToValueAtTime(0.18 * this.faunaVol, now + 0.3);
-        envelopeGain.gain.setValueAtTime(0.18 * this.faunaVol, now + duration - 0.4);
-        envelopeGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-        noise.connect(bpf);
-        bpf.connect(envelopeGain);
-        tremoloGain.connect(envelopeGain.gain);
-        envelopeGain.connect(this.ambienceMaster);
-
-        noise.start(now);
-        tremoloOsc.start(now);
-        noise.stop(now + duration);
-        tremoloOsc.stop(now + duration);
-      }
-
-      // ==========================================
-      // СЕЗОН 3: ОСЕНЬ (Плотный дождь + завывающий ветер)
-      // ==========================================
-      startAutumnLandscape() {
-        const now = this.ctx.currentTime;
-
-        // 1. Процедурный дождь (розовый шум с деликатным ВЧ срезом)
+        // 1. Полнотелый непрерывный шум дождя
         const rainSource = this.ctx.createBufferSource();
-        rainSource.buffer = this.noiseBuffers.pink;
+        rainSource.buffer = this.pinkBuffer;
         rainSource.loop = true;
 
-        const rainFilter = this.ctx.createBiquadFilter();
-        rainFilter.type = 'lowpass';
-        rainFilter.frequency.setValueAtTime(3200, now);
+        // Мягкий двухполосный фильтр (срезает резкий «песок», оставляя глубокий шум падающих капель)
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(2600, now);
+        filter.Q.setValueAtTime(0.7, now);
 
-        this.waterGainNode = this.ctx.createGain();
-        this.waterGainNode.gain.setValueAtTime(0.24 * this.waterVol, now);
+        this.seasonalGainNode = this.ctx.createGain();
+        this.seasonalGainNode.gain.setValueAtTime(0.26 * this.seasonalVolume, now);
 
-        rainSource.connect(rainFilter);
-        rainFilter.connect(this.waterGainNode);
-        this.waterGainNode.connect(this.ambienceMaster);
-
+        rainSource.connect(filter).connect(this.seasonalGainNode).connect(this.ambienceGain);
         rainSource.start(now);
-        this.activeNodes.push(rainSource, this.waterGainNode);
+        this.activeNodes.push(rainSource, this.seasonalGainNode);
 
-        // 2. Осенний завывающий ветер
-        this.buildWindChannel(310, 4.2, 0.22 * this.windVol, 0.18, true);
+        // 2. Осенний прохладный ветер
+        this.createWindChannel(320, 2.8, 0.16 * this.windVolume, 0.15);
 
-        // 3. Микро-капли дождя (рандомные щелчки на оконное стекло)
-        this.scheduleRainDroplets();
+        // 3. Микро-капли по подоконнику
+        this.scheduleRainDrops();
       }
 
-      scheduleRainDroplets() {
-        if (!this.isPlayingAmbience || this.season !== 'autumn') return;
-
+      scheduleRainDrops() {
+        if (!this.isAmbiencePlaying || this.season !== 'autumn') return;
         const now = this.ctx.currentTime;
-        // Генерируем пачку из 2-3 ультракоротких капель
-        for (let i = 0; i < 2; i++) {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          const f = 1400 + Math.random() * 2000;
-          const t = now + Math.random() * 0.15;
 
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(f, t);
-          osc.frequency.exponentialRampToValueAtTime(f * 0.4, t + 0.02);
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const freq = 1200 + Math.random() * 1400;
 
-          gain.gain.setValueAtTime(0.0001, t);
-          gain.gain.linearRampToValueAtTime(0.04 * this.waterVol, t + 0.002);
-          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.025);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.45, now + 0.025);
 
-          osc.connect(gain);
-          gain.connect(this.ambienceMaster);
-          osc.start(t);
-          osc.stop(t + 0.03);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(0.035 * this.seasonalVolume, now + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+
+        osc.connect(gain).connect(this.ambienceGain);
+        osc.start(now);
+        osc.stop(now + 0.035);
+
+        const next = 180 + Math.random() * 320;
+        this.rainDropletTimer = setTimeout(() => this.scheduleRainDrops(), next);
+      }
+
+      // ЛЕТО: Реальные полевые сверчки / цикады + шелест теплого ветра
+      renderSummerAmbience() {
+        const now = this.ctx.currentTime;
+
+        // Включение реального сэмпла сверчков
+        if (this.cricketAudio && this.cricketGainNode) {
+          this.cricketGainNode.gain.setValueAtTime(0.35 * this.seasonalVolume, now);
+          this.cricketAudio.currentTime = Math.random() * 5;
+          this.cricketAudio.play().catch(e => console.log("User action required for audio play"));
         }
 
-        this.cicadaTimer = setTimeout(() => {
-          this.scheduleRainDroplets();
-        }, 120 + Math.random() * 280);
+        // Теплый шелест воздуха и крон
+        this.createWindChannel(680, 1.4, 0.15 * this.windVolume, 0.28);
       }
 
-      // ==========================================
-      // СЕЗОН 4: ЗИМА (Метель, ледяные колокола)
-      // ==========================================
-      startWinterLandscape() {
+      // ВЕСНА: Журчащий ручей (Brown noise) + капли талой воды
+      renderSpringAmbience() {
         const now = this.ctx.currentTime;
 
-        // 1. Метель (двойной свистящий полосовой фильтр с глубоким LFO завывания)
-        this.buildWindChannel(420, 5.5, 0.28 * this.windVol, 0.12, true);
+        const stream = this.ctx.createBufferSource();
+        stream.buffer = this.brownBuffer;
+        stream.loop = true;
 
-        // 2. Суб-басовый холодный гул вдали (55 Гц)
-        const subDrone = this.ctx.createOscillator();
-        subDrone.type = 'sine';
-        subDrone.frequency.setValueAtTime(58, now);
-        const subGain = this.ctx.createGain();
-        subGain.gain.setValueAtTime(0.08 * this.windVol, now);
-        subDrone.connect(subGain);
-        subGain.connect(this.ambienceMaster);
-        subDrone.start(now);
-        this.activeNodes.push(subDrone, subGain);
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(580, now);
+        filter.Q.setValueAtTime(2.6, now);
 
-        // 3. Редкие морозные звоны льдинок (Ice Crystals)
+        // LFO для эффекта перекатывающихся струй воды
+        const lfo = this.ctx.createOscillator();
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(1.4, now);
+        const lfoGain = this.ctx.createGain();
+        lfoGain.gain.setValueAtTime(120, now);
+        lfo.connect(lfoGain);
+        lfoGain.connect(filter.frequency);
+
+        this.seasonalGainNode = this.ctx.createGain();
+        this.seasonalGainNode.gain.setValueAtTime(0.22 * this.seasonalVolume, now);
+
+        stream.connect(filter).connect(this.seasonalGainNode).connect(this.ambienceGain);
+        stream.start(now);
+        lfo.start(now);
+        this.activeNodes.push(stream, lfo, this.seasonalGainNode);
+
+        // Легкий весенний ветерок
+        this.createWindChannel(420, 1.8, 0.12 * this.windVolume, 0.22);
+      }
+
+      // ЗИМА: Морозная метель (сглаженный свист ветра) + кристальные звоны льдинок
+      renderWinterAmbience() {
+        const now = this.ctx.currentTime;
+
+        // Глубокая бархатная метель
+        this.createWindChannel(390, 4.8, 0.24 * this.windVolume, 0.14, true);
+
+        // Суб-басовый холодный резонанс вдали (54 Гц)
+        const coldDrone = this.ctx.createOscillator();
+        coldDrone.type = 'sine';
+        coldDrone.frequency.setValueAtTime(54, now);
+        const coldGain = this.ctx.createGain();
+        coldGain.gain.setValueAtTime(0.09 * this.windVolume, now);
+        coldDrone.connect(coldGain).connect(this.ambienceGain);
+        coldDrone.start(now);
+        this.activeNodes.push(coldDrone, coldGain);
+
         this.scheduleIceChimes();
       }
 
       scheduleIceChimes() {
-        if (!this.isPlayingAmbience || this.season !== 'winter') return;
-
-        const delay = 1800 + Math.random() * 3000;
-        this.birdTimer = setTimeout(() => {
-          this.triggerIceChime();
-          this.scheduleIceChimes();
-        }, delay);
-      }
-
-      triggerIceChime() {
-        if (!this.ctx || this.isMuted) return;
+        if (!this.isAmbiencePlaying || this.season !== 'winter') return;
         const now = this.ctx.currentTime;
-        const chimePitches = [1760, 2093, 2637, 3135, 3520]; // ноты кристальной пентатоники
-        const freq = chimePitches[Math.floor(Math.random() * chimePitches.length)];
+
+        const pitches = [1760, 2093, 2637, 3135];
+        const freq = pitches[Math.floor(Math.random() * pitches.length)];
 
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now);
 
-        // Длинный хрустальный спад
         gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(0.08 * this.faunaVol, now + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+        gain.gain.linearRampToValueAtTime(0.06 * this.seasonalVolume, now + 0.004);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
 
-        osc.connect(gain);
-        gain.connect(this.ambienceMaster);
-
+        osc.connect(gain).connect(this.ambienceGain);
         osc.start(now);
-        osc.stop(now + 1.3);
+        osc.stop(now + 1.0);
+
+        const next = 2200 + Math.random() * 3200;
+        this.iceChimeTimer = setTimeout(() => this.scheduleIceChimes(), next);
       }
 
-      // Общий билдер ветра с LFO-модуляцией резонанса
-      buildWindChannel(centerFreq, qValue, volume, lfoRate, isHowling = false) {
+      // Общий генератор ветра
+      createWindChannel(centerFreq, qVal, volume, lfoFreq, isBlizzard = false) {
         const now = this.ctx.currentTime;
 
-        const windSource = this.ctx.createBufferSource();
-        windSource.buffer = this.noiseBuffers.pink;
-        windSource.loop = true;
+        const wind = this.ctx.createBufferSource();
+        wind.buffer = this.pinkBuffer;
+        wind.loop = true;
 
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'bandpass';
         filter.frequency.setValueAtTime(centerFreq, now);
-        filter.Q.setValueAtTime(qValue, now);
+        filter.Q.setValueAtTime(qVal, now);
 
-        // LFO для завывания ветра
         const lfo = this.ctx.createOscillator();
         lfo.type = 'sine';
-        lfo.frequency.setValueAtTime(lfoRate, now);
-
+        lfo.frequency.setValueAtTime(lfoFreq, now);
         const lfoGain = this.ctx.createGain();
-        lfoGain.gain.setValueAtTime(isHowling ? centerFreq * 0.75 : centerFreq * 0.35, now);
-
+        lfoGain.gain.setValueAtTime(isBlizzard ? centerFreq * 0.7 : centerFreq * 0.35, now);
         lfo.connect(lfoGain);
         lfoGain.connect(filter.frequency);
 
         this.windGainNode = this.ctx.createGain();
         this.windGainNode.gain.setValueAtTime(volume, now);
 
-        windSource.connect(filter);
-        filter.connect(this.windGainNode);
-        this.windGainNode.connect(this.ambienceMaster);
-
-        windSource.start(now);
+        wind.connect(filter).connect(this.windGainNode).connect(this.ambienceGain);
+        wind.start(now);
         lfo.start(now);
-        this.activeNodes.push(windSource, lfo, this.windGainNode);
+        this.activeNodes.push(wind, lfo, this.windGainNode);
       }
 
-      // ==========================================
-      // ТАКТИЛЬНЫЕ ЗВУКИ: ТАПЫ И СКРОЛЛ
-      // ==========================================
-      playSeasonTap(variant = 'primary') {
+      // ТАКТИЛЬНЫЕ ЗВУКИ: ТАПЫ (Улучшенные ASMR клики)
+      playTapSound(soundType) {
         if (this.isMuted) return;
         this.init();
         const now = this.ctx.currentTime;
 
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        const filter = this.ctx.createBiquadFilter();
 
-        switch (this.season) {
-          case 'spring': // Роса / Капля
-            osc.type = 'sine';
-            const startF = variant === 'bell' ? 880 : (variant === 'secondary' ? 440 : 360);
-            osc.frequency.setValueAtTime(startF, now);
-            osc.frequency.exponentialRampToValueAtTime(startF * 2.4, now + 0.045);
+        switch (soundType) {
+          case 'wood': // Теплое дерево (Marimba click)
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(540, now);
+            osc.frequency.exponentialRampToValueAtTime(115, now + 0.035);
             gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.35, now + 0.004);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+            gain.gain.linearRampToValueAtTime(0.34, now + 0.002);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
             osc.connect(gain);
             break;
 
-          case 'summer': // Теплая сухая ветка / клик дерева
-            osc.type = 'triangle';
-            filter.type = 'bandpass';
-            filter.frequency.setValueAtTime(680, now);
-            filter.Q.setValueAtTime(3.0, now);
-            osc.frequency.setValueAtTime(580, now);
-            osc.frequency.exponentialRampToValueAtTime(140, now + 0.035);
+          case 'drop': // Капля росы
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(380, now);
+            osc.frequency.exponentialRampToValueAtTime(1050, now + 0.042);
             gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.38, now + 0.002);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
-            osc.connect(filter);
-            filter.connect(gain);
+            gain.gain.linearRampToValueAtTime(0.28, now + 0.003);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.048);
+            osc.connect(gain);
             break;
 
-          case 'autumn': // Хруст листа / шлепок капли
-            if (variant === 'primary' || variant === 'accent') {
-              // Хруст сухой листвы (всплеск фильтрованного шума)
-              const noiseNode = this.ctx.createBufferSource();
-              noiseNode.buffer = this.noiseBuffers.pink;
-              const bpf = this.ctx.createBiquadFilter();
-              bpf.type = 'bandpass';
-              bpf.frequency.setValueAtTime(1800, now);
-              bpf.Q.setValueAtTime(4.0, now);
-              gain.gain.setValueAtTime(0.0001, now);
-              gain.gain.linearRampToValueAtTime(0.32, now + 0.003);
-              gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
-              noiseNode.connect(bpf);
-              bpf.connect(gain);
-              gain.connect(this.sfxMaster);
-              noiseNode.start(now);
-              noiseNode.stop(now + 0.05);
-              return;
-            } else {
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(950, now);
-              osc.frequency.exponentialRampToValueAtTime(260, now + 0.03);
-              gain.gain.setValueAtTime(0.0001, now);
-              gain.gain.linearRampToValueAtTime(0.28, now + 0.002);
-              gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
-              osc.connect(gain);
-            }
+          case 'crystal': // Стекло / Кристалл
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1900, now);
+            osc.frequency.exponentialRampToValueAtTime(740, now + 0.038);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(0.22, now + 0.001);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.042);
+            osc.connect(gain);
             break;
 
-          case 'winter': // Скрип наста / звон кристаллов льда
+          case 'bubble': // Пузырек Pop
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(260, now);
+            osc.frequency.exponentialRampToValueAtTime(680, now + 0.028);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(0.26, now + 0.002);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+            osc.connect(gain);
+            break;
+
+          case 'paper': // Шелест бумаги (короткий фильтрованный импульс)
+            const noise = this.ctx.createBufferSource();
+            noise.buffer = this.pinkBuffer;
+            const bpf = this.ctx.createBiquadFilter();
+            bpf.type = 'bandpass';
+            bpf.frequency.setValueAtTime(1600, now);
+            bpf.Q.setValueAtTime(3.2, now);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(0.24, now + 0.002);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+            noise.connect(bpf).connect(gain).connect(this.sfxGain);
+            noise.start(now);
+            noise.stop(now + 0.04);
+            return;
+
+          case 'bell': // Гармонический тон
           default:
-            if (variant === 'bell') {
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(2400, now);
-              gain.gain.setValueAtTime(0.0001, now);
-              gain.gain.linearRampToValueAtTime(0.25, now + 0.002);
-              gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-              osc.connect(gain);
-            } else {
-              // Скрип снега под шагом
-              const snowNoise = this.ctx.createBufferSource();
-              snowNoise.buffer = this.noiseBuffers.white;
-              const hpf = this.ctx.createBiquadFilter();
-              hpf.type = 'highpass';
-              hpf.frequency.setValueAtTime(2200, now);
-              gain.gain.setValueAtTime(0.0001, now);
-              gain.gain.linearRampToValueAtTime(0.25, now + 0.003);
-              gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.038);
-              snowNoise.connect(hpf);
-              hpf.connect(gain);
-              gain.connect(this.sfxMaster);
-              snowNoise.start(now);
-              snowNoise.stop(now + 0.04);
-              return;
-            }
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1046, now);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(0.22, now + 0.003);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+            osc.connect(gain);
             break;
         }
 
-        gain.connect(this.sfxMaster);
+        gain.connect(this.sfxGain);
         osc.start(now);
-        osc.stop(now + (variant === 'bell' ? 0.25 : 0.06));
+        osc.stop(now + (soundType === 'bell' ? 0.3 : 0.055));
       }
 
-      playSeasonScrollTick(speed) {
+      // ТАКТИЛЬНЫЙ СКРОЛЛ-ТИК
+      playScrollTick(intensity) {
         if (this.isMuted) return;
         this.init();
         const now = this.ctx.currentTime;
@@ -1069,42 +1017,37 @@ SeasonalASMR.init({ season: 'autumn', scroll: true, tap: true, volume: 0.4 });
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
 
-        const baseF = this.season === 'winter' ? 1600 : (this.season === 'spring' ? 620 : 1100);
-        const pitch = Math.min(2200, baseF + (speed * 20));
-
-        osc.type = this.season === 'spring' ? 'sine' : 'triangle';
+        const pitch = Math.min(1800, 950 + (intensity * 12));
+        osc.type = 'triangle';
         osc.frequency.setValueAtTime(pitch, now);
-        osc.frequency.exponentialRampToValueAtTime(140, now + 0.016);
+        osc.frequency.exponentialRampToValueAtTime(140, now + 0.015);
 
         gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(0.08, now + 0.002);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.018);
+        gain.gain.linearRampToValueAtTime(0.06, now + 0.001);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.017);
 
-        osc.connect(gain);
-        gain.connect(this.sfxMaster);
-
+        osc.connect(gain).connect(this.sfxGain);
         osc.start(now);
         osc.stop(now + 0.02);
       }
     }
 
-    // Инициализация движка
-    const engine = new ProceduralAudioEngine();
+    const studio = new RealisticASMRStudio();
 
     // ==========================================
-    // СИСТЕМА ЧАСТИЦ (Атмосферный визуал)
+    // ВИЗУАЛЬНЫЕ АТМОСФЕРНЫЕ ЧАСТИЦЫ
     // ==========================================
-    class SeasonalCanvasParticles {
+    class BlueAmbientParticles {
       constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
+        this.season = 'autumn';
         this.particles = [];
-        this.season = 'spring';
         this.resize();
         window.addEventListener('resize', () => this.resize());
         this.createParticles();
-        this.animate = this.animate.bind(this);
-        requestAnimationFrame(this.animate);
+        this.render = this.render.bind(this);
+        requestAnimationFrame(this.render);
       }
 
       resize() {
@@ -1112,287 +1055,241 @@ SeasonalASMR.init({ season: 'autumn', scroll: true, tap: true, volume: 0.4 });
         this.canvas.height = window.innerHeight;
       }
 
-      setSeason(season) {
-        this.season = season;
+      setSeason(s) {
+        this.season = s;
         this.createParticles();
       }
 
       createParticles() {
         this.particles = [];
-        const count = window.innerWidth < 768 ? 35 : 75;
+        const count = 45;
         for (let i = 0; i < count; i++) {
           this.particles.push({
             x: Math.random() * this.canvas.width,
             y: Math.random() * this.canvas.height,
-            size: 2 + Math.random() * 4,
-            speedX: (Math.random() - 0.5) * 1.2,
-            speedY: 0.5 + Math.random() * 1.5,
-            opacity: 0.2 + Math.random() * 0.7,
-            angle: Math.random() * Math.PI * 2,
-            angleSpeed: (Math.random() - 0.5) * 0.03
+            size: 1.5 + Math.random() * 2.5,
+            speedY: 0.8 + Math.random() * 2.5,
+            speedX: (Math.random() - 0.5) * 0.8,
+            alpha: 0.2 + Math.random() * 0.5
           });
         }
       }
 
-      animate() {
+      render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.particles.forEach(p => {
-          p.x += p.speedX;
           p.y += p.speedY;
-          p.angle += p.angleSpeed;
-
+          p.x += p.speedX;
           if (p.y > this.canvas.height) { p.y = -10; p.x = Math.random() * this.canvas.width; }
           if (p.x > this.canvas.width) p.x = 0;
           if (p.x < 0) p.x = this.canvas.width;
 
-          this.ctx.save();
-          this.ctx.translate(p.x, p.y);
-          this.ctx.rotate(p.angle);
-
-          if (this.season === 'spring') {
-            // Розовые лепестки вишни
-            this.ctx.fillStyle = `rgba(251, 207, 232, ${p.opacity})`;
-            this.ctx.beginPath();
-            this.ctx.ellipse(0, 0, p.size * 1.5, p.size, 0, 0, Math.PI * 2);
-            this.ctx.fill();
-          } else if (this.season === 'summer') {
-            // Теплые золотые светлячки
-            this.ctx.fillStyle = `rgba(253, 224, 71, ${p.opacity * 0.8})`;
-            this.ctx.shadowBlur = 10;
-            this.ctx.shadowColor = '#facc15';
-            this.ctx.beginPath();
-            this.ctx.arc(0, 0, p.size * 0.8, 0, Math.PI * 2);
-            this.ctx.fill();
-          } else if (this.season === 'autumn') {
-            // Осенние желто-оранжевые листья
-            this.ctx.fillStyle = `rgba(249, 115, 22, ${p.opacity})`;
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, -p.size * 1.5);
-            this.ctx.lineTo(p.size, p.size);
-            this.ctx.lineTo(-p.size, p.size);
-            this.ctx.closePath();
-            this.ctx.fill();
+          this.ctx.beginPath();
+          if (this.season === 'autumn') {
+            // Капли дождя
+            this.ctx.strokeStyle = `rgba(162, 210, 255, ${p.alpha * 0.6})`;
+            this.ctx.lineWidth = 1.2;
+            this.ctx.moveTo(p.x, p.y);
+            this.ctx.lineTo(p.x + p.speedX * 2, p.y + p.size * 5);
+            this.ctx.stroke();
           } else {
-            // Снежинки
-            this.ctx.fillStyle = `rgba(224, 242, 254, ${p.opacity})`;
-            this.ctx.beginPath();
-            this.ctx.arc(0, 0, p.size * 0.9, 0, Math.PI * 2);
+            // Мягкие снежинки/светлячки
+            this.ctx.fillStyle = `rgba(194, 221, 255, ${p.alpha * 0.7})`;
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             this.ctx.fill();
           }
-          this.ctx.restore();
         });
 
-        requestAnimationFrame(this.animate);
+        requestAnimationFrame(this.render);
       }
     }
 
-    const particles = new SeasonalCanvasParticles('ambient-canvas');
+    const particles = new BlueAmbientParticles('ambient-canvas');
 
     // ==========================================
-    // UI BINDINGS & СЕЗОННОЕ ПЕРЕКЛЮЧЕНИЕ
+    // ИНТЕРФЕЙС И СОБЫТИЯ
     // ==========================================
-    const seasonData = {
+    const seasonConfig = {
       spring: {
-        themeClass: 'season-spring',
         icon: 'fa-seedling',
-        iconColor: 'text-emerald-400',
-        badgeBg: 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400',
-        subtitle: 'Весна: пение лесных птиц, журчание ручья и роса',
-        tapMode: 'Режим: Капли росы',
-        labels: ['Весенний бриз', 'FM-пение птиц', 'Журчащий ручей']
+        color: '#a2d2ff',
+        subtitle: 'Весна: звонкая капель, журчание ручья и легкий бриз',
+        seasonalName: '<i class="fa-solid fa-water text-[#93b7e3]"></i> Журчащий ручей'
       },
       summer: {
-        themeClass: 'season-summer',
         icon: 'fa-sun',
-        iconColor: 'text-amber-400',
-        badgeBg: 'bg-amber-500/20 border-amber-500/30 text-amber-400',
-        subtitle: 'Лето: стрекот цикад, шелест крон и теплое дерево',
-        tapMode: 'Режим: Сухие ветки & Дерево',
-        labels: ['Шелест крон', 'Стрекот цикад', 'Теплый бриз']
+        color: '#93b7e3',
+        subtitle: 'Лето: живой стрекот цикад и шелест теплой листвы',
+        seasonalName: '<i class="fa-solid fa-bug text-[#93b7e3]"></i> Реальные цикады'
       },
       autumn: {
-        themeClass: 'season-autumn',
         icon: 'fa-cloud-showers-heavy',
-        iconColor: 'text-orange-400',
-        badgeBg: 'bg-orange-500/20 border-orange-500/30 text-orange-400',
-        subtitle: 'Осень: шум дождя, завывание ветра и шорох листьев',
-        tapMode: 'Режим: Хруст листьев & Дождь',
-        labels: ['Завывание ветра', 'Стекло & Капли', 'Шум дождя']
+        color: '#93b7e3',
+        subtitle: 'Осень: натуральный шум дождя и шелест прохладного ветра',
+        seasonalName: '<i class="fa-solid fa-cloud-showers-heavy text-[#93b7e3]"></i> Натуральный дождь'
       },
       winter: {
-        themeClass: 'season-winter',
         icon: 'fa-snowflake',
-        iconColor: 'text-sky-400',
-        badgeBg: 'bg-sky-500/20 border-sky-500/30 text-sky-400',
-        subtitle: 'Зима: холодная метель, скрип снега и ледяные кристаллы',
-        tapMode: 'Режим: Скрип наста & Льдинки',
-        labels: ['Свист метели', 'Ледяные звоны', 'Холодный гул']
+        color: '#c2ddff',
+        subtitle: 'Зима: бархатный свист метели и кристальный перезвон',
+        seasonalName: '<i class="fa-regular fa-gem text-[#93b7e3]"></i> Звон кристаллов'
       }
     };
 
-    const seasonBtns = document.querySelectorAll('.season-btn');
-    const badgeIcon = document.getElementById('season-badge-icon');
+    // Выбор сезона
+    const seasonButtons = document.querySelectorAll('.season-selector-btn');
+    const seasonIconMain = document.getElementById('season-icon-main');
     const seasonSubtitle = document.getElementById('season-subtitle');
-    const tapModeLabel = document.getElementById('tap-mode-label');
-    const sliderLabel1 = document.getElementById('slider-label-1');
-    const sliderLabel2 = document.getElementById('slider-label-2');
-    const sliderLabel3 = document.getElementById('slider-label-3');
+    const seasonalLayerName = document.getElementById('seasonal-layer-name');
 
-    seasonBtns.forEach(btn => {
+    seasonButtons.forEach(btn => {
       btn.addEventListener('click', () => {
+        seasonButtons.forEach(b => b.classList.remove('active-season'));
+        btn.classList.add('active-season');
+
         const season = btn.getAttribute('data-season');
-        seasonBtns.forEach(b => {
-          b.classList.remove('active', 'border-emerald-500/40', 'bg-emerald-950/40', 'border-amber-500/40', 'bg-amber-950/40', 'border-orange-500/40', 'bg-orange-950/40', 'border-sky-500/40', 'bg-sky-950/40');
-          b.classList.add('border-white/10', 'bg-white/5');
-        });
-        btn.classList.add('active');
+        const data = seasonConfig[season];
 
-        // Смена темы body
-        document.body.className = `${seasonData[season].themeClass} text-slate-100 min-h-screen font-sans relative overflow-x-hidden`;
-
-        // Обновление иконки
-        badgeIcon.className = `w-10 h-10 rounded-2xl flex items-center justify-center text-lg shadow-lg transition-all duration-700 ${seasonData[season].badgeBg}`;
-        badgeIcon.innerHTML = `<i class="fa-solid ${seasonData[season].icon}"></i>`;
-        seasonSubtitle.textContent = seasonData[season].subtitle;
-        tapModeLabel.textContent = seasonData[season].tapMode;
-
-        sliderLabel1.textContent = seasonData[season].labels[0];
-        sliderLabel2.textContent = seasonData[season].labels[1];
-        sliderLabel3.textContent = seasonData[season].labels[2];
+        seasonIconMain.className = `fa-solid ${data.icon} text-[#93b7e3]`;
+        seasonSubtitle.textContent = data.subtitle;
+        seasonalLayerName.innerHTML = data.seasonalName;
 
         particles.setSeason(season);
-        engine.setSeason(season);
-        engine.playSeasonTap('bell');
+        studio.setSeason(season);
+        studio.playTapSound('wood');
       });
     });
 
-    // Управление воспроизведением эмбиента
+    // Вкл/Выкл фона
     const toggleAmbienceBtn = document.getElementById('toggle-ambience-btn');
-    const ambienceIcon = document.getElementById('ambience-icon');
-    const ambienceText = document.getElementById('ambience-text');
+    const ambiencePlayIcon = document.getElementById('ambience-play-icon');
+    const ambienceBtnLabel = document.getElementById('ambience-btn-label');
 
     toggleAmbienceBtn.addEventListener('click', () => {
-      if (engine.isPlayingAmbience) {
-        engine.stopAmbience();
-        ambienceIcon.className = 'fa-solid fa-play';
-        ambienceText.textContent = 'Фон вкл';
-        toggleAmbienceBtn.classList.remove('bg-emerald-400', 'bg-amber-400', 'bg-orange-400', 'bg-sky-400');
-        toggleAmbienceBtn.classList.add('bg-white/10', 'text-white');
+      if (studio.isAmbiencePlaying) {
+        studio.stopAmbience();
+        ambiencePlayIcon.className = 'fa-solid fa-play text-xs text-[#c2ddff]';
+        ambienceBtnLabel.textContent = 'Включить фон';
+        toggleAmbienceBtn.classList.remove('btn-pressed');
       } else {
-        engine.startAmbience();
-        ambienceIcon.className = 'fa-solid fa-pause';
-        ambienceText.textContent = 'Пауза';
-        toggleAmbienceBtn.classList.remove('bg-white/10', 'text-white');
-        toggleAmbienceBtn.classList.add('bg-emerald-500', 'text-slate-950');
+        studio.startAmbience();
+        ambiencePlayIcon.className = 'fa-solid fa-pause text-xs text-[#c2ddff]';
+        ambienceBtnLabel.textContent = 'Остановить';
+        toggleAmbienceBtn.classList.add('btn-pressed');
       }
     });
 
-    // Mute & Громкость
+    // Mute и слайдеры
     const toggleMuteBtn = document.getElementById('toggle-mute-btn');
     const muteIcon = document.getElementById('mute-icon');
-    const masterVolSlider = document.getElementById('master-vol');
+    const masterSlider = document.getElementById('master-vol-slider');
 
     toggleMuteBtn.addEventListener('click', () => {
-      const isMuted = engine.toggleMute();
-      muteIcon.className = isMuted ? 'fa-solid fa-volume-xmark text-red-400' : 'fa-solid fa-volume-high text-slate-200';
+      const isMuted = studio.toggleMute();
+      muteIcon.className = isMuted ? 'fa-solid fa-volume-xmark text-rose-400' : 'fa-solid fa-volume-high text-[#93b7e3]';
     });
 
-    masterVolSlider.addEventListener('input', (e) => {
-      engine.setMasterVolume(e.target.value);
+    masterSlider.addEventListener('input', (e) => {
+      studio.setMasterVolume(e.target.value);
     });
 
-    // Регуляторы слоев
-    document.getElementById('layer-wind-vol').addEventListener('input', (e) => {
-      engine.windVol = parseFloat(e.target.value);
-      document.getElementById('wind-val-text').textContent = `${Math.round(engine.windVol * 100)}%`;
-      if (engine.windGainNode && engine.ctx) {
-        engine.windGainNode.gain.setTargetAtTime(0.2 * engine.windVol, engine.ctx.currentTime, 0.05);
+    // Слайдеры слоев
+    const windSlider = document.getElementById('wind-slider');
+    const windLevelText = document.getElementById('wind-level-text');
+    const seasonalSlider = document.getElementById('seasonal-slider');
+    const seasonalLevelText = document.getElementById('seasonal-level-text');
+
+    windSlider.addEventListener('input', (e) => {
+      studio.windVolume = parseFloat(e.target.value);
+      windLevelText.textContent = `${Math.round(studio.windVolume * 100)}%`;
+      if (studio.windGainNode && studio.ctx) {
+        studio.windGainNode.gain.setTargetAtTime(0.2 * studio.windVolume, studio.ctx.currentTime, 0.05);
       }
     });
 
-    document.getElementById('layer-fauna-vol').addEventListener('input', (e) => {
-      engine.faunaVol = parseFloat(e.target.value);
-      document.getElementById('fauna-val-text').textContent = `${Math.round(engine.faunaVol * 100)}%`;
-    });
-
-    document.getElementById('layer-water-vol').addEventListener('input', (e) => {
-      engine.waterVol = parseFloat(e.target.value);
-      document.getElementById('water-val-text').textContent = `${Math.round(engine.waterVol * 100)}%`;
-      if (engine.waterGainNode && engine.ctx) {
-        engine.waterGainNode.gain.setTargetAtTime(0.22 * engine.waterVol, engine.ctx.currentTime, 0.05);
+    seasonalSlider.addEventListener('input', (e) => {
+      studio.seasonalVolume = parseFloat(e.target.value);
+      seasonalLevelText.textContent = `${Math.round(studio.seasonalVolume * 100)}%`;
+      if (studio.seasonalGainNode && studio.ctx) {
+        studio.seasonalGainNode.gain.setTargetAtTime(0.26 * studio.seasonalVolume, studio.ctx.currentTime, 0.05);
+      }
+      if (studio.cricketGainNode && studio.ctx) {
+        studio.cricketGainNode.gain.setTargetAtTime(0.35 * studio.seasonalVolume, studio.ctx.currentTime, 0.05);
       }
     });
 
-    // Интерактивные тапы
-    document.querySelectorAll('.asmr-interactive').forEach(item => {
-      item.addEventListener('pointerdown', () => {
-        const variant = item.getAttribute('data-sound-variant') || 'primary';
-        engine.playSeasonTap(variant);
+    // Интерактивные ASMR кнопки
+    document.querySelectorAll('.asmr-tap-btn, .asmr-nav-btn').forEach(btn => {
+      btn.addEventListener('pointerdown', () => {
+        const sound = btn.getAttribute('data-sound') || 'wood';
+        studio.playTapSound(sound);
       });
     });
 
-    // Скролл-полигон
-    const scrollDemoBox = document.getElementById('scroll-demo-box');
-    const scrollBadge = document.getElementById('scroll-state-badge');
-    let lastBoxScroll = 0;
-    let scrollStopTimeout = null;
+    // Скролл-контейнер списка
+    const scrollBox = document.getElementById('scroll-test-container');
+    const scrollIndicator = document.getElementById('scroll-state-indicator');
+    let lastScrollPos = 0;
+    let scrollTimer = null;
 
-    scrollDemoBox.addEventListener('scroll', () => {
-      const y = scrollDemoBox.scrollTop;
-      const delta = Math.abs(y - lastBoxScroll);
-      scrollBadge.textContent = 'Движение...';
-      scrollBadge.classList.replace('text-emerald-300', 'text-amber-300');
+    scrollBox.addEventListener('scroll', () => {
+      const pos = scrollBox.scrollTop;
+      const delta = Math.abs(pos - lastScrollPos);
 
-      if (delta > 22) {
-        engine.playSeasonScrollTick(delta);
-        lastBoxScroll = y;
+      scrollIndicator.textContent = 'Скролл...';
+      scrollIndicator.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#203759] text-[#c2ddff] border border-[#3b5987]';
+
+      if (delta > 25) {
+        studio.playScrollTick(delta);
+        lastScrollPos = pos;
       }
 
-      clearTimeout(scrollStopTimeout);
-      scrollStopTimeout = setTimeout(() => {
-        scrollBadge.textContent = 'Покой';
-        scrollBadge.classList.replace('text-amber-300', 'text-emerald-300');
-      }, 250);
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        scrollIndicator.textContent = 'Готов';
+        scrollIndicator.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1b2b46] text-[#93b7e3] border border-[#2b4169]';
+      }, 200);
     }, { passive: true });
 
-    // Глобальный скролл страницы
-    let globalScrollY = window.scrollY;
-    let globalScrollTime = Date.now();
+    // Глобальный скролл всей страницы
+    let lastGlobalY = window.scrollY;
+    let lastGlobalT = Date.now();
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
-      const d = Math.abs(y - globalScrollY);
+      const diff = Math.abs(y - lastGlobalY);
       const now = Date.now();
-      if (d > 35 && (now - globalScrollTime) > 40) {
-        engine.playSeasonScrollTick(d / 10);
-        globalScrollY = y;
-        globalScrollTime = now;
+      if (diff > 45 && (now - lastGlobalT) > 40) {
+        studio.playScrollTick(diff / 5);
+        lastGlobalY = y;
+        lastGlobalT = now;
       }
     }, { passive: true });
 
-    // Кнопка копирования готового скрипта
-    const copyBtn = document.getElementById('copy-script-btn');
-    const copyLabel = document.getElementById('copy-btn-label');
+    // Кнопка копирования кода
+    const copyCodeBtn = document.getElementById('copy-code-btn');
+    const copyBtnText = document.getElementById('copy-btn-text');
     const codeSnippet = document.getElementById('code-snippet');
 
-    copyBtn.addEventListener('click', () => {
-      const textarea = document.createElement('textarea');
-      textarea.value = codeSnippet.innerText;
-      document.body.appendChild(textarea);
-      textarea.select();
+    copyCodeBtn.addEventListener('click', () => {
+      const tempArea = document.createElement('textarea');
+      tempArea.value = codeSnippet.innerText;
+      document.body.appendChild(tempArea);
+      tempArea.select();
       try {
         document.execCommand('copy');
-        copyLabel.textContent = 'Скопировано в буфер!';
-        copyBtn.classList.replace('bg-emerald-500', 'bg-teal-400');
+        copyBtnText.textContent = 'Скопировано в буфер!';
+        copyCodeBtn.classList.add('btn-pressed');
         setTimeout(() => {
-          copyLabel.textContent = 'Скопировать скрипт';
-          copyBtn.classList.replace('bg-teal-400', 'bg-emerald-500');
+          copyBtnText.textContent = 'Скопировать код скрипта';
+          copyCodeBtn.classList.remove('btn-pressed');
         }, 2200);
-      } catch (err) {
-        copyLabel.textContent = 'Ошибка копирования';
+      } catch (e) {
+        copyBtnText.textContent = 'Ошибка';
       }
-      document.body.removeChild(textarea);
+      document.body.removeChild(tempArea);
     });
   </script>
 </body>
 </html>
+```
