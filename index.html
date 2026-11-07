@@ -1,1160 +1,235 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASMR Премиум Звуковой Движок | Неоновая Пастельная Фуксия</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    /* Пастельная фуксия с неоновым свечением */
-    :root {
-      --bg-deep: #120512;
-      --bg-card: #220b22;
-      --bg-card-soft: #301030;
-      --btn-base: #381237;
-      --btn-hover: #481846;
-      --btn-active: #220921;
-      --neon-fuchsia: #ff2a8d;
-      --neon-glow: rgba(255, 42, 141, 0.35);
-      --pastel-fuchsia: #f3a7d4;
-      --pastel-light: #fbcfe8;
-      --pastel-muted: #a3658d;
-      --dark-shadow: rgba(6, 1, 6, 0.75);
-    }
-
-    body {
-      background-color: var(--bg-deep);
-      color: #fae8f4;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    /* 3D Объемные кнопки (Neumorphic Depth + Neon Edge) */
-    .btn-3d {
-      background: linear-gradient(145deg, #3d143c, #260a25);
-      border-top: 1px solid rgba(255, 180, 225, 0.25);
-      border-left: 1px solid rgba(255, 180, 225, 0.16);
-      border-right: 1px solid rgba(0, 0, 0, 0.45);
-      border-bottom: 2px solid rgba(0, 0, 0, 0.65);
-      box-shadow: 
-        0 6px 14px -2px var(--dark-shadow),
-        0 2px 4px 0 rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-      transition: all 0.12s cubic-bezier(0.2, 0, 0.1, 1);
-      position: relative;
-    }
-
-    .btn-3d:hover {
-      background: linear-gradient(145deg, #4d1a4c, #300d2f);
-      transform: translateY(-1px);
-      box-shadow: 
-        0 8px 18px -3px var(--dark-shadow),
-        0 0 12px var(--neon-glow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
-
-    .btn-3d:active, .btn-3d.btn-pressed {
-      transform: translateY(2px);
-      background: linear-gradient(145deg, #1d061c, #260925);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      border-top: 1px solid rgba(0, 0, 0, 0.5);
-      box-shadow: 
-        inset 0 4px 8px rgba(0, 0, 0, 0.7),
-        inset 0 1px 3px rgba(0, 0, 0, 0.5),
-        0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Активное выбранное состояние с неоновым свечением */
-    .btn-3d.active-neon {
-      background: linear-gradient(145deg, #58164f, #330b2e);
-      border: 1px solid rgba(255, 100, 180, 0.65);
-      box-shadow: 
-        0 0 18px rgba(255, 42, 141, 0.45),
-        inset 0 1px 1px rgba(255, 255, 255, 0.4),
-        inset 0 -2px 6px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Акцентная 3D кнопка */
-    .btn-3d-accent {
-      background: linear-gradient(145deg, #b01b67, #730e42);
-      border-top: 1px solid rgba(255, 200, 235, 0.4);
-      border-left: 1px solid rgba(255, 200, 235, 0.2);
-      border-bottom: 2px solid rgba(25, 3, 16, 0.8);
-      box-shadow: 
-        0 6px 16px -1px rgba(255, 42, 141, 0.35),
-        inset 0 1px 1px rgba(255, 255, 255, 0.45);
-      color: #ffffff;
-    }
-    .btn-3d-accent:hover {
-      background: linear-gradient(145deg, #c72076, #87124f);
-      box-shadow: 0 0 20px rgba(255, 42, 141, 0.6);
-    }
-    .btn-3d-accent:active {
-      transform: translateY(2px);
-      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.7);
-    }
-
-    /* Карточки пастельной фуксии */
-    .fuchsia-card {
-      background: linear-gradient(165deg, rgba(39, 13, 38, 0.88) 0%, rgba(22, 7, 22, 0.92) 100%);
-      border: 1px solid rgba(255, 120, 195, 0.18);
-      box-shadow: 
-        0 14px 34px -5px rgba(5, 1, 5, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(14px);
-    }
-
-    /* Ползунки */
-    input[type="range"] {
-      accent-color: #ff2a8d;
-    }
-
-    /* Кастомный неоновый скроллбар */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(18, 5, 18, 0.7);
-      border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #4a1745;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 100, 180, 0.2);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #731e6c;
-      box-shadow: 0 0 6px rgba(255, 42, 141, 0.5);
-    }
-  </style>
-</head>
-<body class="min-h-screen relative flex flex-col justify-between antialiased selection:bg-pink-500/30">
-
-  <!-- Неоновые атмосферные частицы на фоне -->
-  <canvas id="ambient-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
-
-  <div class="relative z-10 w-full max-w-6xl mx-auto px-4 py-6 md:py-8 flex flex-col flex-1 space-y-7">
-
-    <!-- Верхняя шапка -->
-    <header class="fuchsia-card p-5 md:p-6 rounded-3xl flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <div id="status-sphere" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl text-pink-200 btn-3d active-neon">
-          <i id="status-icon-main" class="fa-solid fa-water text-[#f3a7d4]"></i>
-        </div>
-        <div>
-          <div class="flex items-center gap-2.5">
-            <h1 class="text-lg md:text-xl font-bold tracking-tight text-white">ASMR Acoustic Studio</h1>
-            <span class="text-[10px] font-mono tracking-wide px-2.5 py-0.5 rounded-full bg-[#401239] text-[#fbcfe8] border border-[#ff2a8d]/40 shadow-[0_0_10px_rgba(255,42,141,0.25)]">
-              NEON PASTEL FUCHSIA
-            </span>
-          </div>
-          <p id="engine-subtitle" class="text-xs text-[#d291bf] mt-0.5 font-medium">Независимый микшер: Ветер, Дождь и Журчание воды</p>
-        </div>
-      </div>
-
-      <!-- Главные органы управления -->
-      <div class="flex items-center gap-3">
-        <!-- Кнопка Вкл/Выкл всех фонов -->
-        <button id="toggle-ambience-btn" class="btn-3d btn-3d-accent px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2.5">
-          <i id="ambience-play-icon" class="fa-solid fa-play text-xs text-[#fbcfe8]"></i>
-          <span id="ambience-btn-label">Включить фон</span>
-        </button>
-
-        <!-- Кнопка Mute -->
-        <button id="toggle-mute-btn" class="btn-3d w-10 h-10 rounded-2xl flex items-center justify-center text-[#f3a7d4]" title="Заглушить все звуки">
-          <i id="mute-icon" class="fa-solid fa-volume-high text-xs"></i>
-        </button>
-
-        <!-- Общий регулятор громкости -->
-        <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-[#4a1846]">
-          <i class="fa-solid fa-volume-low text-xs text-[#a3658d]"></i>
-          <input type="range" id="master-vol-slider" min="0" max="1" step="0.05" value="0.75" class="w-20 md:w-28 cursor-pointer">
-        </div>
-      </div>
-    </header>
-
-    <!-- СЕКЦИЯ 1: Изолированные регуляторы стихий (Ветер, Дождь, Журчание) -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      
-      <!-- Канал 1: ВЕТЕР -->
-      <div class="fuchsia-card p-5 rounded-3xl space-y-3.5 flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-xl flex items-center justify-center text-sm bg-[#240a23] text-[#f3a7d4] border border-[#52174d]">
-              <i class="fa-solid fa-wind"></i>
-            </span>
-            <div>
-              <div class="text-sm font-semibold text-white">Ветер</div>
-              <div class="text-[11px] text-[#b377a0]">Шелковистый воздушный бриз</div>
-            </div>
-          </div>
-          <button id="btn-toggle-wind" class="btn-3d active-neon px-3 py-1.5 rounded-xl text-[11px] font-semibold text-white">
-            ВКЛ
-          </button>
-        </div>
-
-        <div class="space-y-1.5 pt-2">
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-[#d291bf] font-medium">Громкость ветра</span>
-            <span id="wind-vol-val" class="font-mono text-[#f3a7d4]">65%</span>
-          </div>
-          <input type="range" id="wind-slider" min="0" max="1" step="0.05" value="0.65" class="w-full cursor-pointer">
-        </div>
-      </div>
-
-      <!-- Канал 2: ДОЖДЬ -->
-      <div class="fuchsia-card p-5 rounded-3xl space-y-3.5 flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-xl flex items-center justify-center text-sm bg-[#240a23] text-[#f3a7d4] border border-[#52174d]">
-              <i class="fa-solid fa-cloud-showers-heavy"></i>
-            </span>
-            <div>
-              <div class="text-sm font-semibold text-white">Дождь</div>
-              <div class="text-[11px] text-[#b377a0]">Мягкий ливень и капли</div>
-            </div>
-          </div>
-          <button id="btn-toggle-rain" class="btn-3d active-neon px-3 py-1.5 rounded-xl text-[11px] font-semibold text-white">
-            ВКЛ
-          </button>
-        </div>
-
-        <div class="space-y-1.5 pt-2">
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-[#d291bf] font-medium">Громкость дождя</span>
-            <span id="rain-vol-val" class="font-mono text-[#f3a7d4]">70%</span>
-          </div>
-          <input type="range" id="rain-slider" min="0" max="1" step="0.05" value="0.70" class="w-full cursor-pointer">
-        </div>
-      </div>
-
-      <!-- Канал 3: ЖУРЧАНИЕ ВОДЫ -->
-      <div class="fuchsia-card p-5 rounded-3xl space-y-3.5 flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-xl flex items-center justify-center text-sm bg-[#240a23] text-[#f3a7d4] border border-[#52174d]">
-              <i class="fa-solid fa-water"></i>
-            </span>
-            <div>
-              <div class="text-sm font-semibold text-white">Журчание</div>
-              <div class="text-[11px] text-[#b377a0]">Глубокий ручей и струи воды</div>
-            </div>
-          </div>
-          <button id="btn-toggle-stream" class="btn-3d active-neon px-3 py-1.5 rounded-xl text-[11px] font-semibold text-white">
-            ВКЛ
-          </button>
-        </div>
-
-        <div class="space-y-1.5 pt-2">
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-[#d291bf] font-medium">Громкость ручья</span>
-            <span id="stream-vol-val" class="font-mono text-[#f3a7d4]">55%</span>
-          </div>
-          <input type="range" id="stream-slider" min="0" max="1" step="0.05" value="0.55" class="w-full cursor-pointer">
-        </div>
-      </div>
-
-    </section>
-
-    <!-- СЕКЦИЯ 2: Интерактивный полигон тапов и скролла -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-      <!-- Левый блок: 3D-кнопки тактильных ASMR-кликов -->
-      <div class="lg:col-span-2 space-y-6">
-        <div class="fuchsia-card p-5 md:p-6 rounded-3xl space-y-4">
-          <div class="flex items-center justify-between">
-            <h2 class="text-xs uppercase font-mono tracking-wider text-[#f3a7d4] flex items-center gap-2">
-              <i class="fa-solid fa-fingerprint text-[#ff2a8d]"></i>
-              Тактильные микро-щелчки (Тапы и клики)
-            </h2>
-            <span class="text-[11px] text-[#a3658d] font-mono">+ Haptic Feedback</span>
-          </div>
-
-          <p class="text-xs text-[#d291bf] leading-relaxed">
-            Чистый процедурный чип-синтез. Мягкие экспоненциальные затухания дают расслабляющий ASMR-отклик без резких паразитных частот.
-          </p>
-
-          <!-- Сетка 6 объемных кнопок -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
-            <!-- Дерево (Marimba) -->
-            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="wood">
-              <span class="w-10 h-10 rounded-xl bg-[#240a23] flex items-center justify-center text-base text-[#f3a7d4] border border-[#52174d]">
-                <i class="fa-solid fa-cubes"></i>
-              </span>
-              <span class="text-xs font-semibold text-white">Теплое дерево</span>
-              <span class="text-[10px] text-[#a3658d] font-mono">Wood Click</span>
-            </button>
-
-            <!-- Капля (Water droplet) -->
-            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="drop">
-              <span class="w-10 h-10 rounded-xl bg-[#240a23] flex items-center justify-center text-base text-[#fbcfe8] border border-[#52174d]">
-                <i class="fa-solid fa-droplet"></i>
-              </span>
-              <span class="text-xs font-semibold text-white">Капля росы</span>
-              <span class="text-[10px] text-[#a3658d] font-mono">Dew Drop</span>
-            </button>
-
-            <!-- Стекло / Кристалл -->
-            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="crystal">
-              <span class="w-10 h-10 rounded-xl bg-[#240a23] flex items-center justify-center text-base text-[#f3a7d4] border border-[#52174d]">
-                <i class="fa-regular fa-gem"></i>
-              </span>
-              <span class="text-xs font-semibold text-white">Кристалл / Стекло</span>
-              <span class="text-[10px] text-[#a3658d] font-mono">Glass Tap</span>
-            </button>
-
-            <!-- Пузырек Pop -->
-            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="bubble">
-              <span class="w-10 h-10 rounded-xl bg-[#240a23] flex items-center justify-center text-base text-[#ff2a8d] border border-[#52174d]">
-                <i class="fa-solid fa-circle-notch"></i>
-              </span>
-              <span class="text-xs font-semibold text-white">Мягкий поп</span>
-              <span class="text-[10px] text-[#a3658d] font-mono">Bubble Pop</span>
-            </button>
-
-            <!-- Шелест бумаги -->
-            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="paper">
-              <span class="w-10 h-10 rounded-xl bg-[#240a23] flex items-center justify-center text-base text-[#d291bf] border border-[#52174d]">
-                <i class="fa-solid fa-scroll"></i>
-              </span>
-              <span class="text-xs font-semibold text-white">Шелест бумаги</span>
-              <span class="text-[10px] text-[#a3658d] font-mono">Soft Flutter</span>
-            </button>
-
-            <!-- Нежный тон -->
-            <button class="asmr-tap-btn btn-3d p-4 rounded-2xl flex flex-col items-center gap-2.5 text-center" data-sound="bell">
-              <span class="w-10 h-10 rounded-xl bg-[#240a23] flex items-center justify-center text-base text-[#fbcfe8] border border-[#52174d]">
-                <i class="fa-regular fa-bell"></i>
-              </span>
-              <span class="text-xs font-semibold text-white">Нежный тон</span>
-              <span class="text-[10px] text-[#a3658d] font-mono">Harmonic</span>
-            </button>
-          </div>
-
-          <!-- Имитация панели Elektromir -->
-          <div class="pt-3">
-            <div class="text-[11px] font-medium text-[#a3658d] mb-2 uppercase font-mono tracking-wider">Имитация каталога Elektromir</div>
-            <div class="p-2.5 rounded-2xl bg-[#140614] border border-[#3e133c] flex flex-wrap gap-2 items-center justify-around">
-              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="wood">
-                <i class="fa-solid fa-bolt text-[#ff2a8d]"></i> Автоматы
-              </button>
-              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="drop">
-                <i class="fa-solid fa-lightbulb text-[#f3a7d4]"></i> Освещение
-              </button>
-              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="crystal">
-                <i class="fa-solid fa-shield-halved text-[#fbcfe8]"></i> Щиты УЗО
-              </button>
-              <button class="asmr-nav-btn btn-3d px-3.5 py-2 rounded-xl text-xs font-medium text-white flex items-center gap-2" data-sound="bubble">
-                <i class="fa-solid fa-basket-shopping text-[#ff5eb8]"></i> Корзина
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Правый блок: Полигон прокрутки (Scroll Kinetic Feedback) -->
-      <div class="fuchsia-card p-5 md:p-6 rounded-3xl flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <h2 class="text-xs uppercase font-mono tracking-wider text-[#f3a7d4] flex items-center gap-2">
-              <i class="fa-solid fa-arrows-up-down text-[#ff2a8d]"></i>
-              АСМР-Скролл
-            </h2>
-            <span id="scroll-state-indicator" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#351034] text-[#f3a7d4] border border-[#6b1e67]">
-              Готов
-            </span>
-          </div>
-
-          <p class="text-xs text-[#d291bf] mb-3 leading-relaxed">
-            Прокручивайте список: синтезатор выдаёт бархатный кинетический перестук с троттлингом.
-          </p>
-
-          <!-- Скролл-контейнер товаров -->
-          <div id="scroll-test-container" class="max-h-[360px] overflow-y-auto space-y-2 pr-1.5">
-            <div class="p-3 rounded-2xl bg-[#170717] border border-[#3e133c] flex items-center justify-between hover:border-[#ff2a8d]/40 transition-colors">
-              <div>
-                <div class="text-xs font-semibold text-white">Выключатель двухклавишный</div>
-                <div class="text-[10px] text-[#a3658d]">Legrand Valena Allure</div>
-              </div>
-              <span class="font-mono text-xs text-[#f3a7d4]">720 ₽</span>
-            </div>
-
-            <div class="p-3 rounded-2xl bg-[#170717] border border-[#3e133c] flex items-center justify-between hover:border-[#ff2a8d]/40 transition-colors">
-              <div>
-                <div class="text-xs font-semibold text-white">Автоматический выключатель 16A</div>
-                <div class="text-[10px] text-[#a3658d]">ABB S201 B16 1-полюсный</div>
-              </div>
-              <span class="font-mono text-xs text-[#f3a7d4]">480 ₽</span>
-            </div>
-
-            <div class="p-3 rounded-2xl bg-[#170717] border border-[#3e133c] flex items-center justify-between hover:border-[#ff2a8d]/40 transition-colors">
-              <div>
-                <div class="text-xs font-semibold text-white">УЗО Easy9 2P 25A 30мА</div>
-                <div class="text-[10px] text-[#a3658d]">Schneider Electric тип AC</div>
-              </div>
-              <span class="font-mono text-xs text-[#f3a7d4]">2 350 ₽</span>
-            </div>
-
-            <div class="p-3 rounded-2xl bg-[#170717] border border-[#3e133c] flex items-center justify-between hover:border-[#ff2a8d]/40 transition-colors">
-              <div>
-                <div class="text-xs font-semibold text-white">Кабель ВВГнг-LS 3x2.5 ГОСТ</div>
-                <div class="text-[10px] text-[#a3658d]">Бухта 100 м, медь монолит</div>
-              </div>
-              <span class="font-mono text-xs text-[#f3a7d4]">9 400 ₽</span>
-            </div>
-
-            <div class="p-3 rounded-2xl bg-[#170717] border border-[#3e133c] flex items-center justify-between hover:border-[#ff2a8d]/40 transition-colors">
-              <div>
-                <div class="text-xs font-semibold text-white">Реле напряжения Welrok D2-63</div>
-                <div class="text-[10px] text-[#a3658d]">С цифровым LED индикатором</div>
-              </div>
-              <span class="font-mono text-xs text-[#f3a7d4]">3 890 ₽</span>
-            </div>
-
-            <div class="p-3 rounded-2xl bg-[#170717] border border-[#3e133c] flex items-center justify-between hover:border-[#ff2a8d]/40 transition-colors">
-              <div>
-                <div class="text-xs font-semibold text-white">Клеммы соединительные Wago</div>
-                <div class="text-[10px] text-[#a3658d]">Серия 221-413 (3 контакта)</div>
-              </div>
-              <span class="font-mono text-xs text-[#f3a7d4]">46 ₽</span>
-            </div>
-
-            <div class="p-3 rounded-2xl bg-[#170717] border border-[#3e133c] flex items-center justify-between hover:border-[#ff2a8d]/40 transition-colors">
-              <div>
-                <div class="text-xs font-semibold text-white">Бокс распределительный 36 мод.</div>
-                <div class="text-[10px] text-[#a3658d]">Встраиваемый с дверцей</div>
-              </div>
-              <span class="font-mono text-xs text-[#f3a7d4]">3 150 ₽</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-4 pt-3 border-t border-[#3e133c] text-[11px] text-[#a3658d] flex justify-between items-center">
-          <span>Сглаживание пиков: активный лимитер</span>
-          <i class="fa-solid fa-bolt text-[#ff2a8d]"></i>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- СЕКЦИЯ 3: Готовый скрипт для подключения в Elektromir -->
-    <section class="fuchsia-card p-5 md:p-6 rounded-3xl space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-code text-[#ff2a8d]"></i>
-            Готовый код для вашего сайта (https://romanmudrenov.github.io/elektromir/)
-          </h2>
-          <p class="text-xs text-[#d291bf] mt-0.5">
-            Вставьте данный скрипт перед тегом &lt;/body&gt;. Он не требует внешних библиотек и аудио-файлов.
-          </p>
-        </div>
-        <button id="copy-code-btn" class="btn-3d btn-3d-accent px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2">
-          <i class="fa-regular fa-copy"></i>
-          <span id="copy-btn-text">Скопировать код скрипта</span>
-        </button>
-      </div>
-
-      <pre class="bg-[#120412] p-4 rounded-2xl text-[11px] font-mono text-[#fbcfe8]/90 overflow-x-auto border border-[#3e133c] leading-relaxed max-h-56"><code id="code-snippet">&lt;!-- ASMR Pure Elements Engine (Neon Pastel Fuchsia Edition) --&gt;
-&lt;script&gt;
-class ElektromirASMR {
-  static start(options = {}) {
-    if (window._elektromirASMR) return window._elektromirASMR;
-    window._elektromirASMR = new ElektromirASMR(options);
-    return window._elektromirASMR;
-  }
-
-  constructor(opts) {
-    this.opt = Object.assign({
-      wind: true, rain: true, stream: true,
-      windVol: 0.5, rainVol: 0.6, streamVol: 0.45,
-      masterVol: 0.5, clicks: true, scroll: true, haptic: true
-    }, opts);
-    this.ctx = null;
-    this.master = null;
-    this.bindEvents();
-  }
-
-  initAudio() {
-    if (!this.ctx) {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AC();
-      this.master = this.ctx.createGain();
-      this.master.gain.setValueAtTime(this.opt.masterVol, this.ctx.currentTime);
-      this.master.connect(this.ctx.destination);
-    }
-    if (this.ctx.state === 'suspended') this.ctx.resume();
-  }
-
-  vibrate(pattern = 15) {
-    if (this.opt.haptic && 'vibrate' in navigator) {
-      try { navigator.vibrate(pattern); } catch (e) {}
-    }
-  }
-
-  playClick(type = 'wood') {
-    this.initAudio();
-    this.vibrate(14);
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    if (type === 'wood') {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(540, t);
-      osc.frequency.exponentialRampToValueAtTime(115, t + 0.035);
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.linearRampToValueAtTime(0.28, t + 0.002);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
-      osc.connect(gain).connect(this.master);
-      osc.start(t); osc.stop(t + 0.045);
-    } else if (type === 'drop') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(380, t);
-      osc.frequency.exponentialRampToValueAtTime(1050, t + 0.042);
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.linearRampToValueAtTime(0.24, t + 0.003);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.048);
-      osc.connect(gain).connect(this.master);
-      osc.start(t); osc.stop(t + 0.05);
-    } else {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(260, t);
-      osc.frequency.exponentialRampToValueAtTime(680, t + 0.028);
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.linearRampToValueAtTime(0.22, t + 0.002);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
-      osc.connect(gain).connect(this.master);
-      osc.start(t); osc.stop(t + 0.04);
-    }
-  }
-
-  playScroll() {
-    this.initAudio();
-    this.vibrate(8);
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(960, t);
-    osc.frequency.exponentialRampToValueAtTime(150, t + 0.016);
-    gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.linearRampToValueAtTime(0.04, t + 0.001);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.018);
-    osc.connect(gain).connect(this.master);
-    osc.start(t); osc.stop(t + 0.02);
-  }
-
-  bindEvents() {
-    if (this.opt.clicks) {
-      document.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('button, a, input, select, [role="button"], .card, i')) {
-          this.playClick('wood');
-        }
-      }, { passive: true });
-    }
-    if (this.opt.scroll) {
-      let lastY = window.scrollY, lastT = Date.now();
-      window.addEventListener('scroll', () => {
-        const y = window.scrollY;
-        const diff = Math.abs(y - lastY);
-        const now = Date.now();
-        if (diff > 45 && (now - lastT) > 50) {
-          this.playScroll();
-          lastY = y; lastT = now;
-        }
-      }, { passive: true });
-    }
-  }
-}
-
-// Запуск по умолчанию
-ElektromirASMR.start();
-&lt;/script&gt;</code></pre>
-    </section>
-
-  </div>
-
-  <!-- Аудио-архитектура ASMR движка -->
-  <script>
-    /**
-     * Премиальный звуковой движок:
-     * - Изолированные каналы: Ветер, Дождь, Журчание (ручей)
-     * - Процедурный синтез (розовый и коричневый шум) без тяжелых внешних файлов
-     * - 6 тактильных щелчков + Haptic Vibration
-     */
-    class PureElementsStudio {
-      constructor() {
-        this.ctx = null;
-        this.masterGain = null;
-        this.ambienceGain = null;
-        this.sfxGain = null;
-
-        this.isAmbiencePlaying = false;
-        this.isMuted = false;
-        this.masterVolume = 0.75;
-
-        // Включение/выключение каналов
-        this.enabledChannels = {
-          wind: true,
-          rain: true,
-          stream: true
-        };
-
-        // Громкость каналов
-        this.volumes = {
-          wind: 0.65,
-          rain: 0.70,
-          stream: 0.55
-        };
-
-        // Ноды громкости каналов
-        this.gainNodes = {
-          wind: null,
-          rain: null,
-          stream: null
-        };
-
-        this.pinkBuffer = null;
-        this.brownBuffer = null;
-        this.activeNodes = [];
-        this.rainDropletTimer = null;
-      }
-
-      init() {
-        if (!this.ctx) {
-          const AC = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AC();
-
-          this.masterGain = this.ctx.createGain();
-          this.masterGain.gain.setValueAtTime(this.masterVolume, this.ctx.currentTime);
-          this.masterGain.connect(this.ctx.destination);
-
-          this.ambienceGain = this.ctx.createGain();
-          this.ambienceGain.gain.setValueAtTime(1.0, this.ctx.currentTime);
-          this.ambienceGain.connect(this.masterGain);
-
-          this.sfxGain = this.ctx.createGain();
-          this.sfxGain.gain.setValueAtTime(0.85, this.ctx.currentTime);
-          this.sfxGain.connect(this.masterGain);
-
-          this.createNoiseGenerators();
+<!-- ... existing code ... -->
+            const bgMat = new THREE.MeshBasicMaterial({ color: 0x270d22 });
+            const bg = new THREE.Mesh(bgGeo, bgMat);
+            bg.position.z = -1.2;
+            this.scene.add(bg);
         }
 
-        if (this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
-      }
-
-      haptic(pattern = 15) {
-        if ('vibrate' in navigator) {
-          try { navigator.vibrate(pattern); } catch (e) {}
-        }
-      }
-
-      createNoiseGenerators() {
-        const sr = this.ctx.sampleRate;
-        const length = sr * 4;
-
-        // Розовый шум (Voss-McCartney) для шелковистого ветра и дождя
-        this.pinkBuffer = this.ctx.createBuffer(2, length, sr);
-        for (let ch = 0; ch < 2; ch++) {
-          const data = this.pinkBuffer.getChannelData(ch);
-          let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-          for (let i = 0; i < length; i++) {
-            const white = Math.random() * 2 - 1;
-            b0 = 0.99886 * b0 + white * 0.0555179;
-            b1 = 0.99332 * b1 + white * 0.0750759;
-            b2 = 0.96900 * b2 + white * 0.1538520;
-            b3 = 0.86650 * b3 + white * 0.3104856;
-            b4 = 0.55000 * b4 + white * 0.5329522;
-            b5 = -0.7616 * b5 - white * 0.0168980;
-            data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.09;
-            b6 = white * 0.115926;
-          }
+        /* 3D тактильная процедурная бархатная текстура */
+        createVelvetCanvas() {
+            const size = 128;
+            const cvs = document.createElement('canvas');
+            cvs.width = size;
+            cvs.height = size;
+            const ctx = cvs.getContext('2d');
+            
+            const imgData = ctx.createImageData(size, size);
+            const data = imgData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                // Оптимизация: так как исходный цвет 255, положительный шум отсекался бы через Math.min.
+                // Вычисляем сразу итоговую яркость без лишних вызовов Math.min/max на каждый канал.
+                const val = 255 - Math.random() * 17.5;
+                data[i] = val;     // R
+                data[i + 1] = val; // G
+                data[i + 2] = val; // B
+                data[i + 3] = 255; // A
+            }
+            ctx.putImageData(imgData, 0, 0);
+            
+            const tex = new THREE.CanvasTexture(cvs);
+            tex.wrapS = THREE.RepeatWrapping;
+            tex.wrapT = THREE.RepeatWrapping;
+            tex.repeat.set(2, 2);
+            return tex;
         }
 
-        // Коричневый шум для глубокого журчания ручья
-        this.brownBuffer = this.ctx.createBuffer(2, length, sr);
-        for (let ch = 0; ch < 2; ch++) {
-          const data = this.brownBuffer.getChannelData(ch);
-          let last = 0.0;
-          for (let i = 0; i < length; i++) {
-            const white = Math.random() * 2 - 1;
-            last = (last + (0.02 * white)) / 1.02;
-            data[i] = last * 3.2;
-          }
-        }
-      }
+        // Плавные видимые синусоиды прямо внутри рабочего игрового поля
+        initFieldSinusoids() {
+<!-- ... existing code ... -->
+        // Создание 3D геометрии сердечка через Shape (Базовый размер = 1 для переиспользования)
+        createHeartGeometry(scale = 1) {
+            const shape = new THREE.Shape();
+            const x = 0, y = 0;
+            shape.moveTo(x, y + 0.35 * scale);
+            shape.bezierCurveTo(x, y + 0.35 * scale, x - 0.5 * scale, y + 0.7 * scale, x - 0.5 * scale, y + 0.25 * scale);
+            shape.bezierCurveTo(x - 0.5 * scale, y - 0.15 * scale, x - 0.2 * scale, y - 0.45 * scale, x, y - 0.65 * scale);
+            shape.bezierCurveTo(x + 0.2 * scale, y - 0.45 * scale, x + 0.5 * scale, y - 0.15 * scale, x + 0.5 * scale, y + 0.25 * scale);
+            shape.bezierCurveTo(x + 0.5 * scale, y + 0.7 * scale, x, y + 0.35 * scale, x, y + 0.35 * scale);
 
-      setMasterVolume(val) {
-        this.masterVolume = parseFloat(val);
-        if (this.masterGain && !this.isMuted) {
-          this.masterGain.gain.setTargetAtTime(this.masterVolume, this.ctx.currentTime, 0.03);
-        }
-      }
+            const extrudeSettings = {
+                depth: 0.10 * scale,
+                bevelEnabled: true,
+                bevelSegments: 3,
+                steps: 1,
+                bevelSize: 0.04 * scale,
+                bevelThickness: 0.04 * scale
+            };
 
-      toggleMute() {
-        this.isMuted = !this.isMuted;
-        if (this.masterGain) {
-          const target = this.isMuted ? 0 : this.masterVolume;
-          this.masterGain.gain.setTargetAtTime(target, this.ctx.currentTime, 0.03);
-        }
-        return this.isMuted;
-      }
-
-      toggleChannel(ch) {
-        this.enabledChannels[ch] = !this.enabledChannels[ch];
-        if (this.isAmbiencePlaying && this.gainNodes[ch] && this.ctx) {
-          const target = this.enabledChannels[ch] ? this.getChannelTargetGain(ch) : 0;
-          this.gainNodes[ch].gain.setTargetAtTime(target, this.ctx.currentTime, 0.1);
-        }
-        return this.enabledChannels[ch];
-      }
-
-      setChannelVolume(ch, val) {
-        this.volumes[ch] = parseFloat(val);
-        if (this.isAmbiencePlaying && this.gainNodes[ch] && this.ctx) {
-          if (this.enabledChannels[ch]) {
-            this.gainNodes[ch].gain.setTargetAtTime(this.getChannelTargetGain(ch), this.ctx.currentTime, 0.05);
-          }
-        }
-      }
-
-      getChannelTargetGain(ch) {
-        switch (ch) {
-          case 'wind': return 0.22 * this.volumes.wind;
-          case 'rain': return 0.28 * this.volumes.rain;
-          case 'stream': return 0.24 * this.volumes.stream;
-          default: return 0.2;
-        }
-      }
-
-      startAmbience() {
-        this.init();
-        this.stopAmbience();
-        this.isAmbiencePlaying = true;
-        const now = this.ctx.currentTime;
-
-        // 1. КАНАЛ ВЕТРА (Розовый шум + Bandpass + LFO)
-        const wind = this.ctx.createBufferSource();
-        wind.buffer = this.pinkBuffer;
-        wind.loop = true;
-
-        const windFilter = this.ctx.createBiquadFilter();
-        windFilter.type = 'bandpass';
-        windFilter.frequency.setValueAtTime(460, now);
-        windFilter.Q.setValueAtTime(1.8, now);
-
-        const windLfo = this.ctx.createOscillator();
-        windLfo.type = 'sine';
-        windLfo.frequency.setValueAtTime(0.22, now);
-        const windLfoGain = this.ctx.createGain();
-        windLfoGain.gain.setValueAtTime(160, now);
-        windLfo.connect(windLfoGain);
-        windLfoGain.connect(windFilter.frequency);
-
-        this.gainNodes.wind = this.ctx.createGain();
-        this.gainNodes.wind.gain.setValueAtTime(this.enabledChannels.wind ? this.getChannelTargetGain('wind') : 0, now);
-
-        wind.connect(windFilter).connect(this.gainNodes.wind).connect(this.ambienceGain);
-        wind.start(now);
-        windLfo.start(now);
-        this.activeNodes.push(wind, windLfo, this.gainNodes.wind);
-
-        // 2. КАНАЛ ДОЖДЯ (Розовый шум + Lowpass + капли)
-        const rain = this.ctx.createBufferSource();
-        rain.buffer = this.pinkBuffer;
-        rain.loop = true;
-
-        const rainFilter = this.ctx.createBiquadFilter();
-        rainFilter.type = 'lowpass';
-        rainFilter.frequency.setValueAtTime(2600, now);
-        rainFilter.Q.setValueAtTime(0.7, now);
-
-        this.gainNodes.rain = this.ctx.createGain();
-        this.gainNodes.rain.gain.setValueAtTime(this.enabledChannels.rain ? this.getChannelTargetGain('rain') : 0, now);
-
-        rain.connect(rainFilter).connect(this.gainNodes.rain).connect(this.ambienceGain);
-        rain.start(now);
-        this.activeNodes.push(rain, this.gainNodes.rain);
-
-        this.scheduleRainDrops();
-
-        // 3. КАНАЛ ЖУРЧАНИЯ ВОДЫ (Коричневый шум + Bandpass + LFO перекатывания)
-        const stream = this.ctx.createBufferSource();
-        stream.buffer = this.brownBuffer;
-        stream.loop = true;
-
-        const streamFilter = this.ctx.createBiquadFilter();
-        streamFilter.type = 'bandpass';
-        streamFilter.frequency.setValueAtTime(560, now);
-        streamFilter.Q.setValueAtTime(2.5, now);
-
-        const streamLfo = this.ctx.createOscillator();
-        streamLfo.type = 'sine';
-        streamLfo.frequency.setValueAtTime(1.3, now);
-        const streamLfoGain = this.ctx.createGain();
-        streamLfoGain.gain.setValueAtTime(110, now);
-        streamLfo.connect(streamLfoGain);
-        streamLfoGain.connect(streamFilter.frequency);
-
-        this.gainNodes.stream = this.ctx.createGain();
-        this.gainNodes.stream.gain.setValueAtTime(this.enabledChannels.stream ? this.getChannelTargetGain('stream') : 0, now);
-
-        stream.connect(streamFilter).connect(this.gainNodes.stream).connect(this.ambienceGain);
-        stream.start(now);
-        streamLfo.start(now);
-        this.activeNodes.push(stream, streamLfo, this.gainNodes.stream);
-      }
-
-      scheduleRainDrops() {
-        if (!this.isAmbiencePlaying) return;
-        const now = this.ctx.currentTime;
-
-        if (this.enabledChannels.rain && this.volumes.rain > 0.05) {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          const freq = 1200 + Math.random() * 1400;
-
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now);
-          osc.frequency.exponentialRampToValueAtTime(freq * 0.45, now + 0.025);
-
-          gain.gain.setValueAtTime(0.0001, now);
-          gain.gain.linearRampToValueAtTime(0.035 * this.volumes.rain, now + 0.002);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
-
-          osc.connect(gain).connect(this.ambienceGain);
-          osc.start(now);
-          osc.stop(now + 0.035);
+            const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            geo.center(); // Центрируем геометрию для правильного вращения вокруг своей оси
+            return geo;
         }
 
-        const next = 180 + Math.random() * 320;
-        this.rainDropletTimer = setTimeout(() => this.scheduleRainDrops(), next);
-      }
+        // Парящие миниатюрные сердца, которые плавно появляются и исчезают
+        initFloatingHearts() {
+            this.heartsGroup = new THREE.Group();
+            this.scene.add(this.heartsGroup);
 
-      stopAmbience() {
-        this.isAmbiencePlaying = false;
-        if (this.rainDropletTimer) clearTimeout(this.rainDropletTimer);
+            const heartCount = 5;
+            const colors = [0xff8fb6, 0xffa4c7, 0xff6b97, 0xffc2d8];
+            
+            // Оптимизация памяти: создаем тяжелую Extrude-геометрию один раз и масштабируем сами меши
+            if (!this.sharedHeartGeo) {
+                this.sharedHeartGeo = this.createHeartGeometry(1);
+            }
 
-        this.activeNodes.forEach(node => {
-          try {
-            if (node.stop) node.stop();
-            if (node.disconnect) node.disconnect();
-          } catch (e) {}
-        });
-        this.activeNodes = [];
-      }
+            for (let i = 0; i < heartCount; i++) {
+                const scale = 0.28 + Math.random() * 0.18;
+                const mat = new THREE.MeshStandardMaterial({
+                    color: colors[i % colors.length],
+                    roughness: 0.65,
+                    metalness: 0.02,
+                    transparent: true,
+                    opacity: 0.0,
+                    depthWrite: false // Предотвращает графические артефакты при наложении прозрачных объектов
+                });
 
-      // ТАКТИЛЬНЫЕ ЗВУКИ: ТАПЫ
-      playTapSound(soundType) {
-        if (this.isMuted) return;
-        this.init();
-        this.haptic(15);
-        const now = this.ctx.currentTime;
+                const mesh = new THREE.Mesh(this.sharedHeartGeo, mat);
+                mesh.scale.setScalar(scale);
+                this.heartsGroup.add(mesh);
 
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
+                const heartData = {
+                    mesh,
+                    mat,
+                    scale,
+                    x: 0,
+                    y: 0,
+                    z: -0.3 + Math.random() * 0.8,
+                    vx: 0,
+                    vy: 0,
+                    rotSpeed: (Math.random() - 0.5) * 0.02,
+                    opacity: 0,
+                    targetOpacity: 0.55 + Math.random() * 0.25,
+                    state: 'spawning',
+                    life: 0,
+                    maxLife: 320 + Math.random() * 250
+                };
 
-        switch (soundType) {
-          case 'wood': // Теплое дерево
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(540, now);
-            osc.frequency.exponentialRampToValueAtTime(115, now + 0.035);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.34, now + 0.002);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
-            osc.connect(gain);
-            break;
+                this.respawnHeart(heartData);
+                heartData.life = Math.random() * heartData.maxLife;
+                this.floatingHearts.push(heartData);
+            }
+        }
+<!-- ... existing code ... -->
+        buildPlushBorders() {
+            if (!this.velvetTexture) {
+                this.velvetTexture = this.createVelvetCanvas();
+            }
 
-          case 'drop': // Капля росы
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(380, now);
-            osc.frequency.exponentialRampToValueAtTime(1050, now + 0.042);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.28, now + 0.003);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.048);
-            osc.connect(gain);
-            break;
+            const borderMat = new THREE.MeshStandardMaterial({
+                color: 0xff7ea7,
+                roughness: 0.75,
+                metalness: 0.02,
+                bumpMap: this.velvetTexture,
+                bumpScale: 0.06
+            });
 
-          case 'crystal': // Стекло / Кристалл
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(1900, now);
-            osc.frequency.exponentialRampToValueAtTime(740, now + 0.038);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.22, now + 0.001);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.042);
-            osc.connect(gain);
-            break;
+            const t = 0.85;
+            const hw = this.fieldW / 2;
+            const hh = this.fieldH / 2;
+            const vWallH = this.fieldH + t * 2;
+            const hWallW = this.fieldW + t * 2;
 
-          case 'bubble': // Пузырек Pop
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(260, now);
-            osc.frequency.exponentialRampToValueAtTime(680, now + 0.028);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.26, now + 0.002);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
-            osc.connect(gain);
-            break;
+            // Оптимизация: переиспользуем геометрию для двух одинаковых боковых стенок
+            const sideGeo = new THREE.BoxGeometry(t, vWallH, 1.2);
+            const topGeo = new THREE.BoxGeometry(hWallW, t, 1.2);
 
-          case 'paper': // Шелест бумаги
-            const noise = this.ctx.createBufferSource();
-            noise.buffer = this.pinkBuffer;
-            const bpf = this.ctx.createBiquadFilter();
-            bpf.type = 'bandpass';
-            bpf.frequency.setValueAtTime(1600, now);
-            bpf.Q.setValueAtTime(3.2, now);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.24, now + 0.002);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
-            noise.connect(bpf).connect(gain).connect(this.sfxGain);
-            noise.start(now);
-            noise.stop(now + 0.04);
-            return;
+            const leftWall = new THREE.Mesh(sideGeo, borderMat);
+            leftWall.position.set(-hw - t / 2, 0, 0);
 
-          case 'bell': // Гармонический тон
-          default:
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(1046, now);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.22, now + 0.003);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
-            osc.connect(gain);
-            break;
+            const rightWall = new THREE.Mesh(sideGeo, borderMat);
+            rightWall.position.set(hw + t / 2, 0, 0);
+
+            const topWall = new THREE.Mesh(topGeo, borderMat);
+            topWall.position.set(0, hh + t / 2, 0);
+
+            this.scene.add(leftWall, rightWall, topWall);
         }
 
-        gain.connect(this.sfxGain);
-        osc.start(now);
-        osc.stop(now + (soundType === 'bell' ? 0.3 : 0.055));
-      }
+        initPaddleAndBall() {
+            const conf = DIFF_CONFIG[this.diffKey];
+            this.paddleW = conf.paddleW;
+            this.paddleH = 0.85;
 
-      // ТАКТИЛЬНЫЙ СКРОЛЛ-ТИК
-      playScrollTick(intensity) {
-        if (this.isMuted) return;
-        this.init();
-        this.haptic(8);
-        const now = this.ctx.currentTime;
+            const padGeo = new THREE.BoxGeometry(this.paddleW, this.paddleH, 1.1);
+            this.padMat = new THREE.MeshStandardMaterial({
+                color: 0xff6b97,
+                roughness: 0.70,
+                metalness: 0.02,
+                bumpMap: this.velvetTexture,
+                bumpScale: 0.08
+            });
+            this.paddle = new THREE.Mesh(padGeo, this.padMat);
+            this.paddle.position.set(0, -this.fieldH / 2 + 1.8, 0);
 
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
+            const cushionGeo = new THREE.BoxGeometry(this.paddleW * 0.94, 0.22, 1.15);
+            const cushionMat = new THREE.MeshStandardMaterial({ 
+                color: 0xfff0f6, 
+                roughness: 0.55,
+                bumpMap: this.velvetTexture,
+                bumpScale: 0.04
+            });
+            this.cushion = new THREE.Mesh(cushionGeo, cushionMat);
+            this.cushion.position.set(0, this.paddleH / 2, 0.05);
+            this.paddle.add(this.cushion);
 
-        const pitch = Math.min(1800, 950 + (intensity * 12));
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(pitch, now);
-        osc.frequency.exponentialRampToValueAtTime(140, now + 0.015);
+            this.ballR = 0.45;
+            const ballGeo = new THREE.SphereGeometry(this.ballR, 24, 24);
+            const ballMat = new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                roughness: 0.45,
+                metalness: 0.02,
+                bumpMap: this.velvetTexture,
+                bumpScale: 0.05
+            });
+            this.ball = new THREE.Mesh(ballGeo, ballMat);
+            
+            this.scene.add(this.paddle, this.ball);
 
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(0.06, now + 0.001);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.017);
-
-        osc.connect(gain).connect(this.sfxGain);
-        osc.start(now);
-        osc.stop(now + 0.02);
-      }
-    }
-
-    const studio = new PureElementsStudio();
-
-    // ==========================================
-    // ВИЗУАЛЬНЫЕ НЕОНОВО-ФУКСИЕВЫЕ ЧАСТИЦЫ
-    // ==========================================
-    class FuchsiaAmbientParticles {
-      constructor(canvasId) {
-        this.canvas = document.getElementById(canvasId);
-        this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.resize();
-        window.addEventListener('resize', () => this.resize());
-        this.createParticles();
-        this.render = this.render.bind(this);
-        requestAnimationFrame(this.render);
-      }
-
-      resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-      }
-
-      createParticles() {
-        this.particles = [];
-        const count = 50;
-        for (let i = 0; i < count; i++) {
-          this.particles.push({
-            x: Math.random() * this.canvas.width,
-            y: Math.random() * this.canvas.height,
-            size: 1.2 + Math.random() * 2.8,
-            speedY: 0.6 + Math.random() * 2.2,
-            speedX: (Math.random() - 0.5) * 0.7,
-            alpha: 0.2 + Math.random() * 0.6
-          });
+            this.ballVel = new THREE.Vector2(0, 0);
+            this.resetBall();
         }
-      }
+<!-- ... existing code ... -->
+                    const cfg = colors[val] || colors[1];
+                    
+                    // Кэшируем геометрию и материалы блоков, чтобы избежать утечек памяти (Memory Leak) 
+                    // и резкого падения FPS из-за создания десятков одинаковых объектов в цикле
+                    if (!this.sharedBlockGeo) {
+                        this.sharedBlockGeo = new THREE.BoxGeometry(blockW * 0.9, blockH * 0.86, 0.9);
+                    }
+                    if (!this.blockMaterials) {
+                        this.blockMaterials = {};
+                    }
+                    if (!this.blockMaterials[cfg.col]) {
+                        this.blockMaterials[cfg.col] = new THREE.MeshStandardMaterial({
+                            color: cfg.col,
+                            roughness: 0.65,
+                            metalness: 0.02,
+                            bumpMap: this.velvetTexture,
+                            bumpScale: 0.07
+                        });
+                    }
 
-      render() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    const mesh = new THREE.Mesh(this.sharedBlockGeo, this.blockMaterials[cfg.col]);
+<!-- ... existing code ... -->
+        // Идеальное центрирование и масштабирование без перекрытия шапкой и низом
+        onResize() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const aspect = w / h;
 
-        this.particles.forEach(p => {
-          p.y += p.speedY;
-          p.x += p.speedX;
-          if (p.y > this.canvas.height) { p.y = -10; p.x = Math.random() * this.canvas.width; }
-          if (p.x > this.canvas.width) p.x = 0;
-          if (p.x < 0) p.x = this.canvas.width;
+            // Гарантированные вертикальные и горизонтальные границы
+            // Добавляем большой запас сверху и снизу (для вытянутых мобильных экранов 19:9, 20:9)
+            const targetW = this.fieldW + 2.5;
+            const targetH = this.fieldH + 14.5;
 
-          this.ctx.beginPath();
-          this.ctx.fillStyle = `rgba(255, 105, 180, ${p.alpha * 0.7})`;
-          this.ctx.shadowBlur = 8;
-          this.ctx.shadowColor = "rgba(255, 42, 141, 0.8)";
-          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          this.ctx.fill();
-        });
-
-        requestAnimationFrame(this.render);
-      }
-    }
-
-    const particles = new FuchsiaAmbientParticles('ambient-canvas');
-
-    // ==========================================
-    // ИНТЕРФЕЙС И СОБЫТИЯ
-    // ==========================================
-
-    // Вкл/Выкл главного фона
-    const toggleAmbienceBtn = document.getElementById('toggle-ambience-btn');
-    const ambiencePlayIcon = document.getElementById('ambience-play-icon');
-    const ambienceBtnLabel = document.getElementById('ambience-btn-label');
-
-    toggleAmbienceBtn.addEventListener('click', () => {
-      if (studio.isAmbiencePlaying) {
-        studio.stopAmbience();
-        ambiencePlayIcon.className = 'fa-solid fa-play text-xs text-[#fbcfe8]';
-        ambienceBtnLabel.textContent = 'Включить фон';
-        toggleAmbienceBtn.classList.remove('btn-pressed');
-      } else {
-        studio.startAmbience();
-        ambiencePlayIcon.className = 'fa-solid fa-pause text-xs text-[#fbcfe8]';
-        ambienceBtnLabel.textContent = 'Остановить';
-        toggleAmbienceBtn.classList.add('btn-pressed');
-      }
-    });
-
-    // Mute и общий регулятор
-    const toggleMuteBtn = document.getElementById('toggle-mute-btn');
-    const muteIcon = document.getElementById('mute-icon');
-    const masterSlider = document.getElementById('master-vol-slider');
-
-    toggleMuteBtn.addEventListener('click', () => {
-      const isMuted = studio.toggleMute();
-      muteIcon.className = isMuted ? 'fa-solid fa-volume-xmark text-rose-400' : 'fa-solid fa-volume-high text-[#f3a7d4]';
-    });
-
-    masterSlider.addEventListener('input', (e) => {
-      studio.setMasterVolume(e.target.value);
-    });
-
-    // Кнопки и слайдеры каналов: ВЕТЕР, ДОЖДЬ, РУЧЕЙ
-    function setupChannelControls(name) {
-      const btn = document.getElementById(`btn-toggle-${name}`);
-      const slider = document.getElementById(`${name}-slider`);
-      const valText = document.getElementById(`${name}-vol-val`);
-
-      btn.addEventListener('click', () => {
-        const enabled = studio.toggleChannel(name);
-        btn.textContent = enabled ? 'ВКЛ' : 'ВЫКЛ';
-        if (enabled) {
-          btn.classList.add('active-neon');
-        } else {
-          btn.classList.remove('active-neon');
-        }
-        studio.playTapSound('wood');
-      });
-
-      slider.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        valText.textContent = `${Math.round(val * 100)}%`;
-        studio.setChannelVolume(name, val);
-      });
-    }
-
-    setupChannelControls('wind');
-    setupChannelControls('rain');
-    setupChannelControls('stream');
-
-    // Интерактивные ASMR кнопки
-    document.querySelectorAll('.asmr-tap-btn, .asmr-nav-btn').forEach(btn => {
-      btn.addEventListener('pointerdown', () => {
-        const sound = btn.getAttribute('data-sound') || 'wood';
-        studio.playTapSound(sound);
-      });
-    });
-
-    // Скролл-контейнер товаров
-    const scrollBox = document.getElementById('scroll-test-container');
-    const scrollIndicator = document.getElementById('scroll-state-indicator');
-    let lastScrollPos = 0;
-    let scrollTimer = null;
-
-    scrollBox.addEventListener('scroll', () => {
-      const pos = scrollBox.scrollTop;
-      const delta = Math.abs(pos - lastScrollPos);
-
-      scrollIndicator.textContent = 'Скролл...';
-      scrollIndicator.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#4a1745] text-[#fbcfe8] border border-[#ff2a8d]/60 shadow-[0_0_8px_rgba(255,42,141,0.4)]';
-
-      if (delta > 25) {
-        studio.playScrollTick(delta);
-        lastScrollPos = pos;
-      }
-
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        scrollIndicator.textContent = 'Готов';
-        scrollIndicator.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#351034] text-[#f3a7d4] border border-[#6b1e67]';
-      }, 200);
-    }, { passive: true });
-
-    // Глобальный скролл страницы
-    let lastGlobalY = window.scrollY;
-    let lastGlobalT = Date.now();
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      const diff = Math.abs(y - lastGlobalY);
-      const now = Date.now();
-      if (diff > 45 && (now - lastGlobalT) > 40) {
-        studio.playScrollTick(diff / 5);
-        lastGlobalY = y;
-        lastGlobalT = now;
-      }
-    }, { passive: true });
-
-    // Кнопка копирования кода
-    const copyCodeBtn = document.getElementById('copy-code-btn');
-    const copyBtnText = document.getElementById('copy-btn-text');
-    const codeSnippet = document.getElementById('code-snippet');
-
-    copyCodeBtn.addEventListener('click', () => {
-      const tempArea = document.createElement('textarea');
-      tempArea.value = codeSnippet.innerText;
-      document.body.appendChild(tempArea);
-      tempArea.select();
-      try {
-        document.execCommand('copy');
-        copyBtnText.textContent = 'Скопировано в буфер!';
-        copyCodeBtn.classList.add('btn-pressed');
-        setTimeout(() => {
-          copyBtnText.textContent = 'Скопировать код скрипта';
-          copyCodeBtn.classList.remove('btn-pressed');
-        }, 2200);
-      } catch (e) {
-        copyBtnText.textContent = 'Ошибка';
-      }
-      document.body.removeChild(tempArea);
-    });
-  </script>
-</body>
-</html>
+            let viewW, viewH;
+            if (aspect < targetW / targetH) {
+                // Узкий вертикальный экран телефона
+                viewW = targetW;
+                viewH = targetW / aspect;
+            } else {
+                // Горизонтальный монитор / планшет
+                viewH = targetH;
+                viewW = targetH * aspect;
