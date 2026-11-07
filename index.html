@@ -1,235 +1,324 @@
-<!-- ... existing code ... -->
-            const bgMat = new THREE.MeshBasicMaterial({ color: 0x270d22 });
-            const bg = new THREE.Mesh(bgGeo, bgMat);
-            bg.position.z = -1.2;
-            this.scene.add(bg);
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Плюшевый 3D Арканоид — Тактильное Издание</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
         }
-
-        /* 3D тактильная процедурная бархатная текстура */
-        createVelvetCanvas() {
-            const size = 128;
-            const cvs = document.createElement('canvas');
-            cvs.width = size;
-            cvs.height = size;
-            const ctx = cvs.getContext('2d');
-            
-            const imgData = ctx.createImageData(size, size);
-            const data = imgData.data;
-            
-            for (let i = 0; i < data.length; i += 4) {
-                // Оптимизация: так как исходный цвет 255, положительный шум отсекался бы через Math.min.
-                // Вычисляем сразу итоговую яркость без лишних вызовов Math.min/max на каждый канал.
-                const val = 255 - Math.random() * 17.5;
-                data[i] = val;     // R
-                data[i + 1] = val; // G
-                data[i + 2] = val; // B
-                data[i + 3] = 255; // A
-            }
-            ctx.putImageData(imgData, 0, 0);
-            
-            const tex = new THREE.CanvasTexture(cvs);
-            tex.wrapS = THREE.RepeatWrapping;
-            tex.wrapT = THREE.RepeatWrapping;
-            tex.repeat.set(2, 2);
-            return tex;
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #3b1334 0%, #160514 100%);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #fff0f6;
         }
-
-        // Плавные видимые синусоиды прямо внутри рабочего игрового поля
-        initFieldSinusoids() {
-<!-- ... existing code ... -->
-        // Создание 3D геометрии сердечка через Shape (Базовый размер = 1 для переиспользования)
-        createHeartGeometry(scale = 1) {
-            const shape = new THREE.Shape();
-            const x = 0, y = 0;
-            shape.moveTo(x, y + 0.35 * scale);
-            shape.bezierCurveTo(x, y + 0.35 * scale, x - 0.5 * scale, y + 0.7 * scale, x - 0.5 * scale, y + 0.25 * scale);
-            shape.bezierCurveTo(x - 0.5 * scale, y - 0.15 * scale, x - 0.2 * scale, y - 0.45 * scale, x, y - 0.65 * scale);
-            shape.bezierCurveTo(x + 0.2 * scale, y - 0.45 * scale, x + 0.5 * scale, y - 0.15 * scale, x + 0.5 * scale, y + 0.25 * scale);
-            shape.bezierCurveTo(x + 0.5 * scale, y + 0.7 * scale, x, y + 0.35 * scale, x, y + 0.35 * scale);
-
-            const extrudeSettings = {
-                depth: 0.10 * scale,
-                bevelEnabled: true,
-                bevelSegments: 3,
-                steps: 1,
-                bevelSize: 0.04 * scale,
-                bevelThickness: 0.04 * scale
-            };
-
-            const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-            geo.center(); // Центрируем геометрию для правильного вращения вокруг своей оси
-            return geo;
+        #game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
-
-        // Парящие миниатюрные сердца, которые плавно появляются и исчезают
-        initFloatingHearts() {
-            this.heartsGroup = new THREE.Group();
-            this.scene.add(this.heartsGroup);
-
-            const heartCount = 5;
-            const colors = [0xff8fb6, 0xffa4c7, 0xff6b97, 0xffc2d8];
-            
-            // Оптимизация памяти: создаем тяжелую Extrude-геометрию один раз и масштабируем сами меши
-            if (!this.sharedHeartGeo) {
-                this.sharedHeartGeo = this.createHeartGeometry(1);
-            }
-
-            for (let i = 0; i < heartCount; i++) {
-                const scale = 0.28 + Math.random() * 0.18;
-                const mat = new THREE.MeshStandardMaterial({
-                    color: colors[i % colors.length],
-                    roughness: 0.65,
-                    metalness: 0.02,
-                    transparent: true,
-                    opacity: 0.0,
-                    depthWrite: false // Предотвращает графические артефакты при наложении прозрачных объектов
-                });
-
-                const mesh = new THREE.Mesh(this.sharedHeartGeo, mat);
-                mesh.scale.setScalar(scale);
-                this.heartsGroup.add(mesh);
-
-                const heartData = {
-                    mesh,
-                    mat,
-                    scale,
-                    x: 0,
-                    y: 0,
-                    z: -0.3 + Math.random() * 0.8,
-                    vx: 0,
-                    vy: 0,
-                    rotSpeed: (Math.random() - 0.5) * 0.02,
-                    opacity: 0,
-                    targetOpacity: 0.55 + Math.random() * 0.25,
-                    state: 'spawning',
-                    life: 0,
-                    maxLife: 320 + Math.random() * 250
-                };
-
-                this.respawnHeart(heartData);
-                heartData.life = Math.random() * heartData.maxLife;
-                this.floatingHearts.push(heartData);
-            }
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px 24px;
         }
-<!-- ... existing code ... -->
-        buildPlushBorders() {
-            if (!this.velvetTexture) {
-                this.velvetTexture = this.createVelvetCanvas();
-            }
-
-            const borderMat = new THREE.MeshStandardMaterial({
-                color: 0xff7ea7,
-                roughness: 0.75,
-                metalness: 0.02,
-                bumpMap: this.velvetTexture,
-                bumpScale: 0.06
-            });
-
-            const t = 0.85;
-            const hw = this.fieldW / 2;
-            const hh = this.fieldH / 2;
-            const vWallH = this.fieldH + t * 2;
-            const hWallW = this.fieldW + t * 2;
-
-            // Оптимизация: переиспользуем геометрию для двух одинаковых боковых стенок
-            const sideGeo = new THREE.BoxGeometry(t, vWallH, 1.2);
-            const topGeo = new THREE.BoxGeometry(hWallW, t, 1.2);
-
-            const leftWall = new THREE.Mesh(sideGeo, borderMat);
-            leftWall.position.set(-hw - t / 2, 0, 0);
-
-            const rightWall = new THREE.Mesh(sideGeo, borderMat);
-            rightWall.position.set(hw + t / 2, 0, 0);
-
-            const topWall = new THREE.Mesh(topGeo, borderMat);
-            topWall.position.set(0, hh + t / 2, 0);
-
-            this.scene.add(leftWall, rightWall, topWall);
+        .hud-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(45, 14, 40, 0.72);
+            backdrop-filter: blur(10px);
+            padding: 12px 22px;
+            border-radius: 26px;
+            border: 2px dashed rgba(255, 164, 199, 0.45);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), inset 0 0 15px rgba(255, 126, 167, 0.15);
+            pointer-events: auto;
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 12px;
         }
-
-        initPaddleAndBall() {
-            const conf = DIFF_CONFIG[this.diffKey];
-            this.paddleW = conf.paddleW;
-            this.paddleH = 0.85;
-
-            const padGeo = new THREE.BoxGeometry(this.paddleW, this.paddleH, 1.1);
-            this.padMat = new THREE.MeshStandardMaterial({
-                color: 0xff6b97,
-                roughness: 0.70,
-                metalness: 0.02,
-                bumpMap: this.velvetTexture,
-                bumpScale: 0.08
-            });
-            this.paddle = new THREE.Mesh(padGeo, this.padMat);
-            this.paddle.position.set(0, -this.fieldH / 2 + 1.8, 0);
-
-            const cushionGeo = new THREE.BoxGeometry(this.paddleW * 0.94, 0.22, 1.15);
-            const cushionMat = new THREE.MeshStandardMaterial({ 
-                color: 0xfff0f6, 
-                roughness: 0.55,
-                bumpMap: this.velvetTexture,
-                bumpScale: 0.04
-            });
-            this.cushion = new THREE.Mesh(cushionGeo, cushionMat);
-            this.cushion.position.set(0, this.paddleH / 2, 0.05);
-            this.paddle.add(this.cushion);
-
-            this.ballR = 0.45;
-            const ballGeo = new THREE.SphereGeometry(this.ballR, 24, 24);
-            const ballMat = new THREE.MeshStandardMaterial({
-                color: 0xffffff,
-                roughness: 0.45,
-                metalness: 0.02,
-                bumpMap: this.velvetTexture,
-                bumpScale: 0.05
-            });
-            this.ball = new THREE.Mesh(ballGeo, ballMat);
-            
-            this.scene.add(this.paddle, this.ball);
-
-            this.ballVel = new THREE.Vector2(0, 0);
-            this.resetBall();
+        .hud-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            align-items: center;
         }
-<!-- ... existing code ... -->
-                    const cfg = colors[val] || colors[1];
-                    
-                    // Кэшируем геометрию и материалы блоков, чтобы избежать утечек памяти (Memory Leak) 
-                    // и резкого падения FPS из-за создания десятков одинаковых объектов в цикле
-                    if (!this.sharedBlockGeo) {
-                        this.sharedBlockGeo = new THREE.BoxGeometry(blockW * 0.9, blockH * 0.86, 0.9);
-                    }
-                    if (!this.blockMaterials) {
-                        this.blockMaterials = {};
-                    }
-                    if (!this.blockMaterials[cfg.col]) {
-                        this.blockMaterials[cfg.col] = new THREE.MeshStandardMaterial({
-                            color: cfg.col,
-                            roughness: 0.65,
-                            metalness: 0.02,
-                            bumpMap: this.velvetTexture,
-                            bumpScale: 0.07
-                        });
-                    }
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px 14px;
+            border-radius: 16px;
+        }
+        .stat-badge span {
+            color: #ff8fb6;
+            font-size: 19px;
+        }
+        .hud-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn, select.btn {
+            background: linear-gradient(145deg, #ff7ea7, #e05383);
+            color: #ffffff;
+            border: 2px solid #ffc2d8;
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 107, 151, 0.4);
+            transition: transform 0.15s ease, filter 0.15s ease;
+            outline: none;
+        }
+        select.btn option {
+            background: #270d22;
+            color: #fff0f6;
+        }
+        .btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(1px) scale(0.97);
+        }
+        .hud-bottom {
+            text-align: center;
+            padding-bottom: 8px;
+        }
+        .level-banner {
+            display: inline-block;
+            background: rgba(39, 13, 34, 0.78);
+            border: 2px dashed rgba(255, 194, 216, 0.5);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 15px;
+            color: #ffd1e1;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+        #overlay-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(42, 12, 37, 0.94);
+            backdrop-filter: blur(14px);
+            border: 3px dashed #ff8fb6;
+            border-radius: 34px;
+            padding: 36px 46px;
+            text-align: center;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75), inset 0 0 30px rgba(255, 126, 167, 0.22);
+            pointer-events: auto;
+            z-index: 10;
+            max-width: 480px;
+            width: 90%;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #overlay-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -45%) scale(0.92);
+        }
+        #overlay-modal h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            color: #ffb3ce;
+            text-shadow: 0 3px 12px rgba(255, 107, 151, 0.6);
+        }
+        #overlay-modal p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #ffe3ee;
+            margin-bottom: 26px;
+        }
+        .btn-large {
+            font-size: 18px;
+            padding: 13px 34px;
+            border-radius: 24px;
+        }
+    </style>
+    <script src="https://cloudflare.com"></script>
+</head>
+<body>
 
-                    const mesh = new THREE.Mesh(this.sharedBlockGeo, this.blockMaterials[cfg.col]);
-<!-- ... existing code ... -->
-        // Идеальное центрирование и масштабирование без перекрытия шапкой и низом
-        onResize() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            const aspect = w / h;
+<canvas id="game-canvas"></canvas>
 
-            // Гарантированные вертикальные и горизонтальные границы
-            // Добавляем большой запас сверху и снизу (для вытянутых мобильных экранов 19:9, 20:9)
-            const targetW = this.fieldW + 2.5;
-            const targetH = this.fieldH + 14.5;
+<div id="ui-layer">
+    <div class="hud-top">
+        <div class="hud-stats">
+            <div class="stat-badge">Счет: <span id="score-val">0</span></div>
+            <div class="stat-badge">Жизни: <span id="lives-val">♥♥♥</span></div>
+            <div class="stat-badge">Уровень: <span id="level-val">1 / 5</span></div>
+        </div>
+        <div class="hud-controls">
+            <select id="diff-select" class="btn" title="Выбор сложности">
+                <option value="easy">Мягкий (Легко)</option>
+                <option value="normal" selected>Уютный (Норма)</option>
+                <option value="hard">Бодрый (Сложно)</option>
+            </select>
+            <button id="btn-level" class="btn">Сменить узор</button>
+            <button id="btn-audio" class="btn">🎵 Синтезатор: ВКЛ</button>
+        </div>
+    </div>
 
-            let viewW, viewH;
-            if (aspect < targetW / targetH) {
-                // Узкий вертикальный экран телефона
-                viewW = targetW;
-                viewH = targetW / aspect;
-            } else {
-                // Горизонтальный монитор / планшет
-                viewH = targetH;
-                viewW = targetH * aspect;
+    <div class="hud-bottom">
+        <div class="level-banner" id="fabric-title">Ткань уровня: Королевский Бархат • Нажмите или кликните для запуска</div>
+    </div>
+</div>
+
+<div id="overlay-modal">
+    <h1 id="modal-title">Плюшевый Арканоид</h1>
+    <p id="modal-desc">Тактильный 3D-мир из мягкого бархата, вязаной шерсти, вельвета и атласа со встроенным полифоническим WebAudio-синтезатором.</p>
+    <button id="modal-btn" class="btn btn-large">Начать игру</button>
+</div>
+
+<script>
+const DIFF_CONFIG = {
+    easy:   { paddleW: 4.9, ballSpeed: 0.23, label: 'Мягкий' },
+    normal: { paddleW: 3.9, ballSpeed: 0.29, label: 'Уютный' },
+    hard:   { paddleW: 3.0, ballSpeed: 0.36, label: 'Бодрый' }
+};
+
+const LEVEL_THEMES = [
+    {
+        id: 'velvet',
+        name: 'Королевский Бархат',
+        bgHex: 0x270d22,
+        borderHex: 0xff7ea7,
+        paddleHex: 0xff5c8d,
+        scale: [261.63, 293.66, 329.63, 392.00, 440.00, 523.25],
+        bass: [130.81, 110.00, 146.83, 98.00],
+        tempo: 112,
+        palette: {
+            1: { col: 0xff9ebb, hp: 1, pts: 100 },
+            2: { col: 0xff6b97, hp: 1, pts: 150 },
+            3: { col: 0xe0457b, hp: 2, pts: 250 },
+            4: { col: 0xf7b267, hp: 2, pts: 350 }
+        },
+        grid: [
+            [0,1,2,3,3,2,1,0],
+            [1,2,3,4,4,3,2,1],
+            [1,2,2,3,3,2,2,1],
+            [0,1,1,2,2,1,1,0],
+            [0,0,1,1,1,1,0,0]
+        ]
+    },
+    {
+        id: 'knit',
+        name: 'Крупная Вязка (Свитер)',
+        bgHex: 0x192436,
+        borderHex: 0x72b5f2,
+        paddleHex: 0x4da3ff,
+        scale: [293.66, 349.23, 392.00, 440.00, 523.25, 587.33],
+        bass: [146.83, 116.54, 130.81, 146.83],
+        tempo: 118,
+        palette: {
+            1: { col: 0x90dbf4, hp: 1, pts: 120 },
+            2: { col: 0xa3c4f3, hp: 1, pts: 160 },
+            3: { col: 0xcfbad0, hp: 2, pts: 260 },
+            4: { col: 0xf1c0e8, hp: 2, pts: 380 }
+        },
+        grid: [
+            [2,0,2,4,4,2,0,2],
+            [1,3,1,3,3,1,3,1],
+            [2,1,3,2,2,3,1,2],
+            [0,2,1,1,1,1,2,0],
+            [1,0,1,2,2,1,0,1]
+        ]
+    },
+    {
+        id: 'corduroy',
+        name: 'Мягкий Вельвет в Рубчик',
+        bgHex: 0x2b1d16,
+        borderHex: 0xf4a261,
+        paddleHex: 0xe76f51,
+        scale: [246.94, 293.66, 329.63, 369.99, 440.00, 493.88],
+        bass: [123.47, 98.00, 110.00, 123.47],
+        tempo: 124,
+        palette: {
+            1: { col: 0xe9c46a, hp: 1, pts: 130 },
+            2: { col: 0xf4a261, hp: 1, pts: 180 },
+            3: { col: 0xe76f51, hp: 2, pts: 280 },
+            4: { col: 0x2a9d8f, hp: 3, pts: 450 }
+        },
+        grid: [
+            [4,3,2,1,1,2,3,4],
+            [3,4,3,2,2,3,4,3],
+            [0,2,3,3,3,3,2,0],
+            [1,1,2,1,1,2,1,1],
+            [0,1,0,1,1,0,1,0]
+        ]
+    },
+    {
+        id: 'fleece',
+        name: 'Облачный Флис и Букле',
+        bgHex: 0x162a28,
+        borderHex: 0x6ddccf,
+        paddleHex: 0x38b6a8,
+        scale: [261.63, 311.13, 349.23, 392.00, 466.16, 523.25],
+        bass: [130.81, 155.56, 116.54, 98.00],
+        tempo: 116,
+        palette: {
+            1: { col: 0xb8f2e6, hp: 1, pts: 140 },
+            2: { col: 0xaed9e0, hp: 1, pts: 190 },
+            3: { col: 0xffa69e, hp: 2, pts: 300 },
+            4: { col: 0xfaf3dd, hp: 3, pts: 480 }
+        },
+        grid: [
+            [0,3,4,3,3,4,3,0],
+            [2,1,3,4,4,3,1,2],
+            [2,2,1,3,3,1,2,2],
+            [1,2,2,1,1,2,2,1],
+            [0,1,1,0,0,1,1,0]
+        ]
+    },
+    {
+        id: 'quilted',
+        name: 'Стеганый Королевский Атлас',
+        bgHex: 0x231330,
+        borderHex: 0xc77dff,
+        paddleHex: 0x9d4edd,
+        scale: [329.63, 392.00, 440.00, 493.88, 587.33, 659.25],
+        bass: [164.81, 130.81, 146.83, 123.47],
+        tempo: 128,
+        palette: {
+            1: { col: 0xe0aaff, hp: 1, pts: 150 },
+            2: { col: 0xc77dff, hp: 2, pts: 240 },
+3: { col: 0xff9e00, hp: 2, pts: 340 },
+4: { col: 0xff5d8f, hp: 3, pts: 550 }
+},
+grid: [
+[4,2,4,3,3,4,2,4],
+[2,3,2,4,4,2,3,2],
+[1,2,3,2,2,3,2,1],
+[1,1,2,1,1,2,1,1],
+[0,1,1,1,1,1,1,0]
+]
+}
+];
